@@ -14,7 +14,7 @@ descriptive assertions and [RFC2119] terminology. The key words
 "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in the normative
 parts of this document are to be interpreted as described in
-[RFC2119]_. However, for readability, these words do not appear in all
+[RFC2119]. However, for readability, these words do not appear in all
 uppercase letters in this specification.
 
 All of the text of this specification is normative except sections
@@ -32,8 +32,8 @@ The value of the `name` member in the codec object MUST be `blosc`.
 ### `cname`
 A string identifying the internal compression algorithm to be
 used. At the time of writing, the following values are supported
-by the c-blosc library: "lz4", "lz4hc", "blosclz", "zstd",
-"snappy", "zlib".
+by the c-blosc library: `"lz4"`, `"lz4hc"`, `"blosclz"`, `"zstd"`,
+`"snappy"`, `"zlib"`.
     
 ### `clevel`
 An integer from 0 to 9 which controls the speed and level of
@@ -69,27 +69,28 @@ An integer giving the size in bytes of blocks into which a
 buffer is divided before compression. A value of 0
 indicates that an automatic size will be used.
 
+## Example
 For example, the array metadata document below specifies that the compressor is
 the Blosc codec configured with a compression level of 1, byte-wise shuffling
 with a stride of 4, the `lz4` compression algorithm and the default block
 size:
 
-``json
-    {
-        "codecs": [{
-            "name": "blosc",
-            "configuration": {
-                "cname": "lz4",
-                "clevel": 1,
-                "shuffle": "shuffle",
-                "typesize": 4,
-                "blocksize": 0
-            }
-        }],
-    }
-``
+```json
+{
+    "codecs": [{
+        "name": "blosc",
+        "configuration": {
+            "cname": "lz4",
+            "clevel": 1,
+            "shuffle": "shuffle",
+            "typesize": 4,
+            "blocksize": 0
+        }
+    }],
+}
+```
 
-# Format and algorithm
+## Format and algorithm
 
 This is a `bytes -> bytes` codec.
 
@@ -127,14 +128,15 @@ by the Zarr v2 `blosc` codec in the following ways:
 [BLOSC] F. Alted. Blosc Chunk Format. URL:
    https://github.com/Blosc/c-blosc/blob/HEAD/README_CHUNK_FORMAT.rst
 
+[RFC2119]: https://tools.ietf.org/html/rfc2119
+[BLOSC]: https://github.com/Blosc/c-blosc/blob/HEAD/README_CHUNK_FORMAT.rst
+
 
 ## Change log
 
 No changes yet.
 
 
---- 
+## Maintainers
 
-Copyright 2020-Present Zarr core development team. This work
-is licensed under a `Creative Commons Attribution 3.0 Unported License
-<https://creativecommons.org/licenses/by/3.0/>`_.
+Zarr core development team
