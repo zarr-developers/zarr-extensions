@@ -54,9 +54,16 @@ Extensions that are part of the Zarr v3 core specification are marked with an as
 
 ## Registering an extension
 
-To register an extension, open a new PR with a new extension directory under the relevant extension point. 
+To register an extension, open a new PR with a new extension directory under the relevant extension point:
+
+ * [Codecs](./codecs/README.md)
+ * [Data Types](./dtype/README.md)
+ * [Chunk Key Encoding](./chunk-key-encodings/README.md)
+ * [Chunk Grid](./chunk-grids/README.md)
+ * [Storage Transformers](./storage-transformers/README.md)
+
 Each extension MUST have a `README.md` file that describes the extension and its metadata specification.
-Extensions SHOULD have a `schema.json` file that contains the JSON schema for the metadata.
+Extensions SHOULD have a `schema.json` file that contains the JSON schema for the metadata, if the README.md does not provide a link to an external schema.
 Please note that all extensions documents will be licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
 Only open a PR if you are willing to license your extension under this license.
 
