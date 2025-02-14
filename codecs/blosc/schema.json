@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": ["blosc"]
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "cname": {
+          "type": "string",
+          "enum": ["lz4", "lz4hc", "blosclz", "zstd", "snappy", "zlib"]
+        },
+        "clevel": {
+          "type": "number"
+        },
+        "shuffle": {
+          "type": "string",
+          "enum": ["noshuffle", "shuffle", "bitshuffle"]
+        },
+        "typesize": {
+          "type": "number"
+        },
+        "blocksize": {
+          "type": "number"
+        }
+      },
+      "required": ["cname", "clevel", "shuffle", "typesize", "blocksize"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
