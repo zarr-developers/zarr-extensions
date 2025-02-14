@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": ["zstd"]
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "number"
+        },
+        "checksum": {
+          "type": "boolean"
+        }
+      },
+      "required": ["level"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
