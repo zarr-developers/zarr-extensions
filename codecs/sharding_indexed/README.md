@@ -1,0 +1,1 @@
+See https://zarr-specs.readthedocs.io/en/latest/v3/codecs/sharding-indexed/v1.0.html

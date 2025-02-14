@@ -1,0 +1,1 @@
+See https://zarr-specs.readthedocs.io/en/latest/v3/codecs/crc32c/v1.0.html
