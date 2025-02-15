@@ -138,4 +138,4 @@ No changes yet.
 
 ## Maintainers
 
-Zarr core development team
+* Zarr core development team
