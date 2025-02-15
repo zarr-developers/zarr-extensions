@@ -10,7 +10,9 @@
       "type": "object",
       "properties": {
         "level": {
-          "type": "number"
+          "type": "number",
+          "minimum": -131072,
+          "maximum": 22
         },
         "checksum": {
           "type": "boolean"

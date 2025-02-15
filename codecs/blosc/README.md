@@ -2,7 +2,6 @@
 
 Defines a `bytes -> bytes` codec that uses the blosc container format.
 
-
 ## Status of this document
 
 This codec was accepted as part of ZEP0001 on May 15th, 2023 via https://github.com/zarr-developers/zarr-specs/issues/227.
