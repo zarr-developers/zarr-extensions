@@ -23,14 +23,14 @@ The value of the `name` member in the codec object MUST be `zstd`.
 ## Configuration parameters
 
 ### `level`:
-    An integer from -131072 to 22 which controls the speed and level
-    of compression (has no impact on decoding).  A value of 0 indicates to use
-    the default compression level.  Otherwise, a higher level is expected to
-    achieve a higher compression ratio at the cost of lower speed.
+An integer from -131072 to 22 which controls the speed and level
+of compression (has no impact on decoding).  A value of 0 indicates to use
+the default compression level.  Otherwise, a higher level is expected to
+achieve a higher compression ratio at the cost of lower speed.
 
 ### `checksum`:
-    A boolean that indicates whether to store a checksum when writing that will
-    be verified when reading. Should be omitted if false.
+A boolean that indicates whether to store a checksum when writing that will
+be verified when reading. Should be omitted if false.
 
 ## Example
 
