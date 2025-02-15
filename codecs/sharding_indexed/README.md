@@ -55,7 +55,7 @@ The value of the `name` member in the codec object MUST be `sharding_indexed`.
 
 ## Configuration parameters
 
-Sharding can be configured per array in the :ref:`array-metadata` as follows:
+Sharding can be configured per array in the [array metadata](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html#array-metadata) as follows:
 
 ```json
 {
@@ -109,14 +109,14 @@ each of those 32 along the second dimension.
 
 Specifies a list of codecs to be used for encoding and decoding inner chunks. 
 The value must be an array of objects, as specified in the 
-:ref:`array-metadata`. The `codecs` member is required and needs to contain
+[array metadata](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html#array-metadata). The `codecs` member is required and needs to contain
 exactly one `array -> bytes` codec.
 
 ### `index_codecs`
 
 Specifies a list of codecs to be used for encoding and decoding shard index. 
 The value must be an array of objects, as specified in the 
-:ref:`array-metadata`. The `index_codecs` member is required and needs to 
+[array metadata](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html#array-metadata). The `index_codecs` member is required and needs to 
 contain exactly one `array -> bytes` codec. Codecs that produce 
 variable-sized encoded representation, such as compression codecs, MUST NOT
 be used for index codecs. It is RECOMMENDED to use a little-endian codec 
@@ -219,7 +219,7 @@ common optimizations.
   to the requested chunk. The relevant bytes are determined by the 
   `offset,nbytes` pair in the shard index. This bytestream then needs to be 
   decoded with the inner codecs as specified in the sharding configuration applying 
-  the :ref:`decoding_procedure`. This is similar to how an implementation would 
+  the [decoding procedure](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html#decoding-procedure). This is similar to how an implementation would 
   access a sub-slice of a chunk.
 
   The size of the index can be determined by applying `c.compute_encoded_size`
@@ -239,7 +239,7 @@ common optimizations.
   by specifying the byte range. The bytestream, then, needs to be decoded as above. 
 
 * **Encoding**: A simple implementation to encode a chunk in a shard would (a)
-  encode the new chunk per :ref:`encoding_procedure` in a byte buffer using the 
+  encode the new chunk per [encoding procedure](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html#encoding-procedure) in a byte buffer using the 
   shard's inner codecs, (b) read an existing shard from the store, (c) create a 
   new bytestream with all encoded inner chunks of that shard including the overwritten 
   chunk, (d) generate a new shard index that is prepended or appended (according 
@@ -263,7 +263,7 @@ common optimizations.
 
 ## References
 
-.. [RFC2119] S. Bradner. Key words for use in RFCs to Indicate
+[RFC2119] S. Bradner. Key words for use in RFCs to Indicate
    Requirement Levels. March 1997. Best Current Practice. URL:
    https://tools.ietf.org/html/rfc2119
 
