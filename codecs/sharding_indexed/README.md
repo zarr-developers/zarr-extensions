@@ -108,29 +108,29 @@ Sharding can be configured per array in the [array metadata](https://zarr-specs.
 ```json
 {
     "codecs": [{
-        "name": "sharding_indexed"
+        "name": "sharding_indexed",
         "configuration": {
             "chunk_shape": [32, 32],
             "codecs": [
                 { 
-                "name": "bytes",
-                "configuration": {
-                    "endian": "little",
-                }
+                    "name": "bytes",
+                    "configuration": {
+                        "endian": "little",
+                    }
                 },
                 {
-                "name": "gzip",
-                "configuration": {
-                    "level": 1
-                }
+                    "name": "gzip",
+                    "configuration": {
+                        "level": 1
+                    }
                 }
             ],
             "index_codecs": [
                 { 
-                "name": "bytes",
-                "configuration": {
-                    "endian": "little",
-                }
+                    "name": "bytes",
+                    "configuration": {
+                        "endian": "little",
+                    }
                 },
                 { "name": "crc32c" } 
             ],
