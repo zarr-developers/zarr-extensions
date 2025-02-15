@@ -261,4 +261,4 @@ common optimizations.
 
 ## Previous maintainers
 
-* Jonathan Striebel ([@jstriebel](https://github.com/jstriebel>)), Scalable Minds
+* Jonathan Striebel ([@jstriebel](https://github.com/jstriebel)), Scalable Minds
