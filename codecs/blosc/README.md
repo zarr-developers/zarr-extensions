@@ -6,21 +6,6 @@ Defines a `bytes -> bytes` codec that uses the blosc container format.
 
 This codec was accepted as part of ZEP0001 on May 15th, 2023 via https://github.com/zarr-developers/zarr-specs/issues/227.
 
-## Document conventions
-
-Conformance requirements are expressed with a combination of
-descriptive assertions and [RFC2119] terminology. The key words
-"MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in the normative
-parts of this document are to be interpreted as described in
-[RFC2119]. However, for readability, these words do not appear in all
-uppercase letters in this specification.
-
-All of the text of this specification is normative except sections
-explicitly marked as non-normative, examples, and notes. Examples in
-this specification are introduced with the words "for example".
-
-
 ## Codec name
 
 The value of the `name` member in the codec object MUST be `blosc`.
@@ -120,14 +105,9 @@ by the Zarr v2 `blosc` codec in the following ways:
 
 ## References
 
-[RFC2119] S. Bradner. Key words for use in RFCs to Indicate
-   Requirement Levels. March 1997. Best Current Practice. URL:
-   https://tools.ietf.org/html/rfc2119
-
 [BLOSC] F. Alted. Blosc Chunk Format. URL:
    https://github.com/Blosc/c-blosc/blob/HEAD/README_CHUNK_FORMAT.rst
 
-[RFC2119]: https://tools.ietf.org/html/rfc2119
 [BLOSC]: https://github.com/Blosc/c-blosc/blob/HEAD/README_CHUNK_FORMAT.rst
 
 

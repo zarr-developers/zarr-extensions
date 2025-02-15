@@ -25,6 +25,28 @@ The review will be done largely based on avoiding confusing extension names and 
 Extension maintainers are responsible for their extensions.
 Updates to the extensions will also be reviewed by the steering council.
 
+
+## Document conventions
+
+These conventions are used for all extension specifications in this repository.
+
+Conformance requirements are expressed with a combination of descriptive
+assertions and [RFC2119] terminology. The key words "MUST", "MUST NOT",
+"REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY",
+and "OPTIONAL" in the normative parts of this document are to be interpreted as
+described in [RFC2119]. However, for readability, these words do not appear in
+all uppercase letters in this specification.
+
+All of the text of this specification is normative except sections explicitly
+marked as non-normative, examples, and notes. Examples in this specification are
+introduced with the words "for example".
+
+[RFC2119] S. Bradner. Key words for use in RFCs to Indicate
+   Requirement Levels. March 1997. Best Current Practice. URL:
+   https://tools.ietf.org/html/rfc2119
+
+[RFC2119]: https://tools.ietf.org/html/rfc2119
+
 ## License
 
 All extensions are licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
