@@ -55,45 +55,6 @@ The value of the `name` member in the codec object MUST be `sharding_indexed`.
 
 ## Configuration parameters
 
-Sharding can be configured per array in the [array metadata](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html#array-metadata) as follows:
-
-```json
-{
-    "codecs": [
-    {
-        "name": "sharding_indexed"
-        "configuration": {
-        "chunk_shape": [32, 32],
-        "codecs": [
-            { 
-            "name": "bytes",
-            "configuration": {
-                "endian": "little",
-            }
-            },
-            {
-            "name": "gzip",
-            "configuration": {
-                "level": 1
-            }
-            }
-        ],
-        "index_codecs": [
-            { 
-            "name": "bytes",
-            "configuration": {
-                "endian": "little",
-            }
-            },
-            { "name": "crc32c" } 
-        ],
-        "index_location": "end"
-        }
-    }
-    ]
-}
-```
-
 ### `chunk_shape`
 
 An array of integers specifying the shape of the inner chunks in a shard
@@ -139,6 +100,45 @@ If the parameter is not present, the value defaults to `end`.
   inner chunk shape along each dimension must evenly divide the size of the shard shape.
 * **Chunks per shard** is the element-wise division of the shard shape by the 
   inner chunk shape.
+
+## Example
+
+Sharding can be configured per array in the [array metadata](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html#array-metadata) as follows:
+
+```json
+{
+    "codecs": [{
+        "name": "sharding_indexed"
+        "configuration": {
+            "chunk_shape": [32, 32],
+            "codecs": [
+                { 
+                "name": "bytes",
+                "configuration": {
+                    "endian": "little",
+                }
+                },
+                {
+                "name": "gzip",
+                "configuration": {
+                    "level": 1
+                }
+                }
+            ],
+            "index_codecs": [
+                { 
+                "name": "bytes",
+                "configuration": {
+                    "endian": "little",
+                }
+                },
+                { "name": "crc32c" } 
+            ],
+            "index_location": "end"
+        }
+    }]
+}
+```
 
 
 ## Binary shard format
