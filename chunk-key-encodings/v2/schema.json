@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": ["v2"]
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "separator": {
+          "type": "string",
+          "enum": ["/", "."]
+        }
+      },
+      "required": ["separator"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}

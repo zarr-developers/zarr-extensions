@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": ["bytes"]
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "endian": {
+          "type": "string",
+          "enum": ["big", "little"]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

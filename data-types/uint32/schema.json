@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": ["uint32"]
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": false
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    { "type": "string", "enum": ["uint32"] }
+  ]
+}
