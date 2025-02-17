@@ -6,17 +6,16 @@
       "properties": {
         "name": {
           "type": "string",
-          "enum": ["crc32c"]
+          "enum": ["complex128"]
         },
         "configuration": {
           "type": "object",
-          "properties": {},
           "additionalProperties": false
         }
       },
       "required": ["name"],
       "additionalProperties": false
     },
-    { "type": "string", "enum": ["crc32c"] }
+    { "type": "string", "enum": ["complex128"] }
   ]
 }
