@@ -1,4 +1,8 @@
-# zarr-extensions
+# zarr-extensions (PREVIEW)
+
+Currently, this repository is in preview mode. It will become the registry for Zarr v3 extensions as soon as [the changes to the spec](https://github.com/zarr-developers/zarr-specs/pull/330) have been adopted.
+
+---
 
 This repository contains the specification for Zarr extensions for the [Zarr version 3 specification](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html).
 
