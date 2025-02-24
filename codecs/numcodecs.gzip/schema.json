@@ -6,7 +6,7 @@
       "properties": {
         "name": {
           "type": "string",
-          "enum": ["numcodecs.bz2"]
+          "enum": ["numcodecs.gzip"]
         },
         "configuration": {
           "type": "object",
@@ -22,6 +22,6 @@
       "required": ["name"],
       "additionalProperties": false
     },
-    { "type": "string", "enum": ["numcodecs.bz2"] }
+    { "type": "string", "enum": ["numcodecs.gzip"] }
   ]
 }

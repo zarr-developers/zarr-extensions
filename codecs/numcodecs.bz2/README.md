@@ -1,34 +1,35 @@
 # BZ2 codec
 
-Defines a `bytes -> bytes` codec that compresses chunks using the bz2 algorithm.
+Defines a `bytes -> bytes` codec that compresses chunks using the bzip2 algorithm.
 
 ## Codec name
 
-The value of the `name` member in the codec object MUST be `vlen-bytes`.
+The value of the `name` member in the codec object MUST be `numcodecs.bz2`.
 
 ## Configuration parameters
 
-None.
+See https://numcodecs.readthedocs.io/en/stable/compression/bz2.html for details about the configuration parameters.
+
+- `level`
 
 ## Example
 
-For example, the array metadata below specifies that the array contains variable-length byte strings:
+For example, the array metadata below specifies that the array contains bzip2 compressed chunks:
 
 ```json
 {
-    "codecs": [{
-        "name": "bz2"
+    "codecs": [{ "name": "bytes" }, {
+        "name": "numcodecs.bz2",
+        "configuration": {
+            "level": 1
+        }
     }],
 }
 ```
 
 ## Format and algorithm
 
-This is a `array -> bytes` codec.
-
-This codec is only compatible with the [`"bytes"`](../../data-types/bytes/README.md) data type.
-
-See https://numcodecs.readthedocs.io/en/stable/other/vlen.html#vlenbytes for details about the encoding.
+See https://numcodecs.readthedocs.io/en/stable/compression/bz2.html for details about the encoding.
 
 ## Change log
 
