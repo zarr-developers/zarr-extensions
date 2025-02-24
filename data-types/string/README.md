@@ -2,6 +2,10 @@
 
 Defines a data type for variable-length UTF8 strings.
 
+## Permitted fill values
+
+The value of the `fill_value` metadata key must be unicode string.
+
 ## Example
 
 For example, the array metadata below specifies that the array contains variable-length byte strings:
@@ -9,6 +13,7 @@ For example, the array metadata below specifies that the array contains variable
 ```json
 {
     "data_type": "string",
+    "fill_value": "foo",
     "codecs": [{
         "name": "vlen-utf8"
     }],

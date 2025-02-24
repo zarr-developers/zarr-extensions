@@ -2,6 +2,10 @@
 
 Defines a data type for variable-length byte strings.
 
+## Permitted fill values
+
+The value of the `fill_value` metadata key must be an array of byte values.
+
 ## Example
 
 For example, the array metadata below specifies that the array contains variable-length byte strings:
@@ -9,6 +13,7 @@ For example, the array metadata below specifies that the array contains variable
 ```json
 {
     "data_type": "bytes",
+    "fill_value": [1, 2, 3],
     "codecs": [{
         "name": "vlen-bytes"
     }],
