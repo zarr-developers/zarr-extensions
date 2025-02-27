@@ -27,6 +27,7 @@ For example, the array metadata below specifies that the array contains gzip com
 }
 ```
 
+
 ## Format and algorithm
 
 See https://numcodecs.readthedocs.io/en/stable/compression/gzip.html for details about the encoding.

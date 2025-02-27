@@ -27,6 +27,7 @@ For example, the array metadata below specifies that the array contains bzip2 co
 }
 ```
 
+
 ## Format and algorithm
 
 See https://numcodecs.readthedocs.io/en/stable/compression/bz2.html for details about the encoding.
