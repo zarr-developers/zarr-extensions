@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": ["numcodecs.astype"]
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "encode_dtype": {
+          "type": "string"
+        },
+        "decode_dtype": {
+          "type": "string"
+        }
+      },
+      "required": ["encode_dtype"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
