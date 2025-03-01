@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": ["numcodecs.pcodec"]
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 12
+            },
+            "mode_spec": {
+              "type": "string",
+              "enum": ["auto", "classic"]
+            },
+            "delta_spec": {
+              "type": "string",
+              "enum": ["auto", "none", "try_consecutive", "try_lookback"]
+            },
+            "paging_spec": {
+              "type": "string",
+              "enum": ["equal_pages_up_to"]
+            },
+            "delta_encoding_order": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 7
+            },
+            "equal_pages_up_to": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    { "type": "string", "enum": ["numcodecs.pcodec"] }
+  ]
+}

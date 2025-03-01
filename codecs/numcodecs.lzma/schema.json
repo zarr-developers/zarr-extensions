@@ -6,24 +6,35 @@
       "properties": {
         "name": {
           "type": "string",
-          "enum": ["numcodecs.bz2"]
+          "enum": ["numcodecs.lzma"]
         },
         "configuration": {
           "type": "object",
           "properties": {
-            "level": {
+            "format": {
+              "type": "integer"
+            },
+            "check": {
+              "type": "integer"
+            },
+            "preset": {
               "type": "integer",
-              "minimum": 1,
+              "minimum": 0,
               "maximum": 9
+            },
+            "filters": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
             }
           },
-          "required": ["level"],
           "additionalProperties": false
         }
       },
       "required": ["name"],
       "additionalProperties": false
     },
-    { "type": "string", "enum": ["numcodecs.bz2"] }
+    { "type": "string", "enum": ["numcodecs.lzma"] }
   ]
 }

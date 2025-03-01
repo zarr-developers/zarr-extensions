@@ -6,24 +6,21 @@
       "properties": {
         "name": {
           "type": "string",
-          "enum": ["numcodecs.bz2"]
+          "enum": ["numcodecs.shuffle"]
         },
         "configuration": {
           "type": "object",
           "properties": {
-            "level": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 9
+            "elementsize": {
+              "type": "integer"
             }
           },
-          "required": ["level"],
           "additionalProperties": false
         }
       },
       "required": ["name"],
       "additionalProperties": false
     },
-    { "type": "string", "enum": ["numcodecs.bz2"] }
+    { "type": "string", "enum": ["numcodecs.shuffle"] }
   ]
 }

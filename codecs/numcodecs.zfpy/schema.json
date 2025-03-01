@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": ["numcodecs.zfpy"]
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "integer"
+            },
+            "tolerance": {
+              "type": "number"
+            },
+            "rate": {
+              "type": "number"
+            },
+            "precision": {
+              "type": "integer"
+            },
+            "compression_kwargs": {
+              "type": "object"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    { "type": "string", "enum": ["numcodecs.zfpy"] }
+  ]
+}
