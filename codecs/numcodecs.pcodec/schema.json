@@ -29,9 +29,16 @@
               "enum": ["equal_pages_up_to"]
             },
             "delta_encoding_order": {
-              "type": "integer",
-              "minimum": 0,
-              "maximum": 7
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 7
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
             "equal_pages_up_to": {
               "type": "integer"

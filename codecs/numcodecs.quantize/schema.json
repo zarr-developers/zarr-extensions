@@ -11,7 +11,7 @@
       "properties": {
         "digits": {
           "type": "integer",
-          "minimum": 0
+          "minimum": -1
         },
         "dtype": {
           "type": "string"
