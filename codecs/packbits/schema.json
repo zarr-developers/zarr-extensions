@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "packbits"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "padding_encoding": {
+          "enum": ["start_byte", "end_byte", "none"],
+          "default": "none"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}
