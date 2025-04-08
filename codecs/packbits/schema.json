@@ -11,6 +11,24 @@
         "padding_encoding": {
           "enum": ["start_byte", "end_byte", "none"],
           "default": "none"
+        },
+        "start_bit": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            { "const": null }
+          ]
+        },
+        "end_bit": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            { "const": null }
+          ]
         }
       },
       "additionalProperties": false
