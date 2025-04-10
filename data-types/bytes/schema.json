@@ -1,12 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "anyOf": [
+  "oneOf": [
     {
       "type": "object",
       "properties": {
         "name": {
-          "type": "string",
-          "enum": ["bytes"]
+          "const": "bytes"
         },
         "configuration": {
           "type": "object",
@@ -16,6 +15,6 @@
       "required": ["name"],
       "additionalProperties": false
     },
-    { "type": "string", "enum": ["bytes"] }
+    { "const": "bytes" }
   ]
 }

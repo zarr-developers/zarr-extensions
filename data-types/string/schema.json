@@ -5,8 +5,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string",
-          "enum": ["string"]
+          "const": "string"
         },
         "configuration": {
           "type": "object",
@@ -16,6 +15,6 @@
       "required": ["name"],
       "additionalProperties": false
     },
-    { "type": "string", "enum": ["string"] }
+    { "const": "string" }
   ]
 }
