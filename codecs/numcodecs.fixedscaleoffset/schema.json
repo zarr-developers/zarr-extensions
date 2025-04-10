@@ -3,8 +3,7 @@
   "type": "object",
   "properties": {
     "name": {
-      "type": "string",
-      "enum": ["numcodecs.fixedscaleoffset"]
+      "const": "numcodecs.fixedscaleoffset"
     },
     "configuration": {
       "type": "object",

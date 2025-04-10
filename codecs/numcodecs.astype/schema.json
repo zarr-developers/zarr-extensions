@@ -3,8 +3,7 @@
   "type": "object",
   "properties": {
     "name": {
-      "type": "string",
-      "enum": ["numcodecs.astype"]
+      "const": "numcodecs.astype"
     },
     "configuration": {
       "type": "object",

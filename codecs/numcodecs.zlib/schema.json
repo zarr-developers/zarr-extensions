@@ -1,12 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "anyOf": [
+  "oneOf": [
     {
       "type": "object",
       "properties": {
         "name": {
-          "type": "string",
-          "enum": ["numcodecs.zlib"]
+          "const": "numcodecs.zlib"
         },
         "configuration": {
           "type": "object",
@@ -23,6 +22,6 @@
       "required": ["name"],
       "additionalProperties": false
     },
-    { "type": "string", "enum": ["numcodecs.zlib"] }
+    { "const": "numcodecs.zlib" }
   ]
 }

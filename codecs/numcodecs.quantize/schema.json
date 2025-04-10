@@ -3,8 +3,7 @@
   "type": "object",
   "properties": {
     "name": {
-      "type": "string",
-      "enum": ["numcodecs.quantize"]
+      "const": "numcodecs.quantize"
     },
     "configuration": {
       "type": "object",

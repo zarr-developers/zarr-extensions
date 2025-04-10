@@ -1,12 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "anyOf": [
+  "oneOf": [
     {
       "type": "object",
       "properties": {
         "name": {
-          "type": "string",
-          "enum": ["numcodecs.lzma"]
+          "const": "numcodecs.lzma"
         },
         "configuration": {
           "type": "object",
@@ -18,7 +17,7 @@
               "type": "integer"
             },
             "preset": {
-              "anyOf": [
+              "oneOf": [
                 {
                   "type": "integer",
                   "minimum": 0,
@@ -30,7 +29,7 @@
               ]
             },
             "filters": {
-              "anyOf": [
+              "oneOf": [
                 {
                   "type": "array",
                   "items": {
@@ -49,6 +48,6 @@
       "required": ["name"],
       "additionalProperties": false
     },
-    { "type": "string", "enum": ["numcodecs.lzma"] }
+    { "const": "numcodecs.lzma" }
   ]
 }
