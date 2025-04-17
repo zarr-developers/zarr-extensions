@@ -20,6 +20,7 @@ To register an extension, open a new PR with a new extension directory under the
 
 Each extension MUST have a `README.md` file that describes the extension and its metadata specification.
 Extensions SHOULD have a `schema.json` file that contains the JSON schema for the metadata, if the README.md does not provide a link to an external schema.
+The JSON schema should be formatted with `npx prettier -w **/schema.json`.
 Please note that all extensions documents will be licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
 Only open a PR if you are willing to license your extension under this license.
 
@@ -28,6 +29,7 @@ We aim to be very open about registering extensions.
 The review will be done largely based on avoiding confusing extension names and preventing malicious activity as well as maintaining the formal requirements of the extensions.
 Extension maintainers are responsible for their extensions.
 Updates to the extensions will also be reviewed by the steering council.
+The steering council reserves the right to reassign extensions to other maintainers in case of prolonged inactivity or other reasons at its own discretion.
 
 
 ## Document conventions
