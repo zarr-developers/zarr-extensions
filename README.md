@@ -29,6 +29,29 @@ The review will be done largely based on avoiding confusing extension names and 
 Extension maintainers are responsible for their extensions.
 Updates to the extensions will also be reviewed by the steering council.
 
+## Name conventions
+
+Registered extensions SHOULD use alphanumeric characters or underscore, `_`.
+
+Registered extensions MUST NOT use reserved characters. The following characters are reserved.
+
+```
+reserved = uri-gen-delims / uri-sub-delims / namespace-delims
+
+uri-gen-delims = ":" / "/" / "?" / "#" / "[" / "]" / "@"
+
+uri-sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+
+namespace-delims = "." / "-" / "~"
+```
+
+The reserved characters are a superset of reserved in [RFC3986].
+
+[RFC3986] Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform Resource Identifier (URI): Generic Syntax", STD 66, RFC 3986, DOI 10.17487/RFC3986, January 2005, 
+https://tools.ietf.org/html/rfc3986.
+
+[RFC3986]:
+https://tools.ietf.org/html/rfc3986
 
 ## Document conventions
 
@@ -49,7 +72,8 @@ introduced with the words "for example".
    Requirement Levels. March 1997. Best Current Practice. URL:
    https://tools.ietf.org/html/rfc2119
 
-[RFC2119]: https://tools.ietf.org/html/rfc2119
+[RFC2119]:
+https://tools.ietf.org/html/rfc2119
 
 ## License
 
