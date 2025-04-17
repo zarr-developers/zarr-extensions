@@ -45,7 +45,7 @@ uri-sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
 namespace-delims = "." / "-" / "~"
 ```
 
-The reserved characters are a superset of reserved in [RFC3986].
+The reserved characters are a superset of those reserved in [RFC3986].
 
 [RFC3986] Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform Resource Identifier (URI): Generic Syntax", STD 66, RFC 3986, DOI 10.17487/RFC3986, January 2005, 
 https://tools.ietf.org/html/rfc3986.
