@@ -49,7 +49,8 @@ More examples can be viewed in the [examples](./examples/) subdirectory.
 ## Supported Chunk Shapes
 
 `zfp` natively only supports 1, 2, 3 and 4 dimensional arrays.
-Implementations can support higher dimensional arrays by collapsing dimensions of size 1.
+
+This codec allows for encoding of higher dimensional arrays by collapsing dimensions of size 1.
 For example, a chunk of shape [4, 1, 3, 1, 2, 1] would have a zfp shape of [4, 3, 2].
 If the zfp shape has more than 4 dimensions after collapsing, it is an error.
 Dimensions of size 1 MUST NOT be collapsed for 1 to 4 dimensional arrays.
