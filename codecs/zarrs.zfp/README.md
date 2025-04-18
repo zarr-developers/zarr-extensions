@@ -4,7 +4,7 @@ Defines a `array -> bytes` codec that compresses chunks using the [zfp](https://
 
 ## Codec name
 
-The value of the `name` member in the codec object MUST be `zarrs.zfp`.
+The value of the `name` member in the codec object MUST be `zarrs`.
 
 ## Configuration parameters
 
@@ -35,7 +35,7 @@ For example, the array metadata below specifies that the array contains zfp comp
 ```json
 {
     "codecs": [{
-        "name": "zarrs.zfp",
+        "name": "zarrs",
         "configuration": {
             "mode": "fixed_accuracy",
             "tolerance": 0.05
