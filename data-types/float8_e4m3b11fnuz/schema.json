@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "float8_e4m3b11fnuz"
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": false
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    {
+      "const": "float8_e4m3b11fnuz"
+    }
+  ]
+}
