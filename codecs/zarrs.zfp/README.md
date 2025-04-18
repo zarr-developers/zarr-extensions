@@ -49,7 +49,7 @@ More examples can be viewed in the [examples](./examples/) subdirectory.
 ## Supported Chunk Shapes
 
 `zfp` natively only supports 1, 2, 3 and 4 dimensional arrays.
-However, this codec permits encoding of chunks with more than 4 dimensions provided that at most 4 dimensions have a chunk size greater than 1.
+However, implementations may support encoding of chunks with more than 4 dimensions provided that at most 4 dimensions have a chunk size greater than 1.
 - If the number of dimensions with chunk size > 1 is within the range [1, 4], those are the `zfp` dimensions.
 - If there are more than 4 such dimensions, it is an error.
 - If there are zero such dimensions, i.e. the chunk contains just a single element, treat it as a 1-d array of 1 element.
