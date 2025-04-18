@@ -46,6 +46,16 @@ For example, the array metadata below specifies that the array contains zfp comp
 
 More examples can be viewed in the [examples](./examples/) subdirectory.
 
+## Supported Chunk Shapes
+
+`zfp` natively only supports 1, 2, 3 and 4 dimensional arrays.
+However, this codec permits encoding of chunks with more than 4 dimensions provided that at most 4 dimensions have a chunk size greater than 1.
+- If the number of dimensions with chunk size > 1 is within the range [1, 4], those are the `zfp` dimensions.
+- If there are more than 4 such dimensions, it is an error.
+- If there are zero such dimensions, i.e. the chunk contains just a single element, treat it as a 1-d array of 1 element.
+
+These rules apply to the inner chunk shape if this codec is used as the array-to-bytes codec within the `sharding_indexed` codec.
+
 ## Supported Data Types
 
 - `int32`, `uint32`, `int64`, `uint64`, `float32`, `float64`
@@ -81,6 +91,7 @@ This format is tightly coupled to the [`zfp` C library](https://zfp.readthedocs.
 - `mode` is a string rather than an integer.
 - `mode` supports `reversible` and `expert` mode.
 - Lower-precision integer and floating point data types are supported.
+- Higher dimensional arrays are supported (provided that at most 4 dimensions have size greater than 1)
 - a header is not written with [`zfp_write_header`](https://zfp.readthedocs.io/en/release0.5.5/high-level-api.html#c.zfp_write_header).
   - This header is redundant given the information in the codec configuration.
 
