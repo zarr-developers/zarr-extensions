@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "zarrs.zfp"
+        },
+        "configuration": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "const": "reversible"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "const": "expert"
+                },
+                "minbits": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "maxbits": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "maxprec": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minexp": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "const": "fixed_accuracy"
+                },
+                "tolerance": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "const": "fixed_rate"
+                },
+                "rate": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "const": "fixed_precision"
+                },
+                "precision": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["name", "configuration"],
+      "additionalProperties": false
+    }
+  ]
+}

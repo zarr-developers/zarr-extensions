@@ -1,0 +1,10 @@
+{
+  "name": "zarrs.zfp",
+  "configuration": {
+    "mode": "expert",
+    "minbits": 1,
+    "maxbits": 13,
+    "maxprec": 19,
+    "minexp": -2
+  }
+}
