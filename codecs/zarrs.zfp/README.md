@@ -97,7 +97,7 @@ This format is tightly coupled to the [`zfp` C library](https://zfp.readthedocs.
   - This header is redundant given the information in the codec configuration.
 
 > [!NOTE]
-> An earlier version of the `zfp` codec in `zarrs` Rust crate included an optional [`write_header` parameter](https://docs.rs/zarrs_metadata/0.3.7/zarrs_metadata/v3/array/codec/zfp/struct.ZfpCodecConfigurationV1.html) in the codec configuration.
+> An earlier version of the `zfp` codec in the `zarrs` Rust crate included an optional [`write_header` parameter](https://docs.rs/zarrs_metadata/0.3.7/zarrs_metadata/v3/array/codec/zfp/struct.ZfpCodecConfigurationV1.html) in the codec configuration.
 > This has since been removed in favor of better separating `zfp` and `zfpy`.
 
 ## Change log
