@@ -1,5 +1,5 @@
 {
-  "name": "zarrs.zfp",
+  "name": "zfp",
   "configuration": {
     "mode": "fixed_precision",
     "precision": 19
