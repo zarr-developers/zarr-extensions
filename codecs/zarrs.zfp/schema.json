@@ -16,6 +16,7 @@
                   "const": "reversible"
                 }
               },
+              "required": ["mode"],
               "additionalProperties": false
             },
             {
@@ -40,6 +41,7 @@
                   "type": "integer"
                 }
               },
+              "required": ["mode", "minbits", "maxbits", "maxprec", "minexp"],
               "additionalProperties": false
             },
             {
@@ -52,6 +54,7 @@
                   "type": "number"
                 }
               },
+              "required": ["mode", "tolerance"],
               "additionalProperties": false
             },
             {
@@ -64,6 +67,7 @@
                   "type": "number"
                 }
               },
+              "required": ["mode", "rate"],
               "additionalProperties": false
             },
             {
@@ -77,6 +81,7 @@
                   "minimum": 0
                 }
               },
+              "required": ["mode", "precision"],
               "additionalProperties": false
             }
           ]
