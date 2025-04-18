@@ -51,7 +51,7 @@ More examples can be viewed in the [examples](./examples/) subdirectory.
 - `int32`, `uint32`, `int64`, `uint64`, `float32`, `float64`
 - `int8`, `uint8`, `int16`, `uint16` (through internal promotion 32-bit)
 
-Implementations are permitted to support additional data types that could be interpreted as the above data types (e.g. `datetime64` -> `uint64`).
+Implementations are permitted to support additional data types that could be interpreted as the above data types (e.g. `datetime64` -> `int64`).
 
 ## Format and algorithm
 
