@@ -49,8 +49,7 @@ More examples can be viewed in the [examples](./examples/) subdirectory.
 ## Supported Chunk Shapes
 
 `zfp` natively only supports 1, 2, 3 and 4 dimensional arrays.
-
-Chunks with 4 or fewer dimensions are mapped to `zfp` field sizes as follows (in accordance with the [`zfp_field_Nd`](https://zfp.readthedocs.io/en/release0.5.5/high-level-api.html#array-metadata) functions):
+Chunk shapes are mapped to `zfp` field sizes according to the [`zfp_field_Nd`](https://zfp.readthedocs.io/en/release0.5.5/high-level-api.html#array-metadata) APIs as follows:
  - 1D: `[nx]`
  - 2D: `[ny, nx]`
  - 3D: `[nz, ny, nx]`
@@ -58,10 +57,9 @@ Chunks with 4 or fewer dimensions are mapped to `zfp` field sizes as follows (in
 
 The chunk of a zero-dimensional Zarr array is interpreted as a 1D `zfp` field with `nx = 1`.
 
-Higher-dimensional chunks are supported by collapsing dimensions of size 1.
-For example, a chunk of shape `[4, 1, 3, 1, 2, 1]` would have a `zfp` field size of `[nz, ny, nx] = [4, 3, 2]`.
-If a chunk shape has more than 4 dimensions after collapsing, it is an error.
-Dimensions of size 1 MUST NOT be collapsed for 1 to 4 dimensional chunks.
+Chunks with more than four dimensions are not supported directly by this codec.
+However, higher-dimensional arrays could be supported by collapsing singleton dimensions (dimensions of size 1) using a [`np.squeeze`](https://numpy.org/doc/stable/reference/generated/numpy.squeeze.html) inspired array-to-array codec, provided the resulting dimensionality is four or fewer.
+For example, a chunk with shape `[4, 1, 3, 1, 2, 1]` would be squeezed to a `zfp` field size of `[nz, ny, nx] = [4, 3, 2]`.
 
 These rules apply to the inner chunk shape if this codec is used as the array-to-bytes codec within the `sharding_indexed` codec.
 
@@ -101,7 +99,6 @@ This format is tightly coupled to the [`zfp` C library](https://zfp.readthedocs.
 - `mode` is a string rather than an integer.
 - `mode` supports `reversible` and `expert` mode.
 - Lower-precision integer and floating point data types are supported.
-- Higher-dimensional arrays are supported (provided that at most 4 dimensions have size greater than 1)
 - a header is not written with [`zfp_write_header`](https://zfp.readthedocs.io/en/release0.5.5/high-level-api.html#c.zfp_write_header).
   - This header is redundant given the information in the codec configuration.
 
