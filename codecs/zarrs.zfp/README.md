@@ -58,7 +58,7 @@ Chunk shapes are mapped to `zfp` field sizes according to the [`zfp_field_Nd`](h
 The chunk of a zero-dimensional Zarr array is interpreted as a 1D `zfp` field with `nx = 1`.
 
 Chunks with more than four dimensions are not supported directly by this codec.
-However, higher-dimensional arrays could be supported by collapsing singleton dimensions (dimensions of size 1) using a [`np.squeeze`](https://numpy.org/doc/stable/reference/generated/numpy.squeeze.html) inspired array-to-array codec, provided the resulting dimensionality is four or fewer.
+However, higher-dimensional arrays could be supported by preceeding this codec with a [`np.squeeze`](https://numpy.org/doc/stable/reference/generated/numpy.squeeze.html) inspired array-to-array codec that collapses singleton dimensions (dimensions of size 1), provided the resulting dimensionality is four or fewer.
 For example, a chunk with shape `[4, 1, 3, 1, 2, 1]` would be squeezed to a `zfp` field size of `[nz, ny, nx] = [4, 3, 2]`.
 
 These rules apply to the inner chunk shape if this codec is used as the array-to-bytes codec within the `sharding_indexed` codec.
