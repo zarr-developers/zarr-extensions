@@ -1,0 +1,7 @@
+{
+  "name": "zfp",
+  "configuration": {
+    "mode": "fixed_rate",
+    "rate": 10.5
+  }
+}
