@@ -5,7 +5,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "const": "zarrs.zfp"
+          "const": "zfp"
         },
         "configuration": {
           "oneOf": [
