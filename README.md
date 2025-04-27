@@ -42,7 +42,7 @@ uri-gen-delims = ":" / "/" / "?" / "#" / "[" / "]" / "@"
 
 uri-sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
 
-namespace-delims = "." / "-" / "~"
+namespace-delims = "." / "~"
 ```
 
 The reserved characters are a superset of those reserved in [RFC3986].
@@ -52,6 +52,10 @@ https://tools.ietf.org/html/rfc3986.
 
 [RFC3986]:
 https://tools.ietf.org/html/rfc3986
+
+## Namespaces
+
+Namespaces MAY precede an extension name or other namespace prefixes. The character `.` MUST be used to delimit namespaces from each other and from the extension names. The primary use of namespaces is to disambiguate extensions with similar names which may differ in implementation or metadata. Extensions SHOULD register without a namespace if there is no amibiguity or difference in implementation from another extension of a similar name or use an existing namespace if applicable.
 
 ## Document conventions
 
