@@ -1,10 +1,11 @@
 # timedelta64 data type
 
-Defines a Zarr data type to model the `timedelta64` data type defined by Numpy. 
+This document defines a Zarr data type to model the `timedelta64` data type from Numpy. The `timedelta64` data type represents signed temporal durations.
 
 ## Background
 
-`timedelta64` is based on a data type with the same name defined in [Numpy](https://numpy.org/). Thus this document begins by describing how `timedelta64` works in Numpy. Numpy's implementation is necessary context for making sense of the Zarr implementation.
+`timedelta64` is based on a data type with the same name defined in [Numpy](https://numpy.org/). To provide necessary context, this document first describes how `timedelta64` works in Numpy before detailing its specification in Zarr.
+
 The following references to Numpy are current with version 2.2 of that library.
 
 Numpy defines a data type called `"timedelta64"` to represent signed temporal durations. These durations arise when taking a difference between moments in time. Numpy models moments in time with a related data type called `"datetime64"`. Both data types are described in the [Numpy documentation](https://numpy.org/doc/stable/reference/arrays.datetime.html), which should be considered authoritative.
@@ -18,7 +19,7 @@ Numpy represents `timedelta64` scalars with 64 bit signed integers. Negative val
 #### Step size
 The Numpy `timedelta64` data type takes a step size parameter. It must be an integer in the range `[1, 2147483647]`, i.e. `[1, 2^31 - 1]`.
 
-While it is possible to construct a Numpy `timedelta64` data type with a step size of `0`, Numpy will internally normalize this to `1`.
+While it is possible to construct a Numpy `timedelta64` data type with a step size of `0`, Numpy will automatically normalize this to `1`.
 
 #### Unit
 The Numpy `timedelta64` data type takes a unit parameter, which must be one of the following temporal units:
@@ -40,12 +41,12 @@ The Numpy `timedelta64` data type takes a unit parameter, which must be one of t
 | fs       | femtosecond     |
 | as       | attosecond     |
 
-> Note: "us" and "μs" are both valid representations for microseconds.
+> Note: "us" and "μs" are treated as equivalent by Numpy.
 
 > Note: Numpy permits the creation of `timedelta64` data types with an unspecified unit. In this case, the unit is set to the special value `"generic"`.
 
 #### Endianness
-The Numpy `timedelta64` data type takes an byte order parameter, which must be either little-endian or big-endian. 
+The Numpy `timedelta64` data type takes a byte order parameter, which must be either little-endian or big-endian. 
 
 ## Data type representation
 
@@ -55,7 +56,7 @@ The name of this data type is the string `"timedelta64"`.
 
 ### Configuration
 
-The configuration for this data type is a JSON object with the following fields:
+This data type requires a configuration. The configuration for this data type is a JSON object with the following fields:
 
 | field name | type | required | notes |
 |------------|----------|---|---|
@@ -69,7 +70,7 @@ The configuration for this data type is a JSON object with the following fields:
 No additional fields are permitted.
 
 ### Examples
-The metadata representation of a `timedelta64` with a unit of microseconds and a scale factor of 10, equivalent to the Numpy data type `timedelta64[10us]`:
+The following is an example of the metadata representation of a `timedelta64` with a unit of microseconds and a scale factor of 10. This configuration defines a data type equivalent to the Numpy data type `timedelta64[10us]`:
 
 ```json
 {
@@ -87,7 +88,7 @@ The metadata representation of a `timedelta64` with a unit of microseconds and a
 - a JSON number with no fraction or exponent part that is within the range `[-2^63, 2^63 - 1]`. 
 - the string `"NaT"`, which denotes the value `NaT`. 
 
-> Note: the `NaT` value can also be encoded as the JSON number `-9223372036854775808`, i.e. `-2 ^ 63`. 
+> Note: the `NaT` value MAY be encoded as the JSON number `-9223372036854775808`, i.e. `-2 ^ 63`. 
 
 ## Codec compatibility
 
