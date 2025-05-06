@@ -1,0 +1,28 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "datetime64",
+    "type": "object",
+    "properties": {
+      "name": {
+        "const": "datetime64"
+      },
+      "configuration": {
+        "type": "object",
+        "properties": {
+          "unit": {
+            "type": "string",
+            "enum": ["Y", "M", "W", "D", "h", "m", "s", "ms", "us", "μs", "ns", "ps", "fs", "as", "generic"]
+          },
+          "scale_factor": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+          }
+        },
+        "required": ["unit", "scale_factor"],
+        "additionalProperties": false
+      }
+    },
+    "required": ["name", "configuration"],
+    "additionalProperties": false
+  }
