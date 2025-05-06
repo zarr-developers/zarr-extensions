@@ -111,7 +111,7 @@ NumPy data type `timedelta64[10us]`:
 
 For the `"fill_value"` field of array metadata, `timedelta64` scalars must be represented in one of 
 two forms:
-- As JSON number with no fraction or exponent part that is within the range `[-2^63, 2^63 - 1]`. 
+- As a JSON number with no fraction or exponent part that is within the range `[-2^63, 2^63 - 1]`. 
 - As the string `"NaT"`, which denotes the value `NaT`. 
 
 > Note: the `NaT` value may optionally be encoded as the JSON number `-9223372036854775808`, i.e., 
