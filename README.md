@@ -27,6 +27,33 @@ Extension maintainers are responsible for their extensions.
 Updates to the extensions will also be reviewed by the steering council.
 The steering council reserves the right to reassign extensions to other maintainers in case of prolonged inactivity or other reasons at its own discretion.
 
+## Name conventions
+
+Registered extensions SHOULD use alphanumeric characters or underscore, `_`.
+
+Registered extensions MUST NOT use reserved characters. The following characters are reserved.
+
+```
+reserved = uri-gen-delims / uri-sub-delims / namespace-delims
+
+uri-gen-delims = ":" / "/" / "?" / "#" / "[" / "]" / "@"
+
+uri-sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+
+namespace-delims = "." / "~"
+```
+
+The reserved characters are a superset of those reserved in [RFC3986].
+
+[RFC3986] Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform Resource Identifier (URI): Generic Syntax", STD 66, RFC 3986, DOI 10.17487/RFC3986, January 2005, 
+https://tools.ietf.org/html/rfc3986.
+
+[RFC3986]:
+https://tools.ietf.org/html/rfc3986
+
+## Namespaces
+
+Namespaces MAY precede an extension name or other namespace prefixes. The character `.` MUST be used to delimit namespaces from each other and from the extension names. The primary use of namespaces is to disambiguate extensions with similar names which may differ in implementation or metadata. Extensions SHOULD register without a namespace if there is no amibiguity or difference in implementation from another extension of a similar name or use an existing namespace if applicable.
 
 ## Document conventions
 
@@ -47,7 +74,8 @@ introduced with the words "for example".
    Requirement Levels. March 1997. Best Current Practice. URL:
    https://tools.ietf.org/html/rfc2119
 
-[RFC2119]: https://tools.ietf.org/html/rfc2119
+[RFC2119]:
+https://tools.ietf.org/html/rfc2119
 
 ## License
 
