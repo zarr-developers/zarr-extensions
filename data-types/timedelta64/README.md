@@ -4,7 +4,7 @@ Defines a Zarr data type to model the `timedelta64` data type defined by Numpy.
 
 ## Background
 
-`timedelta64` is based on a data type defined in [Numpy](https://numpy.org/). Thus this document begins by describing how `timedelta64` works in Numpy. Numpy's implementation is necessary context for making sense of the Zarr implementation.
+`timedelta64` is based on a data type with the same name defined in [Numpy](https://numpy.org/). Thus this document begins by describing how `timedelta64` works in Numpy. Numpy's implementation is necessary context for making sense of the Zarr implementation.
 The following references to Numpy are current with version 2.2 of that library.
 
 Numpy defines a data type called `"timedelta64"` to represent signed temporal durations. These durations arise when taking a difference between moments in time. Numpy models moments in time with a related data type called `"datetime64"`. Both data types are described in the [Numpy documentation](https://numpy.org/doc/stable/reference/arrays.datetime.html), which should be considered authoritative.
