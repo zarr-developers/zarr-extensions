@@ -10,16 +10,16 @@ The following references to NumPy are based on version 2.2 of that library.
 
 NumPy defines a data type called `"timedelta64"` to represent signed temporal durations. These durations arise when taking a difference between moments in time. NumPy models moments in time with a related data type called `"datetime64"`. Both data types are described in the [NumPy documentation](https://NumPy.org/doc/stable/reference/arrays.datetime.html), which should be considered authoritative.
 
-`timedelta64` data types are parametrized by a physical unit of duration, like seconds or minutes, and a positive integral step size. For example, given a `timedelta64` data type defined with a unit of seconds and a duration 10, the scalar value `1` in that data type represents a duration of 10 seconds.   
+`timedelta64` data types are parametrized by a physical unit of duration, like seconds or minutes, and a positive integral scale factor. For example, given a `timedelta64` data type defined with a unit of seconds and a duration 10, the scalar value `1` in that data type represents a duration of 10 seconds.   
 
 NumPy represents `timedelta64` scalars with 64 bit signed integers. Negative values are permitted. The smallest 64-bit signed integer, i.e., `-2^63`, represents a non-duration value called "Not a Time", or `NaT`. The `NaT` value serves a role similar to the "Not a Number" value used floating point data types. 
 
 ### NumPy data type parameters
 
-#### Step size
-The NumPy `timedelta64` data type takes a step size parameter. It must be an integer in the range `[1, 2147483647]`, i.e. `[1, 2^31 - 1]`.
+#### Scale factor
+The NumPy `timedelta64` data type takes a scaling factor. It must be an integer in the range `[1, 2147483647]`, i.e. `[1, 2^31 - 1]`.
 
-While it is possible to construct a NumPy `timedelta64` data type with a step size of `0`, NumPy will automatically normalize this to `1`.
+While it is possible to construct a NumPy `timedelta64` data type with a scaling factor of `0`, NumPy will automatically normalize this to `1`.
 
 #### Unit
 The NumPy `timedelta64` data type takes a unit parameter, which must be one of the following temporal units:
