@@ -23,10 +23,10 @@ Only open a PR if you are willing to license your extension under this license.
 The PR will be reviewed by the [Zarr steering council](https://github.com/orgs/zarr-developers/teams/steering-council).
 We aim to be very open about registering extensions.
 The review will be done largely based on avoiding confusing extension names and preventing malicious activity as well as maintaining the formal requirements of the extensions.
+We recommend opening a "draft PR" first, if you still want to solicit feedback from others in the community. As soon as you turn your PR into a regular PR, the review will be processed.
 Extension maintainers are responsible for their extensions.
 Updates to the extensions will also be reviewed by the steering council.
 The steering council reserves the right to reassign extensions to other maintainers in case of prolonged inactivity or other reasons at its own discretion.
-
 
 ## Document conventions
 
