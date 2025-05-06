@@ -84,11 +84,11 @@ The following is an example of the metadata for a `timedelta64` data type with a
 
 ## Fill value representation
 
-`timedelta64` fill values are represented as one of:
-- a JSON number with no fraction or exponent part that is within the range `[-2^63, 2^63 - 1]`. 
-- the string `"NaT"`, which denotes the value `NaT`. 
+For the `"fill_value"` field of array metadata, `timedelta64` scalars must be represented in one of two forms:
+- As JSON number with no fraction or exponent part that is within the range `[-2^63, 2^63 - 1]`. 
+- As the string `"NaT"`, which denotes the value `NaT`. 
 
-> Note: the `NaT` value may optionally be encoded as the JSON number `-9223372036854775808`, i.e., `-2^63`. 
+> Note: the `NaT` value may optionally be encoded as the JSON number `-9223372036854775808`, i.e., `-2^63`. That is, `"fill_value": "NaT"` and `"fill_value": -9223372036854775808` should be treated as equivalent. 
 
 ## Codec compatibility
 
