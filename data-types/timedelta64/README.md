@@ -18,7 +18,7 @@ Numpy represents `timedelta64` scalars with 64 bit signed integers. Negative val
 #### Step size
 The Numpy `timedelta64` data type takes a step size parameter. It must be an integer in the range `[1, 2147483647]`, i.e. `[1, 2^31 - 1]`.
 
-While it is possible to construct a Numpy `timedelta64` data type with a step size of `0`, Numpy will not permit this data type to be associated with arrays that contain non-`NaT` scalars. Thus for arrays that contain actual durations, the smallest step size is effectively `1`.
+While it is possible to construct a Numpy `timedelta64` data type with a step size of `0`, Numpy will internally normalize this to `1`.
 
 #### Unit
 The Numpy `timedelta64` data type takes a unit parameter, which must be one of the following temporal units:
