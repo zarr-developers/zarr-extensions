@@ -4,7 +4,7 @@
     "type": "object",
     "properties": {
       "name": {
-        "const": "datetime64"
+        "const": "numpy.datetime64"
       },
       "configuration": {
         "type": "object",

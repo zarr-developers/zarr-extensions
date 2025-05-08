@@ -1,13 +1,15 @@
-# datetime64 data type
+# numpy.datetime64 data type
 
-This document defines a Zarr data type to model the `datetime64` data type from NumPy. 
-The `datetime64` data type represents moments in time relative to the Unix epoch.
+This document defines `numpy.datetime64`, a data type 
+that represents moments in time relative to the Unix epoch.
+The `numpy.datetime64` data type closely models the `datetime64` data type from NumPy. 
+
 
 ## Background
 
-`datetime64` is based on a data type with the same name defined in [NumPy](https://NumPy.org/). 
+`numpy.datetime64` is based on the `datetime64` data defined in [NumPy](https://NumPy.org/). 
 To provide necessary context, this document first describes how `datetime64` works in NumPy before 
-detailing its specification in Zarr.
+detailing how the corresponding Zarr data type is defined.
 
 The following references to NumPy are based on version 2.2 of that library.
 
@@ -66,7 +68,7 @@ little-endian or big-endian.
 
 ### Name
 
-The name of this data type is the string `"datetime64"`.
+The name of this data type is the string `"numpy.datetime64"`.
 
 ### Configuration
 
@@ -79,8 +81,8 @@ the following fields:
 | `"scale_factor"` | `integer` | yes | The number must represent an integer from the inclusive range `[1, 2147483647]` |
 
 > Note: the NumPy `datetime64` data type is parametrized by an endianness (little or big), but the 
-Zarr `datetime64` data type is not. In Zarr, the endianness of `datetime64` arrays is determined by 
-the configuration of the `codecs` metadata and is thus not part of the data type configuration.
+Zarr `numpy.datetime64` data type is not. In Zarr, the endianness of `numpy.datetime64` arrays is determined by 
+the configuration of the codecs defined in metadata and is thus not part of the data type configuration.
 
 > Note: as per NumPy, `"us"` and `"μs"` are equivalent and interchangeable representations of 
 microseconds.
@@ -88,13 +90,13 @@ microseconds.
 No additional fields are permitted in the configuration.
 
 ### Examples
-The following is an example of the metadata for a `datetime64` data type with a unit of microseconds 
+The following is an example of the metadata for a `numpy.datetime64` data type with a unit of microseconds 
 and a scale factor of 10. This configuration defines a data type equivalent to the NumPy data type 
 `datetime64[10us]`:
 
 ```json
 {
-    "name": "datetime64",
+    "name": "numpy.datetime64",
     "configuration": {
         "unit": "us",
         "scale_factor": 10
@@ -104,7 +106,7 @@ and a scale factor of 10. This configuration defines a data type equivalent to t
 
 ## Fill value representation
 
-For the `"fill_value"` field of array metadata, `datetime64` scalars must be represented in one of 
+For the `"fill_value"` field of array metadata, `numpy.datetime64` scalars must be represented in one of 
 two forms:
 - As a JSON number with no fraction or exponent part that is within the range `[-2^63, 2^63 - 1]`. 
 - As the string `"NaT"`, which denotes the value `NaT`. 
