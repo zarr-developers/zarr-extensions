@@ -1,11 +1,11 @@
-# timedelta64 data type
+# numpy.timedelta64 data type
 
 This document defines a Zarr data type to model the `timedelta64` data type from NumPy. 
 The `timedelta64` data type represents signed temporal durations.
 
 ## Background
 
-`timedelta64` is based on a data type with the same name defined in [NumPy](https://NumPy.org/). 
+`numpy.timedelta64` is based on a data type with the same name defined in [NumPy](https://NumPy.org/). 
 To provide necessary context, this document first describes how `timedelta64` works in NumPy before 
 detailing its specification in Zarr.
 
@@ -22,7 +22,7 @@ and a positive integral scale factor. For example, given a `timedelta64` data ty
 unit of seconds and a duration 10, the scalar value `1` in that data type represents a duration of 
 10 seconds.   
 
-NumPy represents `timedelta64` scalars with 64 bit signed integers. Negative values are permitted. 
+NumPy represents `timedelta64` scalars with 64-bit signed integers. Negative values are permitted. 
 The smallest 64-bit signed integer, i.e., `-2^63`, represents a non-duration value called 
 "Not a Time", or `NaT`. The `NaT` value serves a role similar to the "Not a Number" value defined in
 some floating point data types. 
@@ -71,7 +71,7 @@ or big-endian.
 
 ### Name
 
-The name of this data type is the string `"timedelta64"`.
+The name of this data type is the string `"numpy.timedelta64"`.
 
 ### Configuration
 
@@ -84,8 +84,8 @@ the following fields:
 | `"scale_factor"` | `integer` | yes | The number must represent an integer from the inclusive range `[1, 2147483647]` |
 
 > Note: the NumPy `timedelta64` data type is parametrized by an endianness (little or big), but the 
-Zarr `timedelta64` data type is not. In Zarr, the endianness of `timedelta64` arrays is determined 
-by the configuration of the `codecs` metadata and is thus not part of the data type configuration.
+Zarr `numpy.timedelta64` data type is not. In Zarr, the endianness of `numpy.timedelta64` arrays is determined 
+by the configuration of the codecs defined in metadata and is thus not part of the data type configuration.
 
 > Note: as per NumPy, `"us"` and `"μs"` are equivalent and interchangeable representations of 
 microseconds.
@@ -93,13 +93,13 @@ microseconds.
 No additional fields are permitted in the configuration.
 
 ### Examples
-The following is an example of the metadata for a `timedelta64` data type with a unit of 
+The following is an example of the metadata for a `numpy.timedelta64` data type with a unit of 
 microseconds and a scale factor of 10. This configuration defines a data type equivalent to the 
 NumPy data type `timedelta64[10us]`:
 
 ```json
 {
-    "name": "timedelta64",
+    "name": "numpy.timedelta64",
     "configuration": {
         "unit": "us",
         "scale_factor": 10
@@ -109,12 +109,12 @@ NumPy data type `timedelta64[10us]`:
 
 ## Fill value representation
 
-For the `"fill_value"` field of array metadata, `timedelta64` scalars must be represented in one of 
+For the `"fill_value"` field of array metadata, `numpy.timedelta64` scalars must be represented in one of 
 two forms:
 - As a JSON number with no fraction or exponent part that is within the range `[-2^63, 2^63 - 1]`. 
 - As the string `"NaT"`, which denotes the value `NaT`. 
 
-> Note: the `NaT` value may optionally be encoded as the JSON number `-9223372036854775808`, i.e., 
+> Note: the `NaT` value may be encoded as the JSON number `-9223372036854775808`, i.e., 
 `-2^63`. That is, `"fill_value": "NaT"` and `"fill_value": -9223372036854775808` should be treated 
 as equivalent representations of the same scalar value (`NaT`). 
 
