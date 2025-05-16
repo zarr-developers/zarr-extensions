@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "fixed-length-ucs4"
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "length_bits": {
+              "type": "integer"
+            }
+          },
+          "required": ["length_bits"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["name", "configuration"],
+      "additionalProperties": false
+    },
+    { "const": "fixed-length-ucs4" }
+  ]
+}
