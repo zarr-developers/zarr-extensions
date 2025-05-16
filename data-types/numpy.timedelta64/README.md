@@ -121,3 +121,7 @@ as equivalent representations of the same scalar value (`NaT`).
 ## Codec compatibility
 
 This data type is compatible with any codec that supports arrays of signed 64-bit integers.
+
+## Current maintainers
+
+* [zarr-python core development team](https://github.com/orgs/zarr-developers/teams/python-core-devs)
