@@ -5,7 +5,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "const": "fixed-length-ucs4"
+          "const": "fixed_length_utf32"
         },
         "configuration": {
           "type": "object",
@@ -14,13 +14,13 @@
               "type": "integer"
             }
           },
-          "required": ["length_bits"],
+          "required": ["length_bytes"],
           "additionalProperties": false
         }
       },
       "required": ["name", "configuration"],
       "additionalProperties": false
     },
-    { "const": "fixed-length-ucs4" }
+    { "const": "fixed_length_utf32" }
   ]
 }
