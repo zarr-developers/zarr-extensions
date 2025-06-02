@@ -10,7 +10,7 @@
         "configuration": {
           "type": "object",
           "properties": {
-            "length_bits": {
+            "length_bytes": {
               "type": "integer"
             }
           },
