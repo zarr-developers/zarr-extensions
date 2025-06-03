@@ -1,8 +1,10 @@
 # `fixed_length_utf32` data type
 
-This document defines a data type for fixed-length Unicode strings encoded using [UTF-32](https://www.unicode.org/versions/Unicode5.0.0/appC.pdf#M9.19040.HeadingAppendix.C2.Encoding.Forms.in.ISOIEC.10646). UTF-32, also known as UCS4, is an encoding of Unicode strings that allocates 4 bytes to each Unicode code point.
+This document defines a data type for fixed-length, null-terminated Unicode strings encoded using [UTF-32](https://www.unicode.org/versions/Unicode5.0.0/appC.pdf#M9.19040.HeadingAppendix.C2.Encoding.Forms.in.ISOIEC.10646). UTF-32, also known as UCS4, is an encoding of Unicode strings that allocates 4 bytes to each Unicode code point.
 
 "Fixed length" as used here means that the `fixed_length_utf32` data type is parametrized by a integral length, which sets a fixed length for every scalar belonging to that data type.
+
+"Null-terminated" as used here means that, for an integral length `L`, a `fixed_length_utf32` data type parameterized with `L` can represent a string shorter than `L` by adding null bytes to the end of that string until it has length `L`. 
 
 ### Name
 
@@ -33,7 +35,7 @@ This data type requires a configuration. The configuration for this data type is
 
 ## Fill value representation
 
-The value of the `fill_value` metadata key must be a string. When encoded in UTF-32, the fill value MUST have a length in bytes equal to the value of the `length_bytes` specified in the `configuration` of this data type.
+The value of the `fill_value` metadata key must be a string. When encoded in UTF-32, the fill value MUST have a length in bytes less than or equal to the value of the `length_bytes` specified in the `configuration` of this data type.
 
 ## Codec compatibility
 
