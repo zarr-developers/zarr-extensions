@@ -41,7 +41,7 @@ Encoded as a 1-byte value `0bEEEEEEEE`.  The `"endian"` parameter has no effect.
 - Defined as the *scale* format E8M0 by [OpenCompute
   MX](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf).
 - Python implementation available at https://pypi.org/project/ml-dtypes/
-- Implemented in [LLVM/MLIR](https://llvm.org/doxygen/APFloat_8h_source.html) as `Float8E8M0FN`.
+- Implemented in [LLVM/MLIR](https://llvm.org/doxygen/APFloat_8h_source.html) as `Float8E8M0FNU`.
 
 ## Current maintainers
 

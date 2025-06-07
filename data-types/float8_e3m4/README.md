@@ -33,7 +33,7 @@ Encoded as a 1-byte value `0bSEEEMMMM`.  The `"endian"` parameter has no effect.
 ## See also
 
 - Python implementation available at https://pypi.org/project/ml-dtypes/
-- Implemented in [LLVM/MLIR](https://llvm.org/doxygen/APFloat_8h_source.html) as `FloatE3M4`.
+- Implemented in [LLVM/MLIR](https://llvm.org/doxygen/APFloat_8h_source.html) as `Float8E3M4`.
 
 ## Current maintainers
 

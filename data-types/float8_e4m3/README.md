@@ -37,7 +37,7 @@ Encoded as a 1-byte value `0bSEEEEMMM`.  The `"endian"` parameter has no effect.
   MX](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf).
 - Python implementation available at https://pypi.org/project/ml-dtypes/
 - Implemented in [LLVM/MLIR](https://llvm.org/doxygen/APFloat_8h_source.html) as
-  `FloatE4M3`.
+  `Float8E4M3`.
 
 ## Current maintainers
 

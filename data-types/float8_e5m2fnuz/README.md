@@ -4,7 +4,7 @@ Defines an 8-bit floating point representation with:
 
 - 1 sign bit
 - 5 exponent bits, with bias of 16
-- 3 mantissa bits
+- 2 mantissa bits
 - Extended range: no infinity, NaN represented by `0b1000'0000`.
 - Subnormal numbers when biased exponent is 0.
 
@@ -40,7 +40,7 @@ Encoded as a 1-byte value `0bSEEEEEMM`.  The `"endian"` parameter has no effect.
 
 - Bit layout described by https://arxiv.org/abs/2206.02915
 - Python implementation available at https://pypi.org/project/ml-dtypes/
-- Implemented in [LLVM/MLIR](https://llvm.org/doxygen/APFloat_8h_source.html) as `FloatE4M3`.
+- Implemented in [LLVM/MLIR](https://llvm.org/doxygen/APFloat_8h_source.html) as `Float8E5M2FNUZ`.
 
 ## Current maintainers
 
