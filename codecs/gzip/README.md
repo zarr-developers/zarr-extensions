@@ -1,1 +1,1 @@
-See https://zarr-specs.readthedocs.io/en/latest/v3/codecs/gzip/v1.0.html
+See https://zarr-specs.readthedocs.io/en/latest/v3/codecs/gzip/

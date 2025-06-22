@@ -1,1 +1,1 @@
-See https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html#data-types
+See https://zarr-specs.readthedocs.io/en/latest/v3/core/index.html#data-types
