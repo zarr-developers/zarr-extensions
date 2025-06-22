@@ -9,7 +9,7 @@ It is the normative source for registering names of Zarr v3 extensions.
 To register an extension, open a new PR with a new extension directory under the relevant extension point:
 
  * [Codecs](./codecs/README.md)
- * [Data Types](./dtype/README.md)
+ * [Data Types](./data-types/README.md)
  * [Chunk Key Encoding](./chunk-key-encodings/README.md)
  * [Chunk Grid](./chunk-grids/README.md)
  * [Storage Transformers](./storage-transformers/README.md)
