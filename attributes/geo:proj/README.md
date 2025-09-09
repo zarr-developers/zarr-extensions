@@ -171,7 +171,17 @@ Note: The coordinate variables contain the actual spatial positions in the CRS f
 
 ## Inheritance
 
-When `geo:proj` is defined at the group level, it applies to all arrays within that group unless overridden at the array level.
+The `geo:proj` attribute follows a simple group-to-array inheritance model:
+
+1. Inheritance Scope: 
+   - Only applies from a group directly to its immediate array members
+   - Does not cascade through nested groups
+   - Groups cannot inherit from parent groups
+
+2. Override Rules:
+   - An array can completely override the group's `geo:proj` attribute with its own definition
+   - Partial inheritance (overriding only some fields while inheriting others) is not allowed
+   - If an array defines `geo:proj`, it must provide a complete definition
 
 ## Compatibility Notes
 
