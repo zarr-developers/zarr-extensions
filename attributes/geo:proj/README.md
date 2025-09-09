@@ -39,7 +39,14 @@ Note: The shape of spatial dimensions is obtained directly from the Zarr array m
 
 ### Spatial Dimension Identification
 
-The extension identifies spatial dimensions through:
+In this extension, "spatial dimensions" refer to the array dimensions (axes) along which the data is organized spatially. These dimensions correspond to the array's shape and dimension names, not to the spatial coordinates themselves, which may be stored separately (e.g., as coordinate variables in the case of irregular grids).
+
+For example:
+- Regular grid: dimensions like "y" and "x" directly map to spatial axes
+- Irregular grid: may use a single dimension (e.g., "node") with explicit x(node) and y(node) coordinates
+- Structured but non-regular grid: may use dimensions like "latitude" and "longitude" with 2D coordinate variables
+
+The extension identifies these array dimensions through:
 
 1. **Explicit Declaration** (recommended): Use `spatial_dimensions` to specify dimension names
 2. **Convention-Based** (fallback): Automatically detect standard spatial dimension names
@@ -116,7 +123,37 @@ This approach avoids redundancy and ensures consistency by using the array's own
 }
 ```
 
-### Example 3: WKT2 Representation
+### Example 3: Irregular Grid
+
+In this case, the spatial coordinates are stored in separate coordinate variables (`x` and `y`) that share the same dimension as the data array:
+
+```json
+{
+  "zarr_format": 3,
+  "shape": [1000],
+  "dimension_names": ["node"],
+  "attributes": {
+    "geo:proj": {
+      "code": "EPSG:4326",
+      "spatial_dimensions": ["node"]
+    }
+  },
+  "coordinates": {
+    "x": {
+      "shape": [1000],
+      "dimension_names": ["node"]
+    },
+    "y": {
+      "shape": [1000],
+      "dimension_names": ["node"]
+    }
+  }
+}
+```
+
+Note: The coordinate variables contain the actual spatial positions in the CRS for each node.
+
+### Example 4: WKT2 Representation
 
 ```json
 {
