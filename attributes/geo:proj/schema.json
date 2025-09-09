@@ -62,7 +62,7 @@
           },
           "description": "Affine transformation coefficients"
         },
-        "spatial_dims": {
+        "spatial_dimensions": {
           "type": "array",
           "minItems": 2,
           "maxItems": 2,

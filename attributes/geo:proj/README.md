@@ -33,7 +33,7 @@ At least one of the following MUST be provided:
 
 - `bbox`: Bounding box in the CRS coordinates
 - `transform`: Affine transformation coefficients (6 or 9 elements)
-- `spatial_dims`: Names of spatial dimensions in the array
+- `spatial_dimensions`: Names of spatial dimensions in the array
 
 Note: The shape of spatial dimensions is obtained directly from the Zarr array metadata once the spatial dimensions are identified.
 
@@ -41,7 +41,7 @@ Note: The shape of spatial dimensions is obtained directly from the Zarr array m
 
 The extension identifies spatial dimensions through:
 
-1. **Explicit Declaration** (recommended): Use `spatial_dims` to specify dimension names
+1. **Explicit Declaration** (recommended): Use `spatial_dimensions` to specify dimension names
 2. **Convention-Based** (fallback): Automatically detect standard spatial dimension names
 
 #### Explicit Declaration
@@ -49,14 +49,14 @@ The extension identifies spatial dimensions through:
 ```json
 {
   "geo:proj": {
-    "spatial_dims": ["latitude", "longitude"]
+    "spatial_dimensions": ["latitude", "longitude"]
   }
 }
 ```
 
 #### Convention-Based Detection
 
-If `spatial_dims` is not provided, implementations should scan `dimension_names` for these patterns (in order):
+If `spatial_dimensions` is not provided, implementations should scan `dimension_names` for these patterns (in order):
 
 - ["y", "x"] or ["Y", "X"]
 - ["lat", "lon"] or ["latitude", "longitude"]
@@ -67,7 +67,7 @@ The first matching pair determines the spatial dimensions.
 
 ### Validation Rules
 
-- Once spatial dimensions are identified (either explicitly through `spatial_dims` or through convention-based detection), their sizes are obtained from the Zarr array's shape metadata
+- Once spatial dimensions are identified (either explicitly through `spatial_dimensions` or through convention-based detection), their sizes are obtained from the Zarr array's shape metadata
 - The spatial dimension order is always [y/lat/northing, x/lon/easting]
 - If spatial dimensions cannot be identified through either method, implementations MUST raise an error
 - When multiple CRS representations are provided, precedence is: `projjson` > `wkt2` > `code`
@@ -75,7 +75,7 @@ The first matching pair determines the spatial dimensions.
 ### Shape Reconciliation
 
 The shape of spatial dimensions is determined by:
-1. Identifying the spatial dimensions using either `spatial_dims` or convention-based detection
+1. Identifying the spatial dimensions using either `spatial_dimensions` or convention-based detection
 2. Looking up these dimension names in the Zarr array's `dimension_names`
 3. Using the corresponding sizes from the array's `shape` attribute
 
@@ -108,7 +108,7 @@ This approach avoids redundancy and ensures consistency by using the array's own
   "attributes": {
     "geo:proj": {
       "code": "EPSG:4326",
-      "spatial_dims": ["latitude", "longitude"],
+      "spatial_dimensions": ["latitude", "longitude"],
       "transform": [0.1, 0.0, -180.0, 0.0, -0.1, 90.0],
       "bbox": [-180.0, -90.0, 180.0, 90.0]
     }
