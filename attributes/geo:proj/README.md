@@ -39,12 +39,28 @@ Note: The shape of spatial dimensions is obtained directly from the Zarr array m
 
 ### Spatial Dimension Identification
 
-In this extension, "spatial dimensions" refer to the array dimensions (axes) along which the data is organized spatially. These dimensions correspond to the array's shape and dimension names, not to the spatial coordinates themselves, which may be stored separately (e.g., as coordinate variables in the case of irregular grids).
+In this extension, "spatial dimensions" refer to the array dimensions along which the data is organized spatially. These dimensions are identified by arbitrary names in the array's metadata and correspond to the array's shape. They should not be confused with spatial coordinates or axes (X, Y), which represent the actual spatial positions and may be stored separately as coordinate variables.
 
 For example:
+
 - Regular grid: dimensions like "y" and "x" directly map to spatial axes
-- Irregular grid: may use a single dimension (e.g., "node") with explicit x(node) and y(node) coordinates
+- Irregular grid: may use a single dimension (e.g., "node") with explicit x(node) and y(node) coordinates storing spatial positions
 - Structured but non-regular grid: may use dimensions like "latitude" and "longitude" with 2D coordinate variables
+
+A relevant example from CF conventions 1.12 (example 5.2) shows this distinction:
+
+```cdm
+  float xc(xc) ;
+    xc:axis = "X" ;
+    xc:long_name = "x-coordinate in Cartesian system" ;
+    xc:units = "m" ;
+  float yc(yc) ;
+    yc:axis = "Y" ;
+    yc:long_name = "y-coordinate in Cartesian system" ;
+    yc:units = "m" ;
+```
+
+Here, "xc" and "yc" are arbitrary dimension names, while "X" and "Y" identify the spatial axes they represent.
 
 The extension identifies these array dimensions through:
 
