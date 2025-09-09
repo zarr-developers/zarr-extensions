@@ -62,16 +62,6 @@
           },
           "description": "Affine transformation coefficients"
         },
-        "shape": {
-          "type": "array",
-          "minItems": 2,
-          "maxItems": 2,
-          "items": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "description": "Shape of spatial dimensions [y, x]"
-        },
         "spatial_dims": {
           "type": "array",
           "minItems": 2,
