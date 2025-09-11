@@ -28,6 +28,7 @@ At least one of the following MUST be provided:
 - `code`: Authority and code identifier (e.g., "EPSG:4326")
 - `wkt2`: WKT2 string representation of the CRS
 - `projjson`: PROJJSON object representation of the CRS
+- `version`: Version of the `geo:proj` extension being used
 
 ### Optional Fields
 
@@ -201,6 +202,7 @@ The `geo:proj` attribute follows a simple group-to-array inheritance model:
 
 ## Compatibility Notes
 
+- The `version` field allows tracking of changes and ensures compatibility with future updates
 - The `code` field follows the "authority:code" format used by PROJ library
 - The `wkt2` field should conform to OGC WKT2 (ISO 19162) standard
 - The `transform` field follows the same ordering as GDAL's GeoTransform and STAC's projection extension

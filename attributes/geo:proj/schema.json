@@ -8,6 +8,11 @@
     "projectionMetadata": {
       "type": "object",
       "properties": {
+        "version": {
+          "type": "string",
+          "enum": ["1.0"],
+          "description": "Static version of the geo:proj schema"
+        },
         "code": {
           "type": ["string", "null"],
           "description": "Authority:code identifier (e.g., EPSG:4326)",
