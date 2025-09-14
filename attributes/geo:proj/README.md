@@ -8,7 +8,7 @@
 
 ## Description
 
-This extension defines a standardized way to encode coordinate reference system (CRS) information for geospatial Zarr arrays and groups using the `geo:proj` attribute.
+This specification defines a JSON object that encodes coordinate reference system (CRS) information for geospatial data. Additionally, this specification defines a convention in which this object is stored under the `"geo:proj"` key in the attributes of Zarr arrays or groups.
 
 ## Motivation
 
