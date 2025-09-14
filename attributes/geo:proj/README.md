@@ -139,37 +139,7 @@ This approach avoids redundancy and ensures consistency by using the array's own
 }
 ```
 
-### Example 3: Irregular Grid
-
-In this case, the spatial coordinates are stored in separate coordinate variables (`x` and `y`) that share the same dimension as the data array:
-
-```json
-{
-  "zarr_format": 3,
-  "shape": [1000],
-  "dimension_names": ["node"],
-  "attributes": {
-    "geo:proj": {
-      "code": "EPSG:4326",
-      "spatial_dimensions": ["node"]
-    }
-  },
-  "coordinates": {
-    "x": {
-      "shape": [1000],
-      "dimension_names": ["node"]
-    },
-    "y": {
-      "shape": [1000],
-      "dimension_names": ["node"]
-    }
-  }
-}
-```
-
-Note: The coordinate variables contain the actual spatial positions in the CRS for each node.
-
-### Example 4: WKT2 Representation
+### Example 3: WKT2 Representation
 
 ```json
 {
@@ -184,6 +154,7 @@ Note: The coordinate variables contain the actual spatial positions in the CRS f
   }
 }
 ```
+
 
 ## Inheritance
 
