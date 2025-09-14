@@ -40,7 +40,7 @@ Note: The shape of spatial dimensions is obtained directly from the Zarr array m
 
 ### Spatial Dimension Identification
 
-In this extension, "spatial dimensions" refer to the array dimensions along which the data is organized spatially. These dimensions are identified by arbitrary names in the array's metadata and correspond to the array's shape. They should not be confused with spatial coordinates or axes (X, Y), which represent the actual spatial positions and may be stored separately as coordinate variables.
+In this extension, "spatial dimensions" refers to the dimensions names of 2D / 3D arrays within this group to which the projection definition applies.
 
 For example:
 
