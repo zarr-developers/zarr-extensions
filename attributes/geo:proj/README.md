@@ -37,12 +37,13 @@ The `geo:proj` attribute can be added to Zarr arrays or groups to define project
 
 ### Required Fields
 
-At least one of the following MUST be provided:
+- `version`: Version of the `geo:proj` extension being used
+
+and at least one of the following:
 
 - `code`: Authority and code identifier (e.g., "EPSG:4326")
 - `wkt2`: WKT2 string representation of the CRS
 - `projjson`: PROJJSON object representation of the CRS
-- `version`: Version of the `geo:proj` extension being used
 
 ### Optional Fields
 
