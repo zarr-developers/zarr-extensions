@@ -13,7 +13,6 @@ This extension defines a standardized way to encode coordinate reference system 
 ## Motivation
 
 - Provides simple, standardized CRS encoding without complex nested structures
-- Addresses issues identified in GeoZarr discussions regarding CF convention complexity
 - Compatible with existing geospatial tools (GDAL, rasterio, pyproj)
 - Based on the proven STAC Projection Extension model
 
