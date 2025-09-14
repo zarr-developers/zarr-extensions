@@ -78,7 +78,7 @@ If `spatial_dimensions` is not provided, implementations should scan `dimension_
 - ["northing", "easting"]
 - ["row", "col"] or ["line", "sample"]
 
-The first matching pair determines the spatial dimensions.
+The first matching pair determines the spatial dimensions. **Important**: When dimensions like "X" and "Y" are found, they are always interpreted as [Y, X] (following lat/lon convention), regardless of their actual order in the Zarr array's `dimension_names`.
 
 ### Validation Rules
 
