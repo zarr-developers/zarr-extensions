@@ -20,7 +20,7 @@ When creating an attribute extension, consider:
 2. **Schema**: Provide a JSON schema for validation
 3. **Inheritance**: Define behavior when attributes are set at group vs array level
 4. **Compatibility**: Consider interoperability with existing tools and standards
-
+5. **Example data**: Where possible, consider including a complete Zarr hierarchy that implements the extension.
 ## Extension Requirements
 
 Each attribute extension MUST:
