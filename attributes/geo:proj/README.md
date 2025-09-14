@@ -16,6 +16,19 @@ This specification defines a JSON object that encodes coordinate reference syste
 - Compatible with existing geospatial tools (GDAL, rasterio, pyproj)
 - Based on the proven STAC Projection Extension model
 
+## Inheritance Model
+
+The `geo:proj` attribute follows a simple group-to-array inheritance model that should be understood first:
+
+### Inheritance Rules
+
+1. **Group-level definition** (recommended): When `geo:proj` is defined at the group level, it applies to all arrays within that group
+2. **Array-level override**: An array can completely override the group's `geo:proj` attribute with its own definition
+3. **Complete replacement only**: Partial inheritance (overriding only some fields while inheriting others) is not allowed
+4. **No cascading**: Inheritance only applies from a group directly to its immediate array members, not through nested groups
+
+Most use cases will use group-level definitions without array overrides.
+
 ## Specification
 
 The `geo:proj` attribute can be added to Zarr arrays or groups to define projection information.
@@ -135,19 +148,6 @@ This approach avoids redundancy and ensures consistency by using the array's own
 ```
 
 
-## Inheritance
-
-The `geo:proj` attribute follows a simple group-to-array inheritance model:
-
-1. Inheritance Scope: 
-   - Only applies from a group directly to its immediate array members
-   - Does not cascade through nested groups
-   - Groups cannot inherit from parent groups
-
-2. Override Rules:
-   - An array can completely override the group's `geo:proj` attribute with its own definition
-   - Partial inheritance (overriding only some fields while inheriting others) is not allowed
-   - If an array defines `geo:proj`, it must provide a complete definition
 
 ## Compatibility Notes
 
