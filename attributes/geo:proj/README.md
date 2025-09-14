@@ -98,32 +98,50 @@ This approach avoids redundancy and ensures consistency by using the array's own
 
 ## Examples
 
-### Example 1: Simple EPSG Code
+### Example 1: Simple Web Mercator Raster (Group Level)
 
 ```json
 {
   "zarr_format": 3,
-  "shape": [2048, 2048],
-  "dimension_names": ["y", "x"],
+  "node_type": "group",
   "attributes": {
     "geo:proj": {
-      "code": "EPSG:3857"
+      "code": "EPSG:3857",
+      "transform": [156543.03392804097, 0.0, -20037508.342789244, 0.0, -156543.03392804097, 20037508.342789244],
+      "bbox": [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244]
     }
   }
 }
 ```
 
-### Example 2: With Multiple Dimensions and Transform
+### Example 2: Multi-band Satellite Image
 
 ```json
 {
   "zarr_format": 3,
-  "shape": [365, 100, 2048, 2048, 4],
-  "dimension_names": ["time", "height", "latitude", "longitude", "band"],
+  "shape": [4, 2048, 2048],
+  "dimension_names": ["band", "y", "x"],
+  "attributes": {
+    "geo:proj": {
+      "code": "EPSG:32633",
+      "spatial_dimensions": ["y", "x"],
+      "transform": [30.0, 0.0, 500000.0, 0.0, -30.0, 5000000.0],
+      "bbox": [500000.0, 4900000.0, 561440.0, 4961440.0]
+    }
+  }
+}
+```
+
+### Example 3: Geographic Coordinates with Transform
+
+```json
+{
+  "zarr_format": 3,
+  "shape": [1800, 3600],
+  "dimension_names": ["lat", "lon"],
   "attributes": {
     "geo:proj": {
       "code": "EPSG:4326",
-      "spatial_dimensions": ["latitude", "longitude"],
       "transform": [0.1, 0.0, -180.0, 0.0, -0.1, 90.0],
       "bbox": [-180.0, -90.0, 180.0, 90.0]
     }
@@ -131,7 +149,7 @@ This approach avoids redundancy and ensures consistency by using the array's own
 }
 ```
 
-### Example 3: WKT2 Representation
+### Example 4: WKT2 Representation
 
 ```json
 {
