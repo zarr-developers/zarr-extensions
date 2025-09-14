@@ -6,11 +6,6 @@ This directory contains specifications for Zarr v3 attribute extensions.
 
 Attribute extensions define standardized schemas and semantics for metadata stored in the attributes of Zarr arrays and groups. These extensions enable interoperability by establishing common conventions for domain-specific metadata.
 
-## Registered Extensions
-
-| Extension | Version | Description |
-|-----------|---------|-------------|
-| [projection](./projection/) | 1.0.0 | Coordinate reference system metadata for geospatial data |
 
 ## Creating an Attribute Extension
 
