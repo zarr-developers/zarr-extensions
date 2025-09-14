@@ -96,6 +96,7 @@
               "properties": {
                 "version": {
                   "type": "string",
+                  "description": "Projection attribute extension version",
                   "enum": ["1.0"]
                 },
                 "code": {
