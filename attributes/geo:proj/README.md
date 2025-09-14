@@ -8,7 +8,9 @@
 
 ## Description
 
-This specification defines a JSON object that encodes coordinate reference system (CRS) information for geospatial data. Additionally, this specification defines a convention in which this object is stored under the `"geo:proj"` key in the attributes of Zarr arrays or groups.
+This specification defines a JSON object that encodes coordinate reference system (CRS) information for geospatial data. Additionally, this specification defines a convention in which this object is stored under the `"geo:proj"` key in the attributes of Zarr groups or arrays.
+
+**Recommended usage**: Define `geo:proj` at the **group level** to apply CRS information to all arrays within that group. This matches the common geospatial pattern of storing multiple arrays with the same coordinates in a single group. Array-level definitions are supported for override cases but are less common.
 
 ## Motivation
 
@@ -57,7 +59,7 @@ In this extension, "spatial dimensions" refers to the dimension names of 2D/3D a
 The extension identifies these array dimensions through:
 
 1. **Explicit Declaration** (recommended): Use `spatial_dimensions` to specify dimension names
-2. **Convention-Based** (fallback): Automatically detect standard spatial dimension names
+2. **Pattern-Based Detection** (fallback): Automatically detect spatial dimensions using patterns defined by this extension
 
 #### Explicit Declaration
 
@@ -69,9 +71,9 @@ The extension identifies these array dimensions through:
 }
 ```
 
-#### Convention-Based Detection
+#### Pattern-Based Detection
 
-If `spatial_dimensions` is not provided, implementations should scan `dimension_names` for these patterns (in order):
+If `spatial_dimensions` is not provided, implementations should scan `dimension_names` for these patterns defined by this extension (in order):
 
 - ["y", "x"] or ["Y", "X"]
 - ["lat", "lon"] or ["latitude", "longitude"]
@@ -82,7 +84,7 @@ The first matching pair determines the spatial dimensions. **Important**: When d
 
 ### Validation Rules
 
-- Once spatial dimensions are identified (either explicitly through `spatial_dimensions` or through convention-based detection), their sizes are obtained from the Zarr array's shape metadata
+- Once spatial dimensions are identified (either explicitly through `spatial_dimensions` or through pattern-based detection), their sizes are obtained from the Zarr array's shape metadata
 - The spatial dimension order is always [y/lat/northing, x/lon/easting]
 - If spatial dimensions cannot be identified through either method, implementations MUST raise an error
 - When multiple CRS representations are provided, precedence is: `projjson` > `wkt2` > `code`
@@ -90,7 +92,7 @@ The first matching pair determines the spatial dimensions. **Important**: When d
 ### Shape Reconciliation
 
 The shape of spatial dimensions is determined by:
-1. Identifying the spatial dimensions using either `spatial_dimensions` or convention-based detection
+1. Identifying the spatial dimensions using either `spatial_dimensions` or pattern-based detection
 2. Looking up these dimension names in the Zarr array's `dimension_names`
 3. Using the corresponding sizes from the array's `shape` attribute
 
