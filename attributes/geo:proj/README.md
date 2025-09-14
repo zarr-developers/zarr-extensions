@@ -139,14 +139,15 @@ The first matching pair determines the spatial dimensions. **Important**: When d
 
 ### Validation Rules
 
-- Once spatial dimensions are identified (either explicitly through `spatial_dimensions` or through pattern-based detection), their sizes are obtained from the Zarr array's shape metadata
-- The spatial dimension order is always [y/lat/northing, x/lon/easting]
-- If spatial dimensions cannot be identified through either method, implementations MUST raise an error
-- When multiple CRS representations are provided, precedence is: `projjson` > `wkt2` > `code`
+- **Shape Inference**: Once spatial dimensions are identified (either explicitly through `spatial_dimensions` or through pattern-based detection), their sizes are obtained from the Zarr array's shape metadata
+- **Spatial Dimension Order**: The spatial dimension order is always [y/lat/northing, x/lon/easting]
+- **Error Handling**: If spatial dimensions cannot be identified through either method, implementations MUST raise an error
+- **Semantic Identity Requirement**: If more than one CRS representation (`code`, `wkt2`, `projjson`) is provided, they MUST be semantically identical (i.e., describe the same coordinate reference system). Implementations SHOULD validate this consistency and raise an error if the representations describe different CRS
 
 ### Shape Reconciliation
 
 The shape of spatial dimensions is determined by:
+
 1. Identifying the spatial dimensions using either `spatial_dimensions` or pattern-based detection
 2. Looking up these dimension names in the Zarr array's `dimension_names`
 3. Using the corresponding sizes from the array's `shape` attribute
