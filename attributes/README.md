@@ -4,7 +4,7 @@ This directory contains specifications for Zarr v3 attribute extensions.
 
 ## What are Attribute Extensions?
 
-Attribute extensions define standardized schemas and semantics for metadata stored in the `attributes` field of Zarr arrays and groups. These extensions enable interoperability by establishing common conventions for domain-specific metadata.
+Attribute extensions define standardized schemas and semantics for metadata stored in the attributes of Zarr arrays and groups. These extensions enable interoperability by establishing common conventions for domain-specific metadata.
 
 ## Registered Extensions
 
