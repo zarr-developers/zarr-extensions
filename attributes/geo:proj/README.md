@@ -24,10 +24,9 @@ The `geo:proj` attribute follows a simple group-to-array inheritance model that 
 
 ### Inheritance Rules
 
-1. **Group-level definition** (recommended): When `geo:proj` is defined at the group level, it applies to all arrays within that group
+1. **Group-level definition** (recommended): When `geo:proj` is defined at the group level, it applies to all arrays that are direct children of that group. It does not apply to groups or arrays deeper in the hierarchy (e.g., grandchildren).
 2. **Array-level override**: An array can completely override the group's `geo:proj` attribute with its own definition
 3. **Complete replacement only**: Partial inheritance (overriding only some fields while inheriting others) is not allowed
-4. **No cascading**: Inheritance only applies from a group directly to its immediate array members, not through nested groups
 
 Most use cases will use group-level definitions without array overrides.
 
