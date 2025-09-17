@@ -208,22 +208,61 @@ If `spatial_dimensions` is not provided, implementations should scan `dimension_
 
 The first matching pair determines the spatial dimensions.
 
+#### Group-Level geo:proj with Array-Level dimension_names
+
+When `geo:proj` is defined at the group level but `spatial_dimensions` is not explicitly provided, implementations must handle the fact that `dimension_names` are defined at the individual array level in Zarr v3. The following algorithm defines how to resolve spatial dimensions:
+
+**For Explicit Declaration (when `spatial_dimensions` is provided):**
+
+1. Use the specified `spatial_dimensions` directly
+2. Validate that each data array in the group contains these dimension names
+3. If any data array lacks the specified spatial dimensions, ignore that array for the purpose of applying `geo:proj`
+4. If no data arrays contain the specified spatial dimensions, implementations MUST raise an error
+
+**For Pattern-Based Detection (when `spatial_dimensions` is not provided):**
+
+1. Scan all data arrays within the group
+2. For each data array, examine its `dimension_names` for the defined patterns
+3. Use the first matching pattern found across all data arrays
+4. If no spatial dimension patterns are found in any data array, implementations MUST raise an error
+
+**Example of Valid Group-Level Configuration:**
+
+```json
+{
+  "zarr_format": 3,
+  "node_type": "group",
+  "attributes": {
+    "geo:proj": {
+      "code": "EPSG:4326",
+      "transform": [0.1, 0.0, -180.0, 0.0, -0.1, 90.0]
+    }
+  }
+}
+```
+
+With data arrays:
+
+- `temperature/`: `dimension_names: ["time", "lat", "lon"]` ✅ Contains ["lat", "lon"]
+- `precipitation/`: `dimension_names: ["time", "lat", "lon"]` ✅ Same pattern
+- `lat/`: `dimension_names: ["lat"]` ⚠️ Excluded (coordinate array)
+- `lon/`: `dimension_names: ["lon"]` ⚠️ Excluded (coordinate array)
+
 ### Validation Rules
 
 - **Shape Inference**: Once spatial dimensions are identified (either explicitly through `spatial_dimensions` or through pattern-based detection), their sizes are obtained from the Zarr array's shape metadata
-- **Spatial Dimension Order**: The spatial dimension order is always [y/lat/northing, x/lon/easting]
 - **Error Handling**: If spatial dimensions cannot be identified through either method, implementations MUST raise an error
 - **Semantic Identity Requirement**: If more than one CRS representation (`code`, `wkt2`, `projjson`) is provided, they MUST be semantically identical (i.e., describe the same coordinate reference system). Implementations SHOULD validate this consistency and raise an error if the representations describe different CRS
 
 ### Shape Reconciliation
 
-The shape of spatial dimensions is determined by:
+The shape of spatial dimensions is determined on a per-array basis:
 
-1. Identifying the spatial dimensions using either `spatial_dimensions` or pattern-based detection
-2. Looking up these dimension names in the Zarr array's `dimension_names`
-3. Using the corresponding sizes from the array's `shape` attribute
+1. Identifying the spatial dimensions using either `spatial_dimensions` or pattern-based detection (as described above)
+2. For each data array that the `geo:proj` applies to, looking up the spatial dimension names in that array's `dimension_names`
+3. Using the corresponding sizes from that same array's `shape` attribute
 
-This approach avoids redundancy and ensures consistency by using the array's own metadata rather than duplicating shape information.
+This approach avoids redundancy and ensures consistency by using each array's own metadata rather than duplicating shape information.
 
 ## Examples
 
