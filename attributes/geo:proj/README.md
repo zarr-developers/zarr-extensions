@@ -248,6 +248,11 @@ With data arrays:
 - `lat/`: `dimension_names: ["lat"]` ⚠️ Excluded (coordinate array)
 - `lon/`: `dimension_names: ["lon"]` ⚠️ Excluded (coordinate array)
 
+**Note**: The ordering of spatial dimensions is flexible. Both `["lat", "lon"]` and `["lon", "lat"]` orderings are valid:
+
+- `temperature/`: `dimension_names: ["time", "lon", "lat"]` ✅ Also valid
+- `precipitation/`: `dimension_names: ["time", "lon", "lat"]` ✅ Also valid
+
 ### Validation Rules
 
 - **Shape Inference**: Once spatial dimensions are identified (either explicitly through `spatial_dimensions` or through pattern-based detection), their sizes are obtained from the Zarr array's shape metadata
