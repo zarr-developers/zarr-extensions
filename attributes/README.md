@@ -12,7 +12,7 @@ Attribute extensions define standardized schemas and semantics for metadata stor
 When creating an attribute extension, consider:
 
 1. **Namespace**: Use a unique prefix to avoid conflicts (e.g., `geo` for geospatial). Choose namespace characters that are compatible with all operating systems by avoiding special characters like colons (:)
-2. **Schema**: Provide a JSON schema for validation
+2. **Schema**: Provide or link to a JSON schema for validation
 3. **Inheritance**: Define behavior when attributes are set at group vs array level
 4. **Compatibility**: Consider interoperability with existing tools and standards
 5. **Example data**: Where possible, consider including a complete Zarr hierarchy that implements the extension.
