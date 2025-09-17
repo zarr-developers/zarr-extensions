@@ -8,7 +8,7 @@
 
 ## Description
 
-This specification defines a JSON object that encodes coordinate reference system (CRS) information for geospatial data. Additionally, this specification defines a convention in which this object is stored under the `"geo:proj"` key in the attributes of Zarr groups or arrays.
+This specification defines a JSON object that encodes datum and coordinate reference system (CRS) information for geospatial data. Additionally, this specification defines a convention for storing this object under the `"geo:proj"` key in the attributes of Zarr groups or arrays.
 
 **Recommended usage**: Define `geo:proj` at the **group level** to apply CRS information to all arrays within that group. This matches the common geospatial pattern of storing multiple arrays with the same coordinates in a single group. Array-level definitions are supported for override cases but are less common.
 
