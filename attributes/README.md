@@ -19,7 +19,7 @@ When creating an attribute extension, consider:
 
 ## Extension Requirements
 
-Each attribute extension MUST:
+Each attribute extension SHOULD:
 
 - Define the attribute key(s) and structure
 - Provide a JSON schema for validation
