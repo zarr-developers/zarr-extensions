@@ -68,12 +68,38 @@ Authority:code identifier (e.g., EPSG:4326)
 * **Required**: No
 * **Pattern**: `^[A-Z]+:[0-9]+$`
 
+Projection codes are identified by a string. The [proj](https://proj.org/) library defines projections
+using "authority:code", e.g., "EPSG:4326" or "IAU_2015:30100". Different projection authorities may define
+different string formats. Examples of known projection authorities, where when can find well known codes that
+clients are likely to support are listed in the following table.
+
+| Authority Name                          | URL                                                        |
+| --------------------------------------- | ---------------------------------------------------------- |
+| European Petroleum Survey Groups (EPSG) | <http://www.opengis.net/def/crs/EPSG> or <http://epsg.org> |
+| International Astronomical Union (IAU)  | <http://www.opengis.net/def/crs/IAU>                       |
+| Open Geospatial Consortium (OGC)        | <http://www.opengis.net/def/crs/OGC>                       |
+| ESRI                                    | <https://spatialreference.org/ref/esri/>                   |
+
+The `geo:proj.code` field SHOULD be set to `null` in the following cases:
+
+- The data does not have a CRS, such as in the case of non-rectified imagery with Ground Control Points.
+- A CRS exists, but there is no valid EPSG code for it. In this case, the CRS should be provided in `geo:proj.wkt2` and/or `geo:proj.projjson`.
+  Clients can prefer to take either, although there may be discrepancies in how each might be interpreted.
+
 #### geo:proj.wkt2
 
 WKT2 (ISO 19162) CRS representation
 
 * **Type**: `["string", "null"]`
 * **Required**: No
+
+A Coordinate Reference System (CRS) is the data reference system (sometimes called a 'projection')
+used by the asset data. This value is a [WKT2](http://docs.opengeospatial.org/is/12-063r5/12-063r5.html) string.
+
+This field SHOULD be set to `null` in the following cases:
+
+- The asset data does not have a CRS, such as in the case of non-rectified imagery with Ground Control Points.
+- A CRS exists, but there is no valid WKT2 string for it.
 
 #### geo:proj.projjson
 
@@ -82,12 +108,29 @@ PROJJSON CRS representation
 * **Type**: `any`
 * **Required**: No
 
+A Coordinate Reference System (CRS) is the data reference system (sometimes called a 'projection')
+used by the asset data. This value is a [PROJJSON](https://proj.org/specifications/projjson.html) object,
+see the [JSON Schema](https://proj.org/schemas/v0.5/projjson.schema.json) for details.
+
+This field SHOULD be set to `null` in the following cases:
+
+- The asset data does not have a CRS, such as in the case of non-rectified imagery with Ground Control Points.
+- A CRS exists, but there is no valid PROJJSON for it.
+
 #### geo:proj.bbox
 
 Bounding box in CRS coordinates
 
 * **Type**: `number` `[]`
 * **Required**: No
+
+Bounding box of the assets represented by this Item in the asset data CRS. Specified as 4 coordinates
+based on the CRS defined in the `proj:code`, `proj:projjson` or `proj:wkt2` fields.  First two numbers are coordinates
+of the lower left corner, followed by coordinates of upper right corner, , e.g., \[west, south, east, north],
+\[xmin, ymin, xmax, ymax], \[left, down, right, up], or \[west, south, lowest, east, north, highest].
+The length of the array must be 2\*n where n is the number of dimensions. The array contains all axes of the southwesterly
+most extent followed by all axes of the northeasterly most extent specified in Longitude/Latitude
+based on [WGS 84](http://www.opengis.net/def/crs/OGC/1.3/CRS84).
 
 #### geo:proj.transform
 
@@ -96,12 +139,41 @@ Affine transformation coefficients
 * **Type**: `number` `[]`
 * **Required**: No
 
+Linear mapping from pixel coordinate space (Pixel, Line) to projection coordinate space (Xp, Yp). It is
+a `3x3` matrix stored as a flat array of 9 elements in row major order. Since the last row is always `0,0,1` it can be omitted,
+in which case only 6 elements are recorded. This mapping can be obtained from 
+GDAL([`GetGeoTransform`](https://gdal.org/api/gdaldataset_cpp.html#_CPPv4N11GDALDataset15GetGeoTransformEPd), requires re-ordering)
+or the Rasterio ([`Transform`](https://rasterio.readthedocs.io/en/stable/api/rasterio.io.html#rasterio.io.BufferedDatasetWriter.transform)).
+To get it on the command line you can use the [Rasterio CLI](https://rasterio.readthedocs.io/en/latest/cli.html) with the
+[info](https://rasterio.readthedocs.io/en/latest/cli.html#info) command: `$ rio info`.
+
+```txt
+  [Xp]   [a0, a1, a2]   [Pixel]
+  [Yp] = [a3, a4, a5] * [Line ]
+  [1 ]   [0 ,  0,  1]   [1    ]
+```
+
+If the transform is defined in Item Properties, it is used as the default transform for all assets that don't have an overriding transform.
+
+Note that `GetGeoTransform` and `rasterio` use different formats for reporting transform information. Order expected in `geo:proj.transform` is the
+same as reported by `rasterio`. When using GDAL method you need to re-order in the following way:
+
+```python
+g = GetGeoTransform(...)
+proj_transform = [g[1], g[2], g[0],
+                  g[4], g[5], g[3],
+                     0,    0,    1]
+```
+
 #### geo:proj.spatial_dimensions
 
 Names of spatial dimensions [y_name, x_name]
 
 * **Type**: `string` `[2]`
 * **Required**: No
+
+See the [Spatial Dimension Identification](#spatial-dimension-identification) section below for details on how spatial dimensions are identified.
+
 <!-- GENERATED_SCHEMA_DOCS_END -->
 
 Note: The shape of spatial dimensions is obtained directly from the Zarr array metadata once the spatial dimensions are identified.
