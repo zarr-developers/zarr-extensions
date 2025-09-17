@@ -1,7 +1,7 @@
 # Projection Attribute Extension for Zarr
 
 - **Extension Name**: Projection Attribute Extension
-- **Version**: 1.0.0
+- **Version**: 0.1.0
 - **Extension Type**: Attribute
 - **Status**: Proposed
 - **Owners**: @emmanuelmathot
@@ -59,7 +59,7 @@ Projection metadata version
 * **Type**: `string`
 * **Required**:  &#10003; Yes
 * **Allowed values**:
-    * `"1.0"`
+    * `"0.1"`
 
 #### geo:proj.code
 

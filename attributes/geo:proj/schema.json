@@ -1,11 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://zarr-specs.readthedocs.io/en/latest/extensions/attributes/projection/v1.0.0/schema.json",
+  "$id": "https://zarr-specs.readthedocs.io/en/latest/extensions/attributes/projection/v0.1.0/schema.json",
   "title": "Zarr Projection Attribute Extension",
   "description": "Projection attribute extension for Zarr arrays and groups",
   "type": "object",
   "definitions": {
-    "projectionMetadataV1_0": {
+    "projectionMetadataV0_1": {
       "type": "object",
       "properties": {
         "code": {
@@ -97,7 +97,7 @@
                 "version": {
                   "type": "string",
                   "description": "Projection attribute extension version",
-                  "enum": ["1.0"]
+                  "enum": ["0.1"]
                 },
                 "code": {
                   "type": ["string", "null"],
