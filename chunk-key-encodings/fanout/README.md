@@ -1,5 +1,5 @@
 # Fanout chunk key encoding
-Defines a chunk key encoding that converts chunk coordinates into a `/`-separated path (representing a sequence of nodes in a tree hierarchy), by splitting each coordinate into multiple nodes such that no node in the hierarchy exceeds a predefined maximum number of children (i.e., fanout). This is useful for filesystems or other hierarchical stores that experience performance issues when nodes (e.g., directories) contain many entries.
+Defines a chunk key encoding that converts chunk coordinates into a `/`-separated path (representing a sequence of nodes in a tree hierarchy), by splitting each coordinate into multiple nodes such that no node in the hierarchy exceeds a predefined maximum number of children. This is useful for filesystems or other hierarchical stores that experience performance issues when nodes (e.g., directories) contain many entries.
 
 ## Chunk key encoding name
 
@@ -9,7 +9,7 @@ The value of the `name` member in the chunk key encoding object MUST be `fanout`
 
 ### `max_children`
 
-An integer greater than 3 indicating the maximum number of child entries allowed within a single node (e.g., directory). Defaults to 1001 if omitted.
+An integer greater than or equal to 3 indicating the maximum number of child entries (fanout) allowed within a single node. Defaults to 1001 if omitted.
 
 ## Example
 
@@ -24,20 +24,18 @@ For example, the array metadata below specifies that chunk keys are encoded usin
         }
     }
 }
-````
+```
 
 ## Algorithm
 Given chunk coordinates as a tuple of integers and a parameter `max_children`, the chunk key is constructed as follows:
 
 1. For each coordinate `coord` at dimension index `dim` (indexing starts from `0`):
-
    1. Create a dimension marker `d{dim}`.
    2. Express `coord` in base `max_children - 1`, producing a sequence of digits (most significant first).
-   3. Join the digits with `/` and prepend the dimension marker to form a subpath. For example:
-
-      ```
-      d{dim}/{digit0}/{digit1}/…/{digitN}
-      ```
+   3. Join the digits with `/` and prepend the dimension marker to form a subpath. This creates a subpath of the form:
+    ```
+    d{dim}/{digit0}/{digit1}/.../{digitN}
+    ```
 
 2. Concatenate all dimension subpaths (in order from the lowest to highest dimension) using `/` as a separator.
 
