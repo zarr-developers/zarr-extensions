@@ -1,6 +1,6 @@
-# Projection Attribute Extension for Zarr
+# Geo Projection Attribute Extension for Zarr
 
-- **Extension Name**: Projection Attribute Extension
+- **Extension Name**: Geo Projection Attribute Extension
 - **Version**: 0.1.0
 - **Extension Type**: Attribute
 - **Status**: Proposed
@@ -8,9 +8,9 @@
 
 ## Description
 
-This specification defines a JSON object that encodes datum and coordinate reference system (CRS) information for geospatial data. Additionally, this specification defines a convention for storing this object under the `"geo:proj"` key in the attributes of Zarr groups or arrays.
+This specification defines a JSON object that encodes datum and coordinate reference system (CRS) information for geospatial data. Additionally, this specification defines a convention for storing this object under the `proj` key within the `geo` dictionary in the attributes of Zarr groups or arrays.
 
-**Recommended usage**: Define `geo:proj` at the **group level** to apply CRS information to all arrays within that group. This matches the common geospatial pattern of storing multiple arrays with the same coordinates in a single group. Array-level definitions are supported for override cases but are less common.
+**Recommended usage**: Define the `proj` key under the `geo` dictionary at the **group level** to apply CRS information to all arrays within that group. This matches the common geospatial pattern of storing multiple arrays with the same coordinates in a single group. Array-level definitions are supported for override cases but are less common.
 
 ## Motivation
 
@@ -20,22 +20,22 @@ This specification defines a JSON object that encodes datum and coordinate refer
 
 ## Inheritance Model
 
-The `geo:proj` attribute follows a simple group-to-array inheritance model that should be understood first:
+The `proj` key under the `geo` dictionary follows a simple group-to-array inheritance model that should be understood first:
 
 ### Inheritance Rules
 
-1. **Group-level definition** (recommended): When `geo:proj` is defined at the group level, it applies to all arrays that are direct children of that group. It does not apply to groups or arrays deeper in the hierarchy (e.g., grandchildren).
-2. **Array-level override**: An array can completely override the group's `geo:proj` attribute with its own definition
-3. **Complete replacement only**: Partial inheritance (overriding only some fields while inheriting others) is not allowed
+1. **Group-level definition** (recommended): When `proj` is defined under the `geo` dictionary at the group level, it applies to all arrays that are direct children of that group. It does not apply to groups or arrays deeper in the hierarchy (e.g., grandchildren).
+2. **Array-level override**: An array can completely override the group's `proj` key with its own definition.
+3. **Complete replacement only**: Partial inheritance (overriding only some fields while inheriting others) is not allowed.
 
 Most use cases will use group-level definitions without array overrides.
 
 ## Specification
 
-The `geo:proj` attribute can be added to Zarr arrays or groups to define projection information.
+The `proj` key under the `geo` dictionary can be added to Zarr arrays or groups to define projection information.
 
 <!-- GENERATED_SCHEMA_DOCS_START -->
-**`geo:proj` Properties**
+**`geo -> proj` Properties**
 
 |   |Type|Description|Required|
 |---|---|---|---|
@@ -51,16 +51,15 @@ The `geo:proj` attribute can be added to Zarr arrays or groups to define project
 
 Additional properties are allowed.
 
-#### geo:proj.version
+#### geo -> proj.version
 
 Projection metadata version
 
 * **Type**: `string`
 * **Required**:  &#10003; Yes
-* **Allowed values**:
-    * `"0.1"`
+* **Allowed values**: `0.1`
 
-#### geo:proj.code
+#### geo -> proj.code
 
 Authority:code identifier (e.g., EPSG:4326)
 
@@ -80,13 +79,13 @@ clients are likely to support are listed in the following table.
 | Open Geospatial Consortium (OGC)        | <http://www.opengis.net/def/crs/OGC>                       |
 | ESRI                                    | <https://spatialreference.org/ref/esri/>                   |
 
-The `geo:proj.code` field SHOULD be set to `null` in the following cases:
+The `proj.code` field SHOULD be set to `null` in the following cases:
 
 - The data does not have a CRS, such as in the case of non-rectified imagery with Ground Control Points.
-- A CRS exists, but there is no valid EPSG code for it. In this case, the CRS should be provided in `geo:proj.wkt2` and/or `geo:proj.projjson`.
+- A CRS exists, but there is no valid EPSG code for it. In this case, the CRS should be provided in `proj.wkt2` and/or `proj.projjson`.
   Clients can prefer to take either, although there may be discrepancies in how each might be interpreted.
 
-#### geo:proj.wkt2
+#### geo -> proj.wkt2
 
 WKT2 (ISO 19162) CRS representation
 
@@ -101,7 +100,7 @@ This field SHOULD be set to `null` in the following cases:
 - The asset data does not have a CRS, such as in the case of non-rectified imagery with Ground Control Points.
 - A CRS exists, but there is no valid WKT2 string for it.
 
-#### geo:proj.projjson
+#### geo -> proj.projjson
 
 PROJJSON CRS representation
 
@@ -117,7 +116,7 @@ This field SHOULD be set to `null` in the following cases:
 - The asset data does not have a CRS, such as in the case of non-rectified imagery with Ground Control Points.
 - A CRS exists, but there is no valid PROJJSON for it.
 
-#### geo:proj.bbox
+#### geo -> proj.bbox
 
 Bounding box in CRS coordinates
 
@@ -125,14 +124,14 @@ Bounding box in CRS coordinates
 * **Required**: No
 
 Bounding box of the assets represented by this Item in the asset data CRS. Specified as 4 coordinates
-based on the CRS defined in the `proj:code`, `proj:projjson` or `proj:wkt2` fields.  First two numbers are coordinates
+based on the CRS defined in the `proj.code`, `proj.projjson` or `proj.wkt2` fields.  First two numbers are coordinates
 of the lower left corner, followed by coordinates of upper right corner, , e.g., \[west, south, east, north],
 \[xmin, ymin, xmax, ymax], \[left, down, right, up], or \[west, south, lowest, east, north, highest].
 The length of the array must be 2\*n where n is the number of dimensions. The array contains all axes of the southwesterly
 most extent followed by all axes of the northeasterly most extent specified in Longitude/Latitude
 based on [WGS 84](http://www.opengis.net/def/crs/OGC/1.3/CRS84).
 
-#### geo:proj.transform
+#### geo -> proj.transform
 
 Affine transformation coefficients
 
@@ -155,8 +154,7 @@ To get it on the command line you can use the [Rasterio CLI](https://rasterio.re
 
 If the transform is defined in Item Properties, it is used as the default transform for all assets that don't have an overriding transform.
 
-Note that `GetGeoTransform` and `rasterio` use different formats for reporting transform information. Order expected in `geo:proj.transform` is the
-same as reported by `rasterio`. When using GDAL method you need to re-order in the following way:
+Note that `GetGeoTransform` and `rasterio` use different formats for reporting transform information. Order expected in `proj.transform` is the same as reported by `rasterio`. When using GDAL method you need to re-order in the following way:
 
 ```python
 g = GetGeoTransform(...)
@@ -165,7 +163,7 @@ proj_transform = [g[1], g[2], g[0],
                      0,    0,    1]
 ```
 
-#### geo:proj.spatial_dimensions
+#### geo -> proj.spatial_dimensions
 
 Names of spatial dimensions [y_name, x_name]
 
@@ -191,8 +189,10 @@ The extension identifies these array dimensions through:
 
 ```json
 {
-  "geo:proj": {
-    "spatial_dimensions": ["latitude", "longitude"]
+  "geo": {
+    "proj": {
+      "spatial_dimensions": ["latitude", "longitude"]
+    }
   }
 }
 ```
@@ -208,9 +208,9 @@ If `spatial_dimensions` is not provided, implementations should scan `dimension_
 
 The first matching pair determines the spatial dimensions.
 
-#### Group-Level geo:proj with Array-Level dimension_names
+#### Group-Level geo -> proj with Array-Level dimension_names
 
-When `geo:proj` is defined at the group level but `spatial_dimensions` is not explicitly provided, implementations must handle the fact that `dimension_names` are defined at the individual array level in Zarr v3. The following algorithm defines how to resolve spatial dimensions:
+When `proj` is defined under the `geo` dictionary at the group level but `spatial_dimensions` is not explicitly provided, implementations must handle the fact that `dimension_names` are defined at the individual array level in Zarr v3. The following algorithm defines how to resolve spatial dimensions:
 
 **For Explicit Declaration (when `spatial_dimensions` is provided):**
 
@@ -233,9 +233,11 @@ When `geo:proj` is defined at the group level but `spatial_dimensions` is not ex
   "zarr_format": 3,
   "node_type": "group",
   "attributes": {
-    "geo:proj": {
-      "code": "EPSG:4326",
-      "transform": [0.1, 0.0, -180.0, 0.0, -0.1, 90.0]
+    "geo": {
+      "proj": {
+        "code": "EPSG:4326",
+        "transform": [0.1, 0.0, -180.0, 0.0, -0.1, 90.0]
+      }
     }
   }
 }
@@ -278,10 +280,12 @@ This approach avoids redundancy and ensures consistency by using each array's ow
   "zarr_format": 3,
   "node_type": "group",
   "attributes": {
-    "geo:proj": {
-      "code": "EPSG:3857",
-      "transform": [156543.03392804097, 0.0, -20037508.342789244, 0.0, -156543.03392804097, 20037508.342789244],
-      "bbox": [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244]
+    "geo": {
+      "proj": {
+        "code": "EPSG:3857",
+        "transform": [156543.03392804097, 0.0, -20037508.342789244, 0.0, -156543.03392804097, 20037508.342789244],
+        "bbox": [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244]
+      }
     }
   }
 }
@@ -295,11 +299,13 @@ This approach avoids redundancy and ensures consistency by using each array's ow
   "shape": [4, 2048, 2048],
   "dimension_names": ["band", "y", "x"],
   "attributes": {
-    "geo:proj": {
-      "code": "EPSG:32633",
-      "spatial_dimensions": ["y", "x"],
-      "transform": [30.0, 0.0, 500000.0, 0.0, -30.0, 5000000.0],
-      "bbox": [500000.0, 4900000.0, 561440.0, 4961440.0]
+    "geo": {
+      "proj": {
+        "code": "EPSG:32633",
+        "spatial_dimensions": ["y", "x"],
+        "transform": [30.0, 0.0, 500000.0, 0.0, -30.0, 5000000.0],
+        "bbox": [500000.0, 4900000.0, 561440.0, 4961440.0]
+      }
     }
   }
 }
@@ -313,10 +319,12 @@ This approach avoids redundancy and ensures consistency by using each array's ow
   "shape": [1800, 3600],
   "dimension_names": ["lat", "lon"],
   "attributes": {
-    "geo:proj": {
-      "code": "EPSG:4326",
-      "transform": [0.1, 0.0, -180.0, 0.0, -0.1, 90.0],
-      "bbox": [-180.0, -90.0, 180.0, 90.0]
+    "geo": {
+      "proj": {
+        "code": "EPSG:4326",
+        "transform": [0.1, 0.0, -180.0, 0.0, -0.1, 90.0],
+        "bbox": [-180.0, -90.0, 180.0, 90.0]
+      }
     }
   }
 }
@@ -330,9 +338,11 @@ This approach avoids redundancy and ensures consistency by using each array's ow
   "shape": [1000, 1000],
   "dimension_names": ["northing", "easting"],
   "attributes": {
-    "geo:proj": {
-      "wkt2": "PROJCRS[\"WGS 84 / UTM zone 33N\",BASEGEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]]],CONVERSION[\"UTM zone 33N\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],PARAMETER[\"Longitude of natural origin\",15,ANGLEUNIT[\"degree\",0.0174532925199433]],PARAMETER[\"Scale factor at natural origin\",0.9996,SCALEUNIT[\"unity\",1]],PARAMETER[\"False easting\",500000,LENGTHUNIT[\"metre\",1]],PARAMETER[\"False northing\",0,LENGTHUNIT[\"metre\",1]]],CS[Cartesian,2],AXIS[\"easting\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"northing\",north,ORDER[2],LENGTHUNIT[\"metre\",1]]]",
-      "transform": [30.0, 0.0, 500000.0, 0.0, -30.0, 5000000.0]
+    "geo": {
+      "proj": {
+        "wkt2": "PROJCRS[\"WGS 84 / UTM zone 33N\",BASEGEOGCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\",ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]]],CONVERSION[\"UTM zone 33N\",METHOD[\"Transverse Mercator\",ID[\"EPSG\",9807]],PARAMETER[\"Latitude of natural origin\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],PARAMETER[\"Longitude of natural origin\",15,ANGLEUNIT[\"degree\",0.0174532925199433]],PARAMETER[\"Scale factor at natural origin\",0.9996,SCALEUNIT[\"unity\",1]],PARAMETER[\"False easting\",500000,LENGTHUNIT[\"metre\",1]],PARAMETER[\"False northing\",0,LENGTHUNIT[\"metre\",1]]],CS[Cartesian,2],AXIS[\"easting\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"northing\",north,ORDER[2],LENGTHUNIT[\"metre\",1]]]",
+        "transform": [30.0, 0.0, 500000.0, 0.0, -30.0, 5000000.0]
+      }
     }
   }
 }
