@@ -1,6 +1,7 @@
 # Attributes Extensions
 
 This directory contains specifications for Zarr v3 attribute extensions.
+This subdirectory lists namespaces that have been formally registered by the community for use as top-level keys in the Zarr v3 attributes dictionary. Each namespace is reserved for that purpose and does not apply when used for nested keys or other contexts.
 
 ## What are Attribute Extensions?
 
