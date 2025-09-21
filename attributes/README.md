@@ -7,6 +7,8 @@ This subdirectory lists namespaces that have been formally registered by the com
 
 Attribute extensions define standardized schemas and semantics for metadata stored in the attributes of Zarr arrays and groups. These extensions enable interoperability by establishing common conventions for domain-specific metadata.
 
+Where possible, attribute extensions should link to external schemas or specifications rather than hosting them directly in this repository. This approach ensures flexibility and avoids potential conflicts. For straightforward and non-controversial cases, JSON schemas may still be included here.
+
 
 ## Creating an Attribute Extension
 
