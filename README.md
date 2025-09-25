@@ -91,4 +91,4 @@ introduced with the words "for example".
 
 ## License
 
-All extensions and registered attributesare licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
+All extensions and registered attributes are licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
