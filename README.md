@@ -1,8 +1,6 @@
 # zarr-extensions
 
-This repository contains the specifications for Zarr extensions as well as a catalog of registered attributes for [Zarr version 3](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html).
-
-It is the normative source for registering names of Zarr v3 extensions.
+This repository is the normative source of registered names for the Zarr v3 specification. This includes Zarr extensions as well as a catalog of registered attributes for [Zarr version 3](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html).
 
 ## Registering an extension
 
@@ -14,7 +12,7 @@ To register an extension, open a new PR with a new extension directory under the
  * [Chunk Grid](./chunk-grids/README.md)
  * [Storage Transformers](./storage-transformers/README.md)
 
-Each extension MUST have a `README.md` file that describes the extension and its metadata specification.
+Each extension MUST have a `README.md` file that describes the extension.
 The `README.md` file SHOULD include or link to external documents with the following contents:
 
 - detailed description of the extension
@@ -37,12 +35,12 @@ Extension maintainers are responsible for their extensions.
 Updates to the extensions will also be reviewed by the steering council.
 The steering council reserves the right to reassign extensions to other maintainers in case of prolonged inactivity or other reasons at its own discretion.
 
-## Registering a registered attribute
+## Registering an attribute
 
 Strictly speaking, registered attributes are not extensions, because the `attributes` dictionary in Zarr arrays and groups may be populated with arbitrary metadata.
 Therefore, implementations do not have strict guarantees about the contents of the `attributes` dictionary and are not required to fail if the `attributes` dictionary contains unknown keys.
 
-However, there are a number of attribute keys that are commonly used within Zarr community as conventions for domain-specific metadata.
+However, there are a number of attribute keys that are commonly used within the Zarr community as conventions for common or domain-specific metadata.
 Therefore, this repository provides a catalog of registered attributes for coordination and discovery purposes.
 
 The process for registering an attribute is similar to registering an extension.
