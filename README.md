@@ -6,7 +6,6 @@ This repository is the normative source of registered names for the Zarr v3 spec
 
 To register an extension, open a new PR with a new extension directory under the relevant extension point:
 
- * [Attributes](./attributes/README.md)
  * [Codecs](./codecs/README.md)
  * [Data Types](./data-types/README.md)
  * [Chunk Key Encoding](./chunk-key-encodings/README.md)
