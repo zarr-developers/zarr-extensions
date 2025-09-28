@@ -1,25 +1,3 @@
-# Attributes Extensions
+# Registered Attributes
 
-This directory contains specifications for Zarr v3 attribute extensions.
-
-## What are Attribute Extensions?
-
-Attribute extensions define standardized schemas and semantics for metadata stored in the attributes of Zarr arrays and groups. These extensions enable interoperability by establishing common conventions for domain-specific metadata.
-
-
-## Creating an Attribute Extension
-
-When creating an attribute extension, consider:
-
-1. **Namespace**: Use a unique prefix to avoid conflicts (e.g., `proj` for projection). Choose namespace characters that are compatible with all operating systems by avoiding special characters like colons (:)
-2. **Schema**: Provide a JSON schema for validation
-3. **Inheritance**: Define behavior when attributes are set at group vs array level
-4. **Compatibility**: Consider interoperability with existing tools and standards
-5. **Example data**: Where possible, consider including a complete Zarr hierarchy that implements the extension.
-## Extension Requirements
-
-Each attribute extension MUST:
-- Define the attribute key(s) and structure
-- Provide a JSON schema for validation
-- Include examples of usage
-- Document any inheritance or precedence rules
+Registered top-level keys in the `attributes` dictionary of Zarr arrays and groups.
