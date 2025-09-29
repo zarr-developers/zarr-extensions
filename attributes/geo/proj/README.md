@@ -14,7 +14,7 @@ This specification defines a JSON object that encodes datum and coordinate refer
 
 The complete specification, including detailed documentation, JSON schema, examples, and implementation notes, is maintained in the [EOPF Data Model repository](https://github.com/EOPF-Explorer/data-model/tree/main/attributes/geo/proj).
 
-**Repository**: https://github.com/EOPF/eopf-explorer/data-model  
+**Repository**: https://github.com/EOPF-Explorer/data-model  
 **Specification Path**: `attributes/geo/proj/`
 
 ## Quick Reference
