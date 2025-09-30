@@ -27,12 +27,19 @@ For example, the array metadata below specifies that the array contains variable
 
 This is a `array -> bytes` codec.
 
-This codec is only compatible with the [`"string"`](../../data-types/string/README.md) data type.
+This codec is only compatible with the
+[`"string"`](../../data-types/string/README.md) and
+[`"json"`](../../data-types/json/README.md) data types.
 
 In the encoded format, each chunk is prefixed with a 32-bit little-endian unsigned integer (u32le) that specifies the number of elements in the chunk.
 This prefix is followed by a sequence of encoded elements in lexicographical order.
 Each element in the sequence is encoded by a u32le representing the number of bytes followed by the bytes themselves.
-The bytes for each element are obtained by encoding the element as UTF8 bytes.
+
+For the `"string"` data type, the bytes for each element are obtained by
+encoding the element as UTF8 bytes.
+
+For the `"json"` data type, the bytes for each element are obtained by encoding
+the element as JSON (which is itself valid UTF8).
 
 See https://numcodecs.readthedocs.io/en/stable/other/vlen.html#vlenutf8 for details about the encoding.
 
