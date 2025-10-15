@@ -58,4 +58,9 @@ This example demonstrates 5 different ways of specifying a rectilinear chunk gri
 
 ## Prior work
 
-A scheme for rectilinear chunking was proposed in a [Zarr extension proposal](https://zarr.dev/zeps/draft/ZEP0003.html) (ZEP). The current specification  
+A scheme for rectilinear chunking was proposed in a [Zarr extension proposal](https://zarr.dev/zeps/draft/ZEP0003.html) (ZEP). The specification presented here builds on the ZEP 3 proposal and adapts it to the Zarr V3. 
+
+Key difference between this specification and ZEP 003:
+- This specification adds run-length encoding for integer sequences
+- This specification uses the key `"chunk_shapes"` in the `configuration` field, while ZEP 0003 uses the key `"chunk_shape"`
+- Zep 0003 defines a meaning for single-integer elements of its `chunk_shape` metadata: `"chunk_shape" : [10]` declares a sequence of chunks with length 10 repeated to match the shape of the array. While convenient, we avoid the single-integer form here because it ambiguously handles chunks at the end of an array.
