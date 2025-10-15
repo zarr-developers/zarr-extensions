@@ -62,5 +62,5 @@ A scheme for rectilinear chunking was proposed in a [Zarr extension proposal](ht
 
 Key difference between this specification and ZEP 003:
 - This specification adds run-length encoding for integer sequences
-- This specification uses the key `"chunk_shapes"` in the `configuration` field, while ZEP 0003 uses the key `"chunk_shape"`
+- This specification uses the key `"chunk_shapes"` in the `configuration` field, while ZEP 0003 uses the key `"chunk_shape"`.
 - Zep 0003 defines a meaning for single-integer elements of its `chunk_shape` metadata: `"chunk_shape" : [10]` declares a sequence of chunks with length 10 repeated to match the shape of the array. While convenient, we avoid the single-integer form here because it ambiguously handles chunks at the end of an array.
