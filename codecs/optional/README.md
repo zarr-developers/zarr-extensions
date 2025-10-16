@@ -64,7 +64,9 @@ This has a profound impact on write performance:
 This transforms a shard from a monolithic object that must be written sequentially into a parallel-access container. It significantly boosts write throughput in high-performance computing (HPC) and other concurrent data processing environments where multiple workers need to write to the same dataset simultaneously.
 
 #### Shard Compaction as a Post-Processing Step
-While this padded shard layout is highly optimized for parallel writes, it can result in a larger file size due to the unused space in each slot. To optimize for long-term storage and read performance, a shard compaction process can be run offline. This subsequent step would read each chunk from its fixed-size slot in the original "write-optimized" shard and write them sequentially into a new, smaller shard file with no padding. The shard's index file would be updated to reflect the new, variable offsets of each chunk in the compacted file. This two-phase approach allows for an extremely high-performance ingest followed by a transition to a space-efficient, read-optimized storage layout, all without altering the logical structure of the Zarr array.
+While this padded shard layout is highly optimized for parallel writes, it can result in a larger file size on disk. This is because each fixed-size slot must be large enough to accommodate the uncompressed data plus a header, leaving significant unused space for chunks that compress well. To optimize for long-term storage and read performance, a shard compaction process can be run offline.
+
+This subsequent step would read each chunk from its fixed-size slot in the original "write-optimized" shard and write them sequentially into a new, smaller shard file with no padding. The shard's index file would be updated to reflect the new, variable offsets of each chunk in the compacted file. This two-phase approach allows for an extremely high-performance ingest followed by a transition to a space-efficient, read-optimized storage layout, all without altering the logical structure of the Zarr array.
 
 ## Usage and Impact
 
