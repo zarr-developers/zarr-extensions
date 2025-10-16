@@ -45,14 +45,21 @@ This avoids the need for creating separate "raw" and "processed" versions of a d
 
 The optional codec, when combined with the sharding codec, unlocks high-performance I/O patterns that are otherwise difficult to achieve, specifically parallel writes within a single shard.
 
-The key mechanism is the optional codec's ability to enforce **a predictable upper bound on the size of any encoded chunk** . By configuring the decision logic to skip compression when it would inflate the data, the maximum possible size for any chunk's byte representation becomes the size of the uncompressed chunk data.
+The key mechanism is the `optional` codec's ability to enforce a **predictable upper bound on the size of any encoded chunk, independent of the nested codecs' behavior**. While some individual compression codecs, like Zstandard, provide an API to calculate a worst-case "compression bound," this value is algorithm-specific and can be complex. The `optional` codec achieves this simply: by configuring its decision logic to skip compression when it would inflate the data, its upper bound becomes the known size of the uncompressed chunk data plus the fixed size of its own header. This universal bound is advantageous for two reasons. First, it is simple to calculate without needing to query the nested codecs. Second, it is often a tighter (smaller) bound than the conservative worst-case estimates provided by individual compressors, which must account for their own internal overhead.
 
-This enables a sharded store to be designed with fixed-size "slots." Each chunk within the shard is allocated a padded space equal to this upper bound. The exact byte offset of any chunk within the shard file can be calculated directly: offset = chunk_index_in_shard * uncompressed_chunk_size
+This allows a sharded store to be designed with fixed-size "slots." Each chunk within the shard is allocated a padded space equal to this upper bound. The exact byte offset of any chunk within the shard file can then be calculated directly:
+
+```
+header_bytes = ceil(header_bits / 8)
+padded_slot_size = uncompressed_chunk_size + header_bytes
+offset = chunk_index_in_shard * padded_slot_size
+```
 
 This has a profound impact on write performance:
 
-* Independent Chunk Modification: Since each chunk resides in a known, non-overlapping slot, it can be overwritten without affecting any other chunk in the shard. The entire shard file does not need to be read and rewritten.
-* Parallel I/O Within a Shard: With predictable offsets, multiple threads or processes can issue concurrent write operations to different chunks within the same shard file using overlapped I/O.
+* **Independent Chunk Modification:** Since each chunk resides in a known, non-overlapping slot, it can be overwritten without affecting any other chunk in the shard. The entire shard file does not need to be read and rewritten.
+
+* **Parallel I/O Within a Shard:** With predictable offsets, multiple threads or processes can issue concurrent write operations to different chunks within the same shard file using overlapped I/O.
 
 This transforms a shard from a monolithic object that must be written sequentially into a parallel-access container. It significantly boosts write throughput in high-performance computing (HPC) and other concurrent data processing environments where multiple workers need to write to the same dataset simultaneously.
 
