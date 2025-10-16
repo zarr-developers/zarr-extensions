@@ -31,7 +31,7 @@ This enhances interoperability and simplifies workflows that bridge Zarr and tra
 The configuration for this encoding is a JSON object with one required and one optional member.
 
 * `"suffix"`: **(Required)** A string that will be appended to the encoded chunk key.
-* `"base-encoding"`: **(Optional)** A chunk key encoding configuration object. This specifies the "base" encoding to be used *before* the suffix is appended. If omitted, the store's `default` chunk key encoding is used.
+* `"base_encoding"`: **(Optional)** A chunk key encoding configuration object. This specifies the "base" encoding to be used *before* the suffix is appended. If omitted, the `default` chunk key encoding is used.
 
 #### Example 1: Simple Suffix
 
