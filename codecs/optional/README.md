@@ -156,7 +156,7 @@ In high-throughput scenarios like instrument capture or live simulations, data m
 #### Phase 1: Fast Ingest
 Chunks can be written with compression explicitly disabled by providing a mask parameter to the writer.
 
-```python=
+```python
 ### Example 2: "Write-Fast, Compress-Later" Workflows
 
 This workflow is ideal for high-throughput applications where write speed is critical. The user can first ingest data with expensive codecs disabled, and then re-open the array later with different runtime settings to optimize it for long-term storage.
@@ -207,7 +207,7 @@ for data_batch in real_time_data_stream:
 
 After data acquisition is complete, the user can run a separate process. They re-open the array, but this time they instantiate the OptionalCodec with the optimizing logic from Example 1.
 
-```python=
+```python
 # 1. Define the optimizing decision function (re-used from Example 1).
 def decide_based_on_size(chunk_index, codec, unencoded_chunk, trial_encoded_chunk):
     """Enables codecs only if they save space."""
@@ -284,7 +284,7 @@ for i in range(10):
 #### Phase 2: Writing the Zarr Array
 When writing the Zarr data, the user provides a decision function that simply looks up the result from the precomputed_bitmasks array.
 
-```pyrhon=
+```python
 import zarr
 from my_zarr_lib.codecs import OptionalCodec, Bytes
 
