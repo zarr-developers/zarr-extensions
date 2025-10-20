@@ -58,7 +58,7 @@ This configuration first encodes the chunk key using the `v2` naming scheme and 
     "name": "suffix",
     "configuration": {
         "suffix": ".shard.zip",
-        "base-encoding": {
+        "base_encoding": {
             "name": "v2"
         }
     }
