@@ -84,4 +84,4 @@ The final key is `base_encoded_key + suffix` (e.g., `"c/1/2.tiff"`).
 1.  Take the full chunk key string as input (e.g., `"c/1/2.tiff"`).
 2.  Verify that the key ends with the configured `suffix`. If not, it is an invalid key for this encoding.
 3.  Remove the `suffix` from the end of the key string to get the base key (e.g., `"c/1/2"`).
-4.  Decode the remaining base key using the specified **`base-encoding`** to retrieve the original chunk coordinate tuple `(1, 2)`.
+4.  Decode the remaining base key using the specified **`base_encoding`** to retrieve the original chunk coordinate tuple `(1, 2)`.
