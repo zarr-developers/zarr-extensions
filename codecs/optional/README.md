@@ -346,7 +346,7 @@ The `conditional` codec is a meta-codec that conditionally applies an encapsulat
 
 The `configuration` object for the `conditional` codec contains the following parameters:
 
-* **`codecs`** (list, required): A list of Zarr v3 codec configuration objects. These are the codecs that will be conditionally applied.
+* **`codecs`** (list, required): A list of Zarr v3 codec configuration objects. These are the codecs that will be conditionally applied. They MUST all be `bytes -> bytes` codecs.
 * **`header_bits`** (integer, optional): An integer specifying the total number of bits to reserve for the header's bitmask.
     * This value **must** be a multiple of 8.
     * If not provided, it defaults to the smallest multiple of 8 that is greater than or equal to the number of configured codecs. The default is calculated as `ceil(len(codecs) / 8) * 8`.
