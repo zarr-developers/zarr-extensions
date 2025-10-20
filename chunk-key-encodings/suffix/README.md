@@ -74,7 +74,7 @@ The implementation logic is a simple wrapper around an existing chunk key encodi
 ### Encoding
 
 1.  Take the chunk coordinate tuple as input (e.g., `(1, 2)`).
-2.  Encode the coordinates using the specified **`base-encoding`**. This might transform `(1, 2)` into `"c/1/2"` if the `base-encoding` is set to `default`
+2.  Encode the coordinates using the specified **`base_encoding`**. This might transform `(1, 2)` into `"c/1/2"` if the `base_encoding` is set to `default`
 3.  Append the `suffix` from the configuration to the result of the base encoding.
 
 The final key is `base_encoded_key + suffix` (e.g., `"c/1/2.tiff"`).
