@@ -15,7 +15,7 @@
     "configuration"
   ],
   "$defs": {
-    "ChunkShape": {
+    "ChunkEdgeLength": {
       "anyOf": [
         {
           "type": "integer",
@@ -25,12 +25,12 @@
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/InnerChunkShape"
+            "$ref": "#/$defs/InnerChunkEdgeLength"
           }
         }
       ]
     },
-    "InnerChunkShape": {
+    "InnerChunkEdgeLength": {
       "anyOf": [
         {
           "type": "array",
@@ -62,7 +62,7 @@
         "chunk_shapes": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/ChunkShape"
+            "$ref": "#/$defs/ChunkEdgeLength"
           }
         },
         "kind": {
