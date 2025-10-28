@@ -74,7 +74,7 @@ Implementations MAY choose any suitable representation for handling nullable val
 The encoded format consists of:
 1. 8 bytes: mask length (u64 little-endian) - the number of bytes in the encoded mask.
 2. 8 bytes: data length (u64 little-endian) - the number of bytes in the encoded data.
-3. N bytes: encoded mask - the result of applying the mask codec chain to the flattened boolean mask.
+3. N bytes: encoded mask - the result of applying the mask codec chain to the boolean mask.
 4. M bytes: encoded data - the result of applying the data codec chain to the flattened bytes of only valid elements.
 
 ### Algorithm
