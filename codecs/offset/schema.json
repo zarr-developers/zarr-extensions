@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Offset Codec",
+  "description": "A codec that applies a byte offset.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "offset"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "description": "The number of bytes to offset.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "prefix": {
+          "description": "An optional base64-encoded string of the literal bytes to prepend when encoding. The length of the decoded bytes must equal 'offset'.",
+          "type": "string",
+          "contentEncoding": "base64"
+        }
+      },
+      "required": ["offset"]
+    }
+  },
+  "required": ["name", "configuration"]
+}
