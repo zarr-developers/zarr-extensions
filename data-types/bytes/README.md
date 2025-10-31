@@ -8,7 +8,7 @@ The value of the `fill_value` metadata key must be one of:
 - an array of integers from the closed interval `[0, 255]`, where each value encodes a byte from a byte string.
 - a string produced by applying [base64 encoding](https://en.wikipedia.org/wiki/Base64) to a byte string.
 
-Implementations SHOULD default to the <insert name of preferred form> form.
+As the string form is more compact, it may be preferred where brevity is desired.
 
 ## Examples
 
