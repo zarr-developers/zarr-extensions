@@ -83,6 +83,10 @@ Implementations may support other data types that are interpretable as an intege
 This codec is compatible with `numcodecs.bitround` for floating-point data types.
 Integer data types are not supported by the `numcodecs.bitround` codec.
 
+## Sample Data
+
+Sample Zarr arrays encoded with the `bitround` codec can be found in the [sample_data](./sample_data) directory.
+
 ## Change log
 
 No changes yet.
