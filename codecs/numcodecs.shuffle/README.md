@@ -1,6 +1,6 @@
 # Shuffle codec
 
-Defines a `array -> array` codec that provides a shuffle filter.
+Defines a `bytes -> bytes` codec that provides a shuffle filter.
 
 ## Codec name
 
