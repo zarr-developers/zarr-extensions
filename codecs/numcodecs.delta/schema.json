@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "numcodecs.delta"
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "dtype": {
+              "type": "string"
+            },
+            "astype": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    { "const": "numcodecs.delta" }
+  ]
+}
