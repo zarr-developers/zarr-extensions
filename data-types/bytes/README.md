@@ -2,13 +2,20 @@
 
 Defines a data type for variable-length byte strings.
 
-## Permitted fill values
+## Fill value encoding
 
-The value of the `fill_value` metadata key must be an array of byte values.
+The value of the `fill_value` metadata key must be one of:
+- an array of integers from the closed interval `[0, 255]`, where each value encodes a byte from a byte string.
+- a string produced by applying [base64 encoding](https://en.wikipedia.org/wiki/Base64) to a byte string.
 
-## Example
+As the string form is more compact, it may be preferred where brevity is desired.
 
-For example, the array metadata below specifies that the array contains variable-length byte strings:
+## Examples
+
+### Array fill value encoding
+
+The example below shows a fragment of an array metadata document using the `bytes` data type. The 
+fill value is the byte string `0x01 0x02 0x03` encoded as an array of integers:
 
 ```json
 {
@@ -19,14 +26,29 @@ For example, the array metadata below specifies that the array contains variable
     }],
 }
 ```
+### String fill value encoding
 
-## Notes
+The example below shows a fragment of an array metadata document using the `bytes` data type. The 
+fill value is the byte string `0x01 0x02 0x03` encoded as a string using base64:
 
-Currently, this data type is only compatible with the [`"vlen-bytes"`](../../codecs/vlen-bytes/README.md) codec.
+```json
+{
+    "data_type": "bytes",
+    "fill_value": "AQID",
+    "codecs": [{
+        "name": "vlen-bytes"
+    }],
+}
+```
+
+## Codec compatibility
+
+This data type is compatible with any codec that can encode variable-length sequences of bytes.
+For example, the [`"vlen-bytes"`](../../codecs/vlen-bytes/README.md) codec.
 
 ## Change log
 
-No changes yet.
+- Addition of the string-based fill value encoding.
 
 ## Current maintainers
 
