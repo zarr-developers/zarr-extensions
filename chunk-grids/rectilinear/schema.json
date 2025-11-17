@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RectilinearChunkGridMetadata",
+  "type": "object",
+  "properties": {
+    "configuration": {
+      "$ref": "#/$defs/RectilinearChunkGridConfiguration"
+    },
+    "name": {
+      "$ref": "#/$defs/rectilinear"
+    }
+  },
+  "required": [
+    "name",
+    "configuration"
+  ],
+  "$defs": {
+    "ChunkEdgeLength": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InnerChunkEdgeLength"
+          }
+        }
+      ]
+    },
+    "InnerChunkEdgeLength": {
+      "anyOf": [
+        {
+          "type": "array",
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "minimum": 0
+            },
+            {
+              "type": "integer",
+              "format": "uint",
+              "minimum": 0
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0
+        }
+      ]
+    },
+    "RectilinearChunkGridConfiguration": {
+      "type": "object",
+      "properties": {
+        "chunk_shapes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChunkEdgeLength"
+          }
+        },
+        "kind": {
+          "$ref": "#/$defs/inline"
+        }
+      },
+      "required": [
+        "kind",
+        "chunk_shapes"
+      ]
+    },
+    "inline": {
+      "const": "inline"
+    },
+    "rectilinear": {
+      "const": "rectilinear"
+    }
+  }
+}
