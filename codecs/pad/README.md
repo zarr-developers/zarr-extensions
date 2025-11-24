@@ -1,4 +1,4 @@
-# Offset Codec
+# Pad Codec
 
 **Version:** 0.1.0 (proposal)
 
@@ -8,45 +8,32 @@
 
 ## Description
 
-The Offset codec is a `bytes->bytes` codec that handles a fixed-size header preceding the chunk data. When decoding, it skips a specified number of bytes from the start of the chunk. When encoding, it prepends a specified prefix (or zeros) to the chunk data.
+The Pad codec is a `bytes->bytes` codec that handles fixed-size padding at the `start` or `end` of a chunk. When decoding, it removes a specified number of bytes from the chunk data. When encoding, it adds a specified padding (or zeros) to the chunk data.
 
-This codec is applied as the final step in the encoding chain, prepending a header to the fully encoded and compressed chunk data.
+This allows for use cases such as:
+- Prepending a file header to each chunk (e.g., a TIFF header).
+- Appending a footer to each chunk.
+- Skipping a header or footer when reading from a foreign data format (e.g., N5).
+
+To add both a prefix and a suffix, the `pad` codec can be applied twice in the codec pipeline.
 
 ## Configuration Parameters
 
 The codec is configured with the following parameters:
 
-*   `offset`: An integer specifying the number of bytes in the header. This is a required parameter.
-*   `prefix`: An optional base64-encoded string of the literal bytes to prepend when encoding. If provided, the length of the decoded bytes MUST be equal to `offset`. If not provided, the prefix defaults to a sequence of `offset` zero bytes (i.e. `\x00` bytes).
+*   `location`: A string specifying whether the padding is at the `"start"` or `"end"` of the chunk. This is a required parameter.
+*   `nbytes`: An integer specifying the number of bytes of padding. This is a required parameter.
+*   `padding`: An optional base64-encoded string of the literal bytes to use for padding when encoding. If not provided, the padding defaults to a sequence of `nbytes` zero bytes (i.e. `\x00` bytes).
 
 ## JSON Schema
 
 A `schema.json` file is provided to validate the codec metadata.
 
-```json
-{
-  "name": "offset",
-  "configuration": {
-    "offset": {
-      "description": "The number of bytes to offset.",
-      "type": "integer",
-      "minimum": 0
-    },
-    "prefix": {
-      "description": "An optional base64-encoded string of the literal bytes to prepend when encoding. The length of the decoded bytes must equal 'offset'.",
-      "type": "string",
-      "contentEncoding": "base64"
-    }
-  },
-  "required": ["offset"]
-}
-```
-
 ## Examples
 
 ### Example 1: Creating a Valid TIFF File per Chunk
 
-If no compression is used in the Zarr codec pipeline, the chunk size becomes fixed and predictable. This allows the `offset` codec to prepend a static but *fully valid* TIFF header, making each Zarr chunk a readable TIFF file.
+If no compression is used in the Zarr codec pipeline, the chunk size becomes fixed and predictable. This allows the `pad` codec to prepend a static but *fully valid* TIFF header, making each Zarr chunk a readable TIFF file.
 
 This example configures a Zarr array of 256x256 `uint16` chunks. Each chunk will be prepended with a 110-byte header to form a complete, uncompressed, single-strip TIFF.
 
@@ -60,10 +47,11 @@ This example configures a Zarr array of 256x256 `uint16` chunks. Each chunk will
       }
     },
     {
-      "name": "offset",
+      "name": "pad",
       "configuration": {
-        "offset": 110,
-        "prefix": "SUkqAAgAAAAIAAABAwABAAAAAAEAAAEBAwABAAAAAAEAAAIBAwABAAAAEAAAAAMBAwABAAAAAQAAAAYBAwABAAAAAQAAABEBBAABAAAAbgAAABYBAwABAAAAAAEAABcBBAABAAAAAAACAAAAAAA="
+        "location": "start",
+        "nbytes": 110,
+        "padding": "SUkqAAgAAAAIAAABAwABAAAAAAEAAAEBAwABAAAAAAEAAAIBAwABAAAAEAAAAAMBAwABAAAAAQAAAAYBAwABAAAAAQAAABEBBAABAAAAbgAAABYBAwABAAAAAAEAABcBBAABAAAAAAACAAAAAAA="
       }
     }
   ]
@@ -72,7 +60,7 @@ This example configures a Zarr array of 256x256 `uint16` chunks. Each chunk will
 
 #### TIFF Header and IFD Details
 
-The `prefix` contains a 110-byte header and Image File Directory (IFD) for a little-endian TIFF.
+The `padding` contains a 110-byte header and Image File Directory (IFD) for a little-endian TIFF.
 
 **Hexdump Representation:**
 
@@ -97,33 +85,34 @@ The `prefix` contains a 110-byte header and Image File Directory (IFD) for a lit
     - `BitsPerSample` (258): 16.
     - `Compression` (259): 1 (None).
     - `PhotometricInterpretation` (262): 1 (BlackIsZero).
-    - `StripOffsets` (273): 110 (The image data begins immediately after the prefix).
+    - `StripOffsets` (273): 110 (The image data begins immediately after the padding).
     - `RowsPerStrip` (278): 256.
     - `StripByteCounts` (279): 131072 (The exact size of the uncompressed 256x256x2-byte chunk).
   - **Next IFD Offset:** 0.
 
-**Encoding process:** The `bytes` codec ensures the `uint16` chunk data is little-endian. The `offset` codec then prepends the 110-byte valid TIFF header. The resulting stored chunk is a standalone, readable TIFF file.
+**Encoding process:** The `bytes` codec ensures the `uint16` chunk data is little-endian. The `pad` codec then prepends the 110-byte valid TIFF header. The resulting stored chunk is a standalone, readable TIFF file.
 
 ### Example 2: Creating a file with a custom header
 
-To prepend the bytes `MY_CUSTOM_HEADER` (16 bytes) to a compressed chunk, the `offset` codec is placed last with a specified `prefix`.
+To prepend the bytes `MY_CUSTOM_HEADER` (16 bytes) to a compressed chunk, the `pad` codec is placed last with `location: "start"`.
 
 ```json
 {
   "codecs": [
     { "name": "gzip" },
     {
-      "name": "offset",
+      "name": "pad",
       "configuration": {
-        "offset": 16,
-        "prefix": "TVlfQ1VTVE9NX0hFQURFUg=="
+        "location": "start",
+        "nbytes": 16,
+        "padding": "TVlfQ1VTVE9NX0hFQURFUg=="
       }
     }
   ]
 }
 ```
 
-**Encoding process:** The data is compressed by `gzip`, and then the `offset` codec prepends the 16-byte custom header.
+**Encoding process:** The data is compressed by `gzip`, and then the `pad` codec prepends the 16-byte custom header.
 
 ### Example 3: Reading an N5 dataset with Zarr v3
 
@@ -189,17 +178,12 @@ Here is the corresponding `zarr.json` for reading the N5 data.
         "endian": "big"
       }
     },
+    { "name": "zstd" },
     {
-      "name": "zstd",
+      "name": "pad",
       "configuration": {
-        "level": 3
-      }
-    },
-    {
-      "name": "offset",
-      "configuration": {
-        "offset": 12,
-        "prefix": "AAAAAgAAAEAAAABA"
+        "location": "start",
+        "nbytes": 12
       }
     }
   ],
@@ -207,9 +191,9 @@ Here is the corresponding `zarr.json` for reading the N5 data.
 }
 ```
 
-#### N5 Header Prefix Details
+#### N5 Header Padding Details
 
-The `prefix` value `AAAAAgAAAEAAAABA` is the base64 encoding of the 12-byte N5 header template. 
+The `padding` value `AAAAAgAAAEAAAABA` is the base64 encoding of the 12-byte N5 header template.
 
 **Python bytes literal:**
 
@@ -237,7 +221,7 @@ This configuration allows a Zarr v3 reader to interpret the N5 dataset seamlessl
 1.  **Metadata Mapping**: The `shape`, `data_type`, and `chunk_grid.configuration.chunk_shape` fields in `zarr.json` directly correspond to the `dimensions`, `dataType`, and `blockSize` from the N5 `attributes.json`.
 2.  **Chunk Naming**: The `chunk_key_encoding` is set to `v2` to match N5's chunk naming and storage layout, avoiding the need to rename files.
 3.  **Codec Pipeline**: The `codecs` array defines the processing pipeline. For **decoding**, codecs are applied in reverse order (from last to first):
-    *   **`offset`**: First, the `offset` codec seeks past the 12-byte N5 header in the stored chunk.
+    *   **`pad`**: First, the `pad` codec with `location: "start"` skips the first 12 bytes of the stored N5 chunk.
     *   **`zstd`**: Second, the `zstd` codec decompresses the remaining data.
     *   **`bytes`**: Finally, the `bytes` codec ensures the decompressed `uint16` data is interpreted as big-endian.
 
@@ -245,13 +229,13 @@ This combination of metadata and codecs makes the N5 chunks readable as a native
 
 ## Implementation Notes
 
-### Handling Dynamic Headers
+### Handling Dynamic Padding
 
-The `prefix` configuration parameter as defined in the JSON schema is a static value. This is effective when the header content is fixed, such as when no compression is used and the chunk size is therefore known in advance (as shown in Example 1).
+The `padding` configuration parameter as defined in the JSON schema is a static value. This is effective when the padding content is fixed, such as when no compression is used and the chunk size is therefore known in advance (as shown in Example 1).
 
-However, many file formats require metadata that depends on the encoded data itself, such as the size of the compressed data. This is the case for the `TileByteCounts` tag in a compressed TIFF or the `compressedSize` field in an N5 header. A static `prefix` cannot support this.
+However, many file formats require metadata that depends on the encoded data itself, such as the size of the compressed data. This is the case for the `TileByteCounts` tag in a compressed TIFF or the `compressedSize` field in an N5 header. A static `padding` cannot support this.
 
-A robust implementation of this codec could address this by providing a mechanism to generate prefixes dynamically during the encoding process. For example, a Python implementation could allow a user to provide a callable function instead of a static `prefix` string when writing an array.
+A robust implementation of this codec could address this by providing a mechanism to generate padding dynamically during the encoding process. For example, a Python implementation could allow a user to provide a callable function instead of a static `padding` string when writing an array.
 
 ```python
 # Hypothetical Python implementation
@@ -265,12 +249,12 @@ zarr.create_array(
     ...,
     codecs=[
         ...,
-        offset_codec(offset=110, prefix_func=create_tiff_header)
+        pad_codec(nbytes=110, padding_func=create_tiff_header)
     ]
 )
 ```
 
-This approach would combine the declarative nature of `zarr.json` (which would still define the `offset`) with the imperative flexibility needed to create complex, valid file format headers on the fly.
+This approach would combine the declarative nature of `zarr.json` (which would still define the `nbytes`) with the imperative flexibility needed to create complex, valid file format headers on the fly.
 
 ## Interoperability and Compatibility
 
@@ -286,7 +270,7 @@ This document is licensed under the [Creative Commons Attribution 3.0 Unported L
 
 ### Script to Generate TIFF Header
 
-The following Python script (`generate_tiff_header.py`) was used to generate the base64-encoded prefix for the valid TIFF header in Example 1.
+The following Python script (`generate_tiff_header.py`) was used to generate the base64-encoded padding for the valid TIFF header in Example 1.
 
 ```python
 import struct
@@ -301,7 +285,7 @@ def generate_and_print_tiff_header():
 
     # 8-byte TIFF header
     # II for little-endian, version 42, IFD at offset 8
-    header = b'\x49\x49\x2A\x00\x08\x00\x00\x00'
+    header = b'\x49\x49\x2a\x00\x08\x00\x00\x00'
 
     # Image File Directory (IFD)
     ifd = b''
@@ -319,27 +303,27 @@ def generate_and_print_tiff_header():
     ifd += create_entry(258, 3, 1, 16)       # BitsPerSample (SHORT)
     ifd += create_entry(259, 3, 1, 1)        # Compression (SHORT) = 1 (None)
     ifd += create_entry(262, 3, 1, 1)        # PhotometricInterpretation (SHORT) = 1 (BlackIsZero)
-    ifd += create_entry(273, 4, 1, 110)      # StripOffsets (LONG) = 110 (data starts after this prefix)
+    ifd += create_entry(273, 4, 1, 110)      # StripOffsets (LONG) = 110 (data starts after this padding)
     ifd += create_entry(278, 3, 1, 256)      # RowsPerStrip (SHORT)
     ifd += create_entry(279, 4, 1, 131072)   # StripByteCounts (LONG) = 256 * 256 * 2
 
     # 4-byte offset to the next IFD (0 for none)
     ifd += struct.pack('<I', 0)
 
-    # Combine header and IFD to form the full prefix
-    prefix_bytes = header + ifd
+    # Combine header and IFD to form the full padding
+    padding_bytes = header + ifd
 
-    # Encode the prefix in base64
-    base64_prefix = base64.b64encode(prefix_bytes)
+    # Encode the padding in base64
+    base64_padding = base64.b64encode(padding_bytes)
 
-    print(f"\nTotal prefix length: {len(prefix_bytes)} bytes")
+    print(f"\nTotal padding length: {len(padding_bytes)} bytes")
     print("Base64 encoded string:")
-    print(base64_prefix.decode('ascii'))
+    print(base64_padding.decode('ascii'))
 
     print("\nVerifying the base64 string...")
     try:
-        decoded_bytes = base64.b64decode(base64_prefix)
-        assert decoded_bytes == prefix_bytes
+        decoded_bytes = base64.b64decode(base64_padding)
+        assert decoded_bytes == padding_bytes
         print("Verification successful: Decoded string matches original bytes.")
     except Exception as e:
         print(f"Verification failed: {e}")

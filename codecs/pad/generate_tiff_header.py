@@ -35,20 +35,20 @@ def generate_and_print_tiff_header():
     # 4-byte offset to the next IFD (0 for none)
     ifd += struct.pack('<I', 0)
 
-    # Combine header and IFD to form the full prefix
-    prefix_bytes = header + ifd
+    # Combine header and IFD to form the full padding
+    padding_bytes = header + ifd
 
-    # Encode the prefix in base64
-    base64_prefix = base64.b64encode(prefix_bytes)
+    # Encode the padding in base64
+    base64_padding = base64.b64encode(padding_bytes)
 
-    print(f"\nTotal prefix length: {len(prefix_bytes)} bytes")
+    print(f"\nTotal padding length: {len(padding_bytes)} bytes")
     print("Base64 encoded string:")
-    print(base64_prefix.decode('ascii'))
+    print(base64_padding.decode('ascii'))
 
     print("\nVerifying the base64 string...")
     try:
-        decoded_bytes = base64.b64decode(base64_prefix)
-        assert decoded_bytes == prefix_bytes
+        decoded_bytes = base64.b64decode(base64_padding)
+        assert decoded_bytes == padding_bytes
         print("Verification successful: Decoded string matches original bytes.")
     except Exception as e:
         print(f"Verification failed: {e}")
