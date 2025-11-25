@@ -20,8 +20,9 @@ The stored `Int8` value `i` is interpreted as `i / 2^4`. This is equivalent to `
 
 ## Fill value representation
 
-The `fill_value` for this data type should be represented as a floating-point number in the JSON metadata. For example: `"fill_value": -3.0625`.
-
+The `fill_value` for this data type SHOULD be represented as a JSON number with the value to be represented.
+To represent the underlying integer bits exactly, the `fill_value` MAY be provided as a hexadecimal string representing the underlying integer (e.g., "0x00" for a fill value of 0).
+There are no `NaN` or `Infinity` values for fixed-point types.
 ## Codec compatibility
 
 This data type is stored as an `int8`. It is expected to be compatible with any codec that can handle the `int8` data type.
