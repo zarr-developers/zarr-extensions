@@ -17,6 +17,8 @@ It is defined by a base integer type, the number of fractional bits, and the num
 - **`fractional_bits`**: The number of bits representing the fractional part.
 - **`integer_bits`**: The number of bits representing the integer part.
 
+It is sufficient to provide either `fractional_bits` or `integer_bits` in the configuration, as the other can be derived from the bit width of the `base_data_type`. If both are provided, they must be consistent with the bit width of the `base_data_type`.
+
 ## Interpretation
 
 The value is interpreted as:
@@ -39,12 +41,12 @@ The choice of `base_data_type` (bit width $W$) limits the possible values for `i
 
 - **Signed Types (`int*`)**:
   The underlying type must accommodate the sign bit, integer bits, and fractional bits.
-  $$ W \ge 1 + \text{integer\_bits} (n) + \text{fractional\_bits} (m) $$
+  $$ W = 1 + \text{integer\_bits} (n) + \text{fractional\_bits} (m) $$
   *Example:* `Q1.14` (1 integer, 14 fractional) requires $1 + 1 + 14 = 16$ bits, fitting into `int16`.
 
 - **Unsigned Types (`uint*`)**:
   The underlying type must accommodate the integer bits and fractional bits. Unsigned fixed-point is sometimes denoted as `UQn.m`.
-  $$ W \ge \text{integer\_bits} (n) + \text{fractional\_bits} (m) $$
+  $$ W = \text{integer\_bits} (n) + \text{fractional\_bits} (m) $$
   *Example:* `UQ8.8` (8 integer, 8 fractional) requires $8 + 8 = 16$ bits, fitting into `uint16`.
 
 ## Fill value representation

@@ -30,9 +30,19 @@
         }
       },
       "required": [
-        "base_data_type",
-        "fractional_bits",
-        "integer_bits"
+        "base_data_type"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "fractional_bits"
+          ]
+        },
+        {
+          "required": [
+            "integer_bits"
+          ]
+        }
       ],
       "additionalProperties": false
     }
