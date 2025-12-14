@@ -65,38 +65,7 @@ The table below demonstrates valid `data_type` and `fill_value` combinations wit
 
 ## Example
 
-For example, the array metadata below specifies that the array contains optional `uint8` values with a fill value of `null` (representing missing elements):
-
-```json
-{
-    "data_type": {
-        "name": "optional",
-        "configuration": {
-            "name": "uint8",
-            "configuration": {}
-        }
-    },
-    "fill_value": null,
-    "codecs": [{
-        "name": "optional",
-        "configuration": {
-            "mask_codecs": [
-                {
-                    "name": "packbits"
-                }
-            ],
-            "data_codecs": [
-                {
-                    "name": "bytes",
-                    "configuration": {
-                        "endian": "little"
-                    }
-                }
-            ]
-        }
-    }]
-}
-```
+See the [`optional` codec](../../codecs/optional/README.md) for an example of how to configure the optional data type within array metadata.
 
 ## Compatible Implementations
 

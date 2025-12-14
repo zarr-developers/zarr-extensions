@@ -24,35 +24,37 @@ For example, the array metadata below specifies the optional codec with `packbit
 
 ```json
 {
-    "data_type": {
-        "name": "optional",
-        "configuration": {
-            "name": "uint8",
-            "configuration": {}
-        }
-    },
-    "fill_value": null,
-    "codecs": [{
-        "name": "optional",
-        "configuration": {
-            "mask_codecs": [
-                {
-                    "name": "packbits",
-                    "configuration": {}
-                }
-            ],
-            "data_codecs": [
-                {
-                    "name": "bytes",
-                    "configuration": {"endian": "little"}
-                },
-                {
-                    "name": "gzip",
-                    "configuration": {"level": 5}
-                }
-            ]
-        }
-    }]
+  "data_type": {
+    "name": "optional",
+    "configuration": {
+      "name": "uint8",
+      "configuration": {}
+    }
+  },
+  "fill_value": null,
+  "codecs": [
+    {
+      "name": "optional",
+      "configuration": {
+        "mask_codecs": [
+          {
+            "name": "packbits"
+          }
+        ],
+        "data_codecs": [
+          {
+            "name": "bytes"
+          },
+          {
+              "name": "gzip",
+              "configuration": {
+                "level": 5
+              }
+          }
+        ]
+      }
+    }
+  ]
 }
 ```
 
