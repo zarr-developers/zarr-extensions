@@ -19,10 +19,49 @@ This should match the configuration requirements of the specified underlying dat
 
 ## Permitted fill values
 
-The value of the `fill_value` metadata key MAY be any valid value of the underlying data type or `null`.
+The value of the `fill_value` metadata key MUST be `null` or a single element array containing any valid fill value of the underlying data type.
 
-When the `fill_value` is `null`, it represents the absence of a value (missing element).
-When the `fill_value` is any other valid value of the underlying data type, that value represents an actual present element, not a missing one.
+- A `null` fill value represents the absence of a value (missing element).
+- A single element array fill value represents a valid value of the underlying data type.
+
+For nested optional types, this representation is applied recursively.
+
+The table below demonstrates valid `data_type` and `fill_value` combinations with an `optional` and nested `optional` data type, along with their equivalent Rust [`Option`](https://doc.rust-lang.org/std/option/) values.
+
+<table>
+<thead>
+<tr>
+<th><code>"data_type"</code></th>
+<th><code>"fill_value"</code></th>
+<th>Rust value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td rowspan="2"><code>{<br>&nbsp;&nbsp;"name": "optional",<br>&nbsp;&nbsp;"configuration": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"name": "uint8",<br>&nbsp;&nbsp;}<br>}</code></td>
+<td><code>null</code></td>
+<td><code>None</code></td>
+</tr>
+<tr>
+<td><code>[42]</code></td>
+<td><code>Some(42)</code></td>
+</tr>
+<tr>
+<td rowspan="3"><code>{<br>&nbsp;&nbsp;"name": "optional",<br>&nbsp;&nbsp;"configuration": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"name": "optional",<br>&nbsp;&nbsp;&nbsp;&nbsp;"configuration": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name": "uint8"<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;}<br>}</code></td>
+<td><code>null</code></td>
+<td><code>None</code></td>
+</tr>
+<tr>
+<td><code>[null]</code></td>
+<td><code>Some(None)</code></td>
+</tr>
+<tr>
+<td><code>[[42]]</code></td>
+<td><code>Some(Some(42))</code></td>
+</tr>
+</tbody>
+</table>
+
 
 ## Example
 
@@ -59,7 +98,7 @@ For example, the array metadata below specifies that the array contains optional
 }
 ```
 
-### Compatible Implementations
+## Compatible Implementations
 
 * zarrs (Rust implementation)
 
