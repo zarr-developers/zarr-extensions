@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "optional"
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "configuration": {
+              "type": "object"
+            }
+          },
+          "required": ["name"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["name", "configuration"],
+      "additionalProperties": false
+    }
+  ]
+}
