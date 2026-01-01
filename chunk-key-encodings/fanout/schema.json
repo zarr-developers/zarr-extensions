@@ -11,8 +11,8 @@
       "properties": {
         "max_children": {
           "type": "integer",
-          "minimum": 3,
-          "default": 1001
+          "minimum": 100,
+          "default": 1000
         }
       },
       "additionalProperties": false
