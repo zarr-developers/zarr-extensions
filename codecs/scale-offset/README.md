@@ -103,7 +103,7 @@ This codec relies on converting arrays from one data type to another. Data type 
 
 ## References
 
-This codec is based on the `FixedScaleOffset` class defined in numcodecs. See https://numcodecs.readthedocs.io/en/stable/filter/fixedscaleoffset.html for details about that class.
+This codec is based on the `FixedScaleOffset` class defined in the Numcodecs library. See https://numcodecs.readthedocs.io/en/stable/filter/fixedscaleoffset.html for more.
 
 ## Change log
 

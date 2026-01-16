@@ -3,25 +3,25 @@
   "type": "object",
   "properties": {
     "name": {
-      "const": "numcodecs.fixedscaleoffset"
+      "const": "scale-offset"
     },
     "configuration": {
       "type": "object",
       "properties": {
         "offset": {
-          "type": "number"
+          "type": ["number", "string", "object"]
         },
         "scale": {
-          "type": "number"
+          "type": ["number", "string", "object"]
         },
         "dtype": {
-          "type": "string"
+          "type": ["string", "object"]
         },
         "astype": {
-          "type": "string"
+          "type": ["string", "object"]
         }
       },
-      "required": ["offset", "scale", "dtype"],
+      "required": ["offset", "scale", "dtype", "astype"],
       "additionalProperties": false
     }
   },
