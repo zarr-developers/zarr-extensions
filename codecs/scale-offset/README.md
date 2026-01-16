@@ -33,11 +33,11 @@ Additional keys are reserved for future versions of this codec, and SHOULD be tr
 
 #### offset
 
-The `offset` field is an array scalar that defines the quantity added to input values during encoding. If `astype` is defined, then `offset` MUST be encoded to JSON using the Zarr V3 fill value encoding for `astype`. If `astype` is not defined, then `offset` MUST be a JSON number.
+The `offset` field is an array scalar that defines the quantity added to input values during encoding. `offset` MUST be encoded to JSON using the Zarr V3 fill value encoding for `astype`.
 
 ### scale
 
-The `scale` field is an array scalar that defines the quantity multiplied with input values during encoding, after they have been added to `offset`. If `astype` is defined, then `scale` MUST be encoded to JSON using the Zarr V3 fill value encoding for `astype`. If `astype` is not defined, then `scale` MUST be a JSON number.
+The `scale` field is an array scalar that defines the quantity multiplied with input values during encoding, after they have been added to `offset`. `scale` MUST be encoded to JSON using the Zarr V3 fill value encoding for `astype`.
 
 ### dtype
 
