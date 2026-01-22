@@ -78,7 +78,7 @@ The following snippet of array metadata demonstrates the metadata for the `scale
         "configuration": {
             "offset": 5,
             "scale": 10,
-            "astype": "float32"
+            "astype": "int8"
             }
         },
         "bytes"
