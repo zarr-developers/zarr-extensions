@@ -65,8 +65,6 @@ arr = arr / scale
 O = arr - offset
 ```
 
-Note that the input data type must support multiplication, division, addition, and subtraction.
-
 ## Example
 
 The following snippet of array metadata demonstrates the metadata for the `scale-offset` codec.
