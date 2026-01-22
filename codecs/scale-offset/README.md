@@ -1,7 +1,7 @@
 # Scale-Offset codec
 
 Defines an `array -> array` codec that encodes an array in a new data type after applying an offset, 
-followed by a scaling, to the array values. This transformation is commonly used to map floating point values into the support range of an integer data type, which achieves a lossy form of compression.
+followed by a scaling, to the array values. This transformation is commonly used to map floating-point values into the support range of an integer data type, which achieves a lossy form of compression.
 
 This codec only supports arrays with integer and floating-point data types.
 
