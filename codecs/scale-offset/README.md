@@ -1,7 +1,9 @@
 # Scale-Offset codec
 
-Defines a `array -> array` codec that encodes an array in a new data type after applying an offset, 
-followed by a scaling, to the array values. This transformation is commonly used to map floating point values into the support range of an integer data type, which achieves a lossy form of compression. 
+Defines an `array -> array` codec that encodes an array in a new data type after applying an offset, 
+followed by a scaling, to the array values. This transformation is commonly used to map floating point values into the support range of an integer data type, which achieves a lossy form of compression.
+
+This codec only supports arrays with integer and floating-point data types.
 
 ## Codec metadata
 
@@ -10,7 +12,7 @@ This codec is declared in metadata as a JSON object with the following structure
 | Field | Type | Required |
 | -     | -    | -        |
 | [`name`](#name)  | string | yes |
-| [`configuration`](#configuration) | object | yes |   
+| [`configuration`](#configuration) | object | yes |
 
 ### Name
 
@@ -22,19 +24,19 @@ The value of the `configuration` field is a JSON object with the following struc
 
 | Field | Type | Required |
 | -     | -    | -        |
-| [`offset`](#offset)  | JSON-encoded array scalar | yes |
-| [`scale`](#scale) | JSON-encoded array scalar | yes |
+| [`offset`](#offset)  | number | yes |
+| [`scale`](#scale) | number | yes |
 | [`astype`](#astype) | Zarr V3 data type metadata | yes |
 
 Additional keys are reserved for future versions of this codec. Metadata with additional keys MUST be treated as invalid by readers.
 
-#### offset
+### offset
 
-The value of the `offset` field is an array scalar that defines the quantity added to input values during encoding. This value MUST be encoded to JSON using the Zarr V3 fill value encoding for `dtype`.
+The value of the `offset` field is a scalar that defines the quantity added to input values during encoding. This value MUST be a JSON number.
 
 ### scale
 
-The value of the `scale` field is an array scalar that defines the quantity multiplied with input values during encoding, after they have been added to `offset`. This value MUST be encoded to JSON using the Zarr V3 fill value encoding for `dtype`.
+The value of the `scale` field is a scalar that defines the quantity multiplied with input values during encoding, after they have been added to `offset`. This value MUST be a JSON number.
 
 ### astype
 
@@ -54,11 +56,11 @@ O = cast(arr, astype)
 
 ### Decoding
 
-The decoding routine inverts the encoding routine. i.e.: 
+The decoding routine inverts the encoding routine, i.e.:
 
 ```
-# I is the input the *decoding* procedure
-I = cast(arr, dtype) # `dtype` is the data type of the array passed as input to the encoding routine. 
+# I is the input to the *decoding* procedure
+arr = cast(I, dtype) # `dtype` is the data type of the array passed as input to the encoding routine.
 arr = arr / scale
 O = arr - offset
 ```
@@ -78,11 +80,11 @@ The following snippet of array metadata demonstrates the metadata for the `scale
         "configuration": {
             "offset": 5,
             "scale": 10,
-            "astype": "float32" 
+            "astype": "float32"
             }
-        }, 
+        },
         "bytes"
-    ],
+    ]
 }
 ```
 
@@ -94,21 +96,21 @@ Implementations should use casting routines that avoid introducing a bias in the
 
 ## Legacy `numcodecs.fixedscaleoffset` codec
 
-The `scale-offset` codec described here is based on a Zarr V3 codec called `numcodecs.fixedscaleoffset`, which was defined operationally as a direct translation of the Zarr-V2-compatible `fixedscaleoffset` codec into Zarr V3. That `fixedscaleoffset` codec was itself defined operationally by an implementation (`numcodecs.FixedScaleOffset`) in the Numcodecs library. 
+The `scale-offset` codec described here is based on a Zarr V3 codec called `numcodecs.fixedscaleoffset`, which was defined operationally as a direct translation of the Zarr-V2-compatible `fixedscaleoffset` codec into Zarr V3. That `fixedscaleoffset` codec was itself defined operationally by an implementation (`numcodecs.FixedScaleOffset`) in the Numcodecs library.
 
-The `scale-offset` codec is designed ot completely supercede the `numcodecs.fixedscaleoffset` codec. That being said, authors of implementations of the `scale-offset` codec may wish to support the `numcodecs.fixedscaleoffset` codec, e.g. by treating is a read-only alias for the `scale-offset` codec. Thus the `numcodecs.fixedscaleoffset` codec will be defined here, with instructions for mapping the semantics of that codec to the `scale-offset` codec.
+The `scale-offset` codec is designed to completely supersede the `numcodecs.fixedscaleoffset` codec. That being said, authors of implementations of the `scale-offset` codec may wish to support the `numcodecs.fixedscaleoffset` codec, e.g. by treating it as a read-only alias for the `scale-offset` codec. Thus the `numcodecs.fixedscaleoffset` codec will be defined here, with instructions for mapping the semantics of that codec to the `scale-offset` codec.
 
 ### Codec metadata
 
-The `numcodecs.fixedscaleoffset` defined the following metadata:
+The `numcodecs.fixedscaleoffset` codec defined the following metadata:
 
 | Field | Type | Required |
 | -     | -    | -        |
-| ['id'](#id) | string | yes |
+| [`id`](#id) | string | yes |
 | [`offset`](#offset-1)  | number | yes |
 | [`scale`](#scale-1) | number | yes |
-| [`astype`](#dtype-1) | Zarr V2 data type metadata | yes |
-| [`dtype`](#astype-1) | Zarr V2 data type metadata | yes |
+| [`astype`](#astype-1) | Zarr V2 data type metadata | yes |
+| [`dtype`](#dtype-1) | Zarr V2 data type metadata | yes |
 
 #### id
 
@@ -116,11 +118,11 @@ The value of the `id` field MUST be the string `"numcodecs.fixedscaleoffset"`
 
 #### offset
 
-The value of the `offset` field is an array scalar that defines the quantity subtracted from input values during encoding. This value MUST be a JSON number.
+The value of the `offset` field is a scalar that defines the quantity subtracted from input values during encoding. This value MUST be a JSON number.
 
 #### scale
 
-The value of the `offset` field is an array scalar that defines the quantity multiplied with input values during encoding. This value MUST be a JSON number.
+The value of the `scale` field is a scalar that defines the quantity multiplied with input values during encoding. This value MUST be a JSON number.
 
 #### astype
 
@@ -128,7 +130,7 @@ The value of the `astype` field defines the data type of the array returned by t
 
 #### dtype
 
-The value of the `astype` field defines the data type of the array given as input to the encoding procedure, and the data type of the array returned by the decoding procedure. This value MUST be Zarr V2 data type metadata.
+The value of the `dtype` field defines the data type of the array given as input to the encoding procedure, and the data type of the array returned by the decoding procedure. This value MUST be Zarr V2 data type metadata.
 
 Note that in Zarr V3, a `dtype` field is not needed because the data type of the input to an array-array codec is determined by its location in the `codecs` metadata. Zarr V2 chunk encoding did not have such guarantees, and so the `dtype` field was necessary for the `fixedscaleoffset` codec implemented in Numcodecs.
 
@@ -147,17 +149,24 @@ O = cast(arr, astype)
 
 #### Decoding
 
-Given an input array `I`, an output array `O` with data type [`dtype`](#dtype) is generated by the following procedure, which inverts the [encoding procedure](#encoding-1):
+Given an input array `I`, an output array `O` with data type [`dtype`](#dtype-1) is generated by the following procedure, which inverts the [encoding procedure](#encoding-1):
 
 ```
-I = cast(arr, dtype)
+arr = cast(I, dtype)
 arr = arr / scale
-O = I + offset # note that offset is *added*
+O = arr + offset # note that offset is *added*
 ```
+
+### Conversion to `scale-offset`
+
+To generate an equivalent `scale-offset` codec definition from `numcodecs.fixedscaleoffset` codec metadata, apply the following changes:
+- multiply the `offset` value by -1. In the `scale-offset` codec algorithm, the offset is added in the encoding path, while in `numcodecs.fixedscaleoffset` the offset is subtracted in the encoding path.
+- convert the `astype` field from Zarr V2 data type metadata to Zarr V3 data type metadata. Note that Zarr V2 data type metadata could declare endianness, but Zarr V3 data type metadata currently cannot, so this conversion might be lossy.
+- ensure that the `dtype` field, once interpreted as Zarr V3 data type metadata, is consistent with the data type of the array passed as input to the `scale-offset` codec.
 
 ## References
 
-This codec is based on the `FixedScaleOffset` class defined in the Numcodecs library. See https://numcodecs.readthedocs.io/en/stable/filter/fixedscaleoffset.html for more information.
+The `scale-offset` codec is based on the `FixedScaleOffset` class defined in the Numcodecs library. See https://numcodecs.readthedocs.io/en/stable/filter/fixedscaleoffset.html for more information.
 
 ## Change log
 

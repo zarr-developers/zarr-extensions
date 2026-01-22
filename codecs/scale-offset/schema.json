@@ -9,19 +9,16 @@
       "type": "object",
       "properties": {
         "offset": {
-          "type": ["number", "string", "object"]
+          "type": "number"
         },
         "scale": {
-          "type": ["number", "string", "object"]
-        },
-        "dtype": {
-          "type": ["string", "object"]
+          "type": "number"
         },
         "astype": {
           "type": ["string", "object"]
         }
       },
-      "required": ["offset", "scale", "dtype", "astype"],
+      "required": ["offset", "scale", "astype"],
       "additionalProperties": false
     }
   },
