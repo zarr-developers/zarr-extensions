@@ -100,19 +100,25 @@ The `scale-offset` codec is designed to completely supersede the `numcodecs.fixe
 
 ### Codec metadata
 
-The `numcodecs.fixedscaleoffset` codec defined the following metadata:
+| Field | Type | Required |
+| -     | -    | -        |
+| [`name`](#name)  | string | yes |
+| [`configuration`](#configuration) | object | yes |
+
+### Name
+
+The value of the `name` field MUST be the string `"numcodecs.fixedscaleoffset"`.
+
+### Configuration
+
+The value of the `configuration` field is a JSON object with the following structure:
 
 | Field | Type | Required |
 | -     | -    | -        |
-| [`id`](#id) | string | yes |
 | [`offset`](#offset-1)  | number | yes |
 | [`scale`](#scale-1) | number | yes |
 | [`astype`](#astype-1) | Zarr V2 data type metadata | yes |
 | [`dtype`](#dtype-1) | Zarr V2 data type metadata | yes |
-
-#### id
-
-The value of the `id` field MUST be the string `"numcodecs.fixedscaleoffset"`
 
 #### offset
 
