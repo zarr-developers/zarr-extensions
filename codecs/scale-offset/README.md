@@ -74,11 +74,11 @@ The following snippet of array metadata demonstrates the metadata for the `scale
     "data_type": "float32",
     "codecs": [
         {
-        "name": "scale-offset",
-        "configuration": {
-            "offset": 5,
-            "scale": 10,
-            "astype": "int8"
+            "name": "scale-offset",
+            "configuration": {
+                "offset": 5,
+                "scale": 10,
+                "astype": "int8"
             }
         },
         "bytes"
@@ -165,7 +165,7 @@ O = arr + offset # note that offset is *added*
 
 To generate an equivalent `scale-offset` codec definition from `numcodecs.fixedscaleoffset` codec metadata, apply the following changes:
 - multiply the `offset` value by -1. In the `scale-offset` codec algorithm, the offset is added in the encoding path, while in `numcodecs.fixedscaleoffset` the offset is subtracted in the encoding path.
-- convert the `astype` field from Zarr V2 data type metadata to Zarr V3 data type metadata. Note that Zarr V2 data type metadata could declare endianness, but Zarr V3 data type metadata currently cannot, so this conversion might be lossy.
+- convert the `astype` field from Zarr V2 data type metadata to Zarr V3 data type metadata.
 - ensure that the `dtype` field, once interpreted as Zarr V3 data type metadata, is consistent with the data type of the array passed as input to the `scale-offset` codec.
 
 ## References
