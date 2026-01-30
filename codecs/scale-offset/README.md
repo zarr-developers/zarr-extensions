@@ -92,6 +92,8 @@ This codec converts arrays from one data type to another. Data type conversion i
 
 Implementations SHOULD use casting routines that avoid introducing a bias in the output data. For example, when converting from a floating-point data type to an integer data type, values SHOULD be rounded to the nearest integer value prior to the integer data type conversion.
 
+Implementations MAY convert the input array to a higher-precision format prior to applying offset and scaling factors to preserve numerical accuracy.
+
 ## Legacy `numcodecs.fixedscaleoffset` codec
 
 The `scale-offset` codec described here is based on a Zarr V3 codec called `numcodecs.fixedscaleoffset`, which was defined operationally as a direct translation of the Zarr-V2-compatible `fixedscaleoffset` codec into Zarr V3. That `fixedscaleoffset` codec was itself defined operationally by an implementation (`numcodecs.FixedScaleOffset`) in the Numcodecs library.
