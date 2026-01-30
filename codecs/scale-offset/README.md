@@ -26,7 +26,7 @@ The value of the `configuration` field is a JSON object with the following struc
 | -     | -    | -        |
 | [`offset`](#offset)  | number | yes |
 | [`scale`](#scale) | number | yes |
-| [`astype`](#astype) | Zarr V3 data type metadata | yes |
+| [`astype`](#astype) | Zarr V3 data type metadata | no |
 
 Additional keys are reserved for future versions of this codec. Metadata with additional keys MUST be treated as invalid by readers.
 
@@ -40,7 +40,9 @@ The value of the `scale` field is a scalar that defines the quantity multiplied 
 
 ### astype
 
-The value of the `astype` field defines the data type of the array returned by the encoding procedure, and the data type of the array provided as input for the decoding procedure. This value MUST be Zarr V3 data type metadata.
+The value of the `astype` field defines the data type of the array returned by the encoding procedure, and the data type of the array provided as input for the decoding procedure. If present this value MUST be Zarr V3 data type metadata.
+
+`astype` can be omitted, in which case the array data type is unchanged by the scale-offset transformation.
 
 ## Algorithm
 
