@@ -18,7 +18,7 @@
           "type": ["string", "object"]
         }
       },
-      "required": ["offset", "scale", "astype"],
+      "required": ["offset", "scale"],
       "additionalProperties": false
     }
   },
