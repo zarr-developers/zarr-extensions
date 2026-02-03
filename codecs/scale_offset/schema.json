@@ -3,20 +3,13 @@
   "type": "object",
   "properties": {
     "name": {
-      "const": "scale-offset"
+      "const": "scale_offset"
     },
     "configuration": {
       "type": "object",
       "properties": {
-        "offset": {
-          "type": "number"
-        },
-        "scale": {
-          "type": "number"
-        },
-        "astype": {
-          "type": ["string", "object"]
-        }
+        "offset": {},
+        "scale": {}
       },
       "required": ["offset", "scale"],
       "additionalProperties": false

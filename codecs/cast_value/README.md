@@ -1,4 +1,4 @@
-# Cast-value codec
+# Cast_value codec
 
 Defines an `array -> array` codec that converts (casts) the values of the input array to a new data type using value semantics. This codec does not re-interpret binary representations, and it leaves all other array properties intact.
 
@@ -13,7 +13,7 @@ This codec is declared in metadata as a JSON object with the following structure
 
 ### Name
 
-The value of the `name` field MUST be the string `"cast-value"`.
+The value of the `name` field MUST be the string `"cast_value"`.
 
 ### Configuration
 
@@ -23,7 +23,7 @@ The value of the `configuration` field is a JSON object with the following struc
 | -     | -    | -        |
 | [`data_type`](#data_type)  | Zarr V3 data type metadata | yes |
 | [`rounding`](#rounding) | string | no |
-| [`range`](#range) | string | no |
+| [`out_of_range`](#out_of_range) | string | no |
 
 Additional keys are reserved for future versions of this codec. Metadata with additional keys MUST be treated as invalid by readers.
 
@@ -47,17 +47,19 @@ The following values are permitted:
 
 If this field is not present and the cast requires rounding, implementations MUST use `"nearest-even"`.
 
-### range
+The `rounding` field is ignored when casting between integer types or when the input values are already integers.
 
-The value of the `range` field is a string that defines how values outside the representable range of the target `data_type` are handled.
+### out_of_range
+
+The value of the `out_of_range` field is a string that defines how values outside the representable range of the target `data_type` are handled.
 
 The following values are permitted:
 
 | Value | Description |
 | - | - |
-| `"error"` | The codec MUST raise an error if any value exceeds the representable range of the target data type. The presence of this value signifies that the casting operation preserves the range of the input values. |
+| `"error"` | The codec MUST raise an error if any value exceeds the representable range of the target data type. |
 | `"clamp"` | Values exceeding the representable range are clamped to the minimum or maximum value of the target data type. Values of ±∞ are treated as outside the representable range of finite numeric types. |
-| `"wrap"` | Values exceeding the representable range wrap around using modular arithmetic. |
+| `"wrap"` | Values exceeding the representable range wrap around using modular arithmetic with modulus equal to the number of distinct values representable by the output data type. |
 
 If this field is not present, implementations MUST use `"error"`. If any input value has `NaN` semantics and the target data type cannot represent `NaN`, implementations MUST raise an error regardless of the value of this field.
 
@@ -65,11 +67,11 @@ If this field is not present, implementations MUST use `"error"`. If any input v
 
 ```json
 {
-    "name": "cast-value",
+    "name": "cast_value",
     "configuration": {
         "data_type": "uint8",
         "rounding": "towards-zero",
-        "range": "clamp"
+        "out_of_range": "clamp"
     }
 }
 ```
@@ -78,15 +80,17 @@ If this field is not present, implementations MUST use `"error"`. If any input v
 
 ### numpy.timedelta64
 
-For the purposes of the `range` configuration field, the `NaT` value defined for the [`numpy.timedelta64`](https://github.com/zarr-developers/zarr-extensions/tree/main/data-types/numpy.timedelta64) data type is treated as `NaN`.
+For the purposes of the `out_of_range` configuration field, the `NaT` value defined for the [`numpy.timedelta64`](https://github.com/zarr-developers/zarr-extensions/tree/main/data-types/numpy.timedelta64) data type is treated as `NaN`.
 
 ### numpy.datetime64
 
-For the purposes of the `range` configuration field, the `NaT` value defined for the [`numpy.datetime64`](https://github.com/zarr-developers/zarr-extensions/tree/main/data-types/numpy.datetime64) data type is treated as `NaN`.
+For the purposes of the `out_of_range` configuration field, the `NaT` value defined for the [`numpy.datetime64`](https://github.com/zarr-developers/zarr-extensions/tree/main/data-types/numpy.datetime64) data type is treated as `NaN`.
 
 ## References
+
 https://en.wikipedia.org/wiki/Rounding
 https://en.wikipedia.org/wiki/IEEE_754
+
 ## Change log
 
 No changes yet.

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "cast_value"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "data_type": {
+          "type": ["string", "object"]
+        },
+        "rounding": {
+          "enum": [
+            "nearest-even",
+            "towards-zero",
+            "towards-positive",
+            "towards-negative",
+            "nearest-away"
+          ]
+        },
+        "out_of_range": {
+          "enum": ["error", "clamp", "wrap"]
+        }
+      },
+      "required": ["data_type"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
