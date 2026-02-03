@@ -33,7 +33,7 @@ The value of the `data_type` field is Zarr V3 data type metadata that defines th
 
 ### rounding
 
-The value of the `rounding` field is a string that defines how non-integer values are rounded when casting to an integer data type. This field is only applicable when the target `data_type` is an integer type.
+The value of the `rounding` field is a string that defines how values are rounded when casting to a data type with lower numerical precision.
 
 The following values are permitted:
 
