@@ -41,8 +41,8 @@ The following values are permitted:
 | - | - |
 | `"nearest-even"` | Round to the nearest integer, with ties going to the nearest even integer (IEEE 754 default). |
 | `"towards-zero"` | Truncate the fractional part (round towards zero). |
-| `"towards-positive"` | Round towards positive infinity (ceiling). |
-| `"towards-negative"` | Round towards negative infinity (floor). |
+| `"towards-positive"` | Round towards positive infinity. Also known as rounding up, or taking the ceiling. |
+| `"towards-negative"` | Round towards negative infinity. Also known as rounding down, or taking the floor. |
 | `"nearest-away"` | Round to the nearest integer, with ties going away from zero. |
 
 If this field is not present and the cast requires rounding, implementations MUST use `"nearest-even"`.
