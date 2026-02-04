@@ -11,10 +11,9 @@
         "offset": {},
         "scale": {}
       },
-      "required": [],
       "additionalProperties": false
     }
   },
-  "required": ["name", "configuration"],
+  "required": ["name"],
   "additionalProperties": false
 }
