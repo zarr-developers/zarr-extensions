@@ -21,18 +21,18 @@ The value of the `configuration` field is a JSON object with the following struc
 
 | Field | Type | Required |
 | -     | -    | -        |
-| [`offset`](#offset)  | JSON-encoded scalar | yes |
-| [`scale`](#scale) | JSON-encoded scalar | yes |
+| [`offset`](#offset)  | JSON-encoded scalar | no |
+| [`scale`](#scale) | JSON-encoded scalar | no |
 
 Additional keys are reserved for future versions of this codec. Metadata with additional keys MUST be treated as invalid by readers.
 
 ### offset
 
-The value of the `offset` field is a scalar that defines the quantity subtracted from input values during encoding. This value MUST be encoded to JSON using the Zarr V3 fill value encoding for the input array's data type.
+The value of the `offset` field is a scalar that defines the quantity subtracted from input values during encoding. If present, this value MUST be encoded to JSON using the Zarr V3 fill value encoding for the input array's data type. A missing `offset` field encodes the additive identity element for the data type, e.g., 0 for numeric data types.
 
 ### scale
 
-The value of the `scale` field is a scalar that defines the quantity multiplied with input values during encoding, after `offset` has been subtracted. This value MUST be encoded to JSON using the Zarr V3 fill value encoding for the input array's data type.
+The value of the `scale` field is a scalar that defines the quantity multiplied with input values during encoding, after `offset` has been subtracted. If present, this value MUST be encoded to JSON using the Zarr V3 fill value encoding for the input array's data type. A missing `scale` field encodes the multiplicative identity element for the data type, e.g., 1 for numeric data types.
 
 ## Algorithm
 

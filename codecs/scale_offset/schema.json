@@ -11,7 +11,7 @@
         "offset": {},
         "scale": {}
       },
-      "required": ["offset", "scale"],
+      "required": [],
       "additionalProperties": false
     }
   },
