@@ -63,6 +63,8 @@ The following values are permitted:
 
 If this field is not present, implementations MUST use `"error"`. If any input value has `NaN` semantics and the target data type cannot represent `NaN`, implementations MUST raise an error regardless of the value of this field.
 
+If the fill value is not representable in the target type, a zero-like fill value can be used instead.
+
 ## Example
 
 ```json
