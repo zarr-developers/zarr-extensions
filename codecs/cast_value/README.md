@@ -29,7 +29,7 @@ Additional keys are reserved for future versions of this codec. Metadata with ad
 
 ### data_type
 
-The value of the `data_type` field is Zarr V3 data type metadata that defines the data type which the input values will be cast to. This also defines the data type of the input to the decoding routine.
+The value of the `data_type` field is Zarr V3 data type metadata that defines the data type which the input values will be cast to. This also defines the data type of the input to the decoding routine. Implementations MUST cast the fill value of the input array to the target data type, using the same semantics as element casting. This is necessary for correct operation of subsequent fill-value-aware codecs, such as sharding_indexed.
 
 ### rounding
 
