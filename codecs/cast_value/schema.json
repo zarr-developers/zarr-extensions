@@ -21,7 +21,29 @@
           ]
         },
         "out_of_range": {
-          "enum": ["error", "clamp", "wrap"]
+          "enum": ["clamp", "wrap"]
+        },
+        "scalar_map": {
+          "type": "object",
+          "properties": {
+            "encode": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2
+              }
+            },
+            "decode": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          },
+          "additionalProperties": false
         }
       },
       "required": ["data_type"],
