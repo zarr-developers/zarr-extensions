@@ -12,13 +12,13 @@ This codec defines an ordered set of conditions that define how a scalar from th
 
 2. An input scalar represents a value exactly representable in the output data type. A scalar is exactly representable in a target data type if it is an element of the set of numerical values representable by that data type and can be encoded without rounding or range transformation. E.g., `0` in `uint16` maps to `0` in `uint8`. No parametrization of this transformation is required. Exact representability for floating-point types refers to numerical value only, not bit-level encoding. Payload preservation is not required.
 
-3. An input scalar can be transformed to a value that is representable in the output data type using a combination of rounding and a rule for mapping out-of-range scalars into the output data type. 
+3. An input scalar can be transformed to a value that is representable in the output data type using a combination of rounding and a rule for mapping out-of-range scalars into the output data type.
 
 Codec implementations MUST evaluate these conditions in order. If none of these conditions hold for any input scalar, the codec implementation MUST error. This ensures that there are no undefined transformations.
 
 ### Special values
 
-If both input and output data types support IEEE 754 semantics, NaN values MUST be propagated unchanged unless overridden by scalar_map. Signed zero MUST be preserved.
+If both input and output data types support IEEE 754 semantics, NaN values MUST be propagated unless overridden by `scalar_map`. Signed zero MUST be preserved.
 
 If the output data type does not support NaN or transfinite values and the input scalar has NaN or transfinite semantics, the transformation MUST error unless explicitly overridden by scalar_map.
 
@@ -79,7 +79,7 @@ The following values are permitted:
 | `"clamp"` | A value with a quantity exceeding the representable range is clamped to the minimum or maximum value of the target data type. For output data types with representations of ±Infinity, values outside the finite range of the data type MUST be mapped to ±Infinity. |
 | `"wrap"` | A value exceeding the representable range is mapped to the value in the representable range that is congruent to that input value modulo `2^N` where `N` is the size in bits of the output data type. Only permitted when `data_type` is an integral type that uses a two's complement representation for purposes of modular arithmetic. |
 
-If this field is not present, implementations MUST use `"clamp"`. 
+If this field is not present, implementations MUST use `"clamp"`.
 
 For example, given an input scalar of `128.0` and an output data type of `"int8"`:
 - If `out_of_range` is `"clamp"` or unset, then the encoded scalar is `127`.
