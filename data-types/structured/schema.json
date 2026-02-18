@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "structured",
+  "$defs": {
+    "dtype": {
+      "description": "A Zarr v3 data type representation: a string for core data types, or an object with name and configuration for extension data types.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Core data type identifier (e.g. 'float32', 'int32', 'uint8')."
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "configuration": {
+              "type": "object"
+            }
+          },
+          "required": ["name", "configuration"],
+          "additionalProperties": false,
+          "description": "Extension data type with required configuration."
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "structured"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "description": "Array of field definitions. Field names MUST be unique.",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "description": "The field name."
+              },
+              {
+                "$ref": "#/$defs/dtype",
+                "description": "The field data type."
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      },
+      "required": ["fields"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
