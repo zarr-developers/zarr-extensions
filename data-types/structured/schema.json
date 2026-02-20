@@ -3,12 +3,10 @@
   "title": "structured",
   "$defs": {
     "dtype": {
-      "description": "A Zarr v3 data type representation: a string for core data types, or an object with name and configuration for extension data types.",
       "oneOf": [
         {
           "type": "string",
-          "minLength": 1,
-          "description": "Core data type identifier (e.g. 'float32', 'int32', 'uint8')."
+          "minLength": 1
         },
         {
           "type": "object",
@@ -22,8 +20,7 @@
             }
           },
           "required": ["name", "configuration"],
-          "additionalProperties": false,
-          "description": "Extension data type with required configuration."
+          "additionalProperties": false
         }
       ]
     }
@@ -38,19 +35,16 @@
       "properties": {
         "fields": {
           "type": "array",
-          "description": "Array of field definitions. Field names MUST be unique.",
           "minItems": 1,
           "items": {
             "type": "array",
             "prefixItems": [
               {
                 "type": "string",
-                "minLength": 1,
-                "description": "The field name."
+                "minLength": 1
               },
               {
-                "$ref": "#/$defs/dtype",
-                "description": "The field data type."
+                "$ref": "#/$defs/dtype"
               }
             ],
             "items": false,
