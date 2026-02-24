@@ -1,10 +1,10 @@
-# Structured data type
+# Struct data type
 
-This document defines `structured`, a data type for arrays whose elements are
+This document defines `struct`, a data type for arrays whose elements are
 fixed-size records composed of named, typed fields — commonly referred to as
 "structured arrays" or "record arrays".
 
-The `structured` data type closely models NumPy's
+The `struct` data type closely models NumPy's
 [structured arrays](https://numpy.org/doc/stable/user/basics.rec.html), where
 each element consists of multiple named fields, each with its own data type.
 
@@ -22,7 +22,12 @@ size is the sum of the sizes of all fields.
 
 ### Name
 
-The name of this data type is the string `"structured"`.
+The name of this data type is the string `"struct"`.
+
+> **Backwards compatibility:** The name `"structured"` MUST be treated as a
+> read-only alias for `"struct"`. Implementations MUST be able to read arrays
+> whose metadata uses `"structured"` as the data type name, but MUST NOT write
+> new arrays using `"structured"`.
 
 ### Configuration
 
@@ -32,7 +37,7 @@ contain a `"fields"` key whose value is a JSON array of fields.
 Each field MUST be a 2-element JSON array `[field_name, field_dtype]`, where:
 
 - `field_name` MUST be a non-empty string that identifies the field. Field names
-  MUST be unique within the same `structured` data type; nested `structured`
+  MUST be unique within the same `struct` data type; nested `struct`
   types have independent namespaces.
 - `field_dtype` MUST be a valid Zarr v3 data type representation whose size in
   bytes is fixed and known at the time the array is opened:
@@ -45,8 +50,8 @@ Each field MUST be a 2-element JSON array `[field_name, field_dtype]`, where:
 
 The `"fields"` array MUST contain at least one field.
 
-The `structured` data type MAY be used recursively: a field's data type MAY
-itself be `"structured"`, enabling nested record types.
+The `struct` data type MAY be used recursively: a field's data type MAY
+itself be `"struct"`, enabling nested record types.
 
 ### Examples
 
@@ -59,7 +64,7 @@ records, each with an `x` and a `y` coordinate stored as 32-bit floats:
   "node_type": "array",
   "shape": [100],
   "data_type": {
-    "name": "structured",
+    "name": "struct",
     "configuration": {
       "fields": [
         ["x", "float32"],
@@ -101,8 +106,8 @@ a `configuration` object specifying `unit` and `scale_factor`:
 }
 ```
 
-The following shows a nested structured field. The outer record has a `point`
-field that is itself a structured type with `x` and `y` sub-fields, plus a
+The following shows a nested `struct` field. The outer record has a `point`
+field that is itself a `struct` type with `x` and `y` sub-fields, plus a
 scalar `value` field:
 
 ```json
@@ -111,7 +116,7 @@ scalar `value` field:
     [
       "point",
       {
-        "name": "structured",
+        "name": "struct",
         "configuration": {
           "fields": [
             ["x", "float32"],
@@ -127,19 +132,19 @@ scalar `value` field:
 
 ## Bytes codec encoding
 
-When the `bytes` codec is used (as required), each structured scalar is encoded
+When the `bytes` codec is used (as required), each `struct` scalar is encoded
 as the packed concatenation of the encoded bytes of each field's value, in
 field declaration order. No padding bytes are inserted between fields,
 regardless of alignment considerations.
 
-For nested structured types, encoding proceeds depth-first: each field is
-encoded completely before the next sibling field. A nested structured field
+For nested `struct` types, encoding proceeds depth-first: each field is
+encoded completely before the next sibling field. A nested `struct` field
 is encoded as the packed concatenation of its own sub-fields, recursively.
 
-The total encoded size of a structured scalar in bytes is the sum of the
+The total encoded size of a `struct` scalar in bytes is the sum of the
 encoded sizes of all fields.
 
-As a concrete example, consider the following structured type:
+As a concrete example, consider the following `struct` type:
 
 ```json
 {
@@ -164,13 +169,13 @@ field:│      id       │ f │            value              │
 The total encoded size is 4 + 1 + 8 = 13 bytes, with field byte offsets of
 0, 4, and 5 respectively.
 
-For nested structured types, the same principle applies recursively. Consider:
+For nested `struct` types, the same principle applies recursively. Consider:
 
 ```json
 {
   "fields": [
     ["point", {
-      "name": "structured",
+      "name": "struct",
       "configuration": {
         "fields": [["x", "float32"], ["y", "float32"]]
       }
@@ -195,9 +200,9 @@ The total encoded size is (4 + 4) + 8 = 16 bytes, with `point` at offset 0
 
 ## Fill value representation
 
-The `fill_value` for arrays with the `structured` data type MUST be a JSON
+The `fill_value` for arrays with the `struct` data type MUST be a JSON
 object mapping each field name to its fill value. Every field defined in the
-`structured` type MUST have a corresponding entry in the fill value object.
+`struct` type MUST have a corresponding entry in the fill value object.
 Each field's value MUST be a valid fill value for that field's data type.
 
 > **Note:** Explicit fill values are required for all fields because implicit
@@ -211,7 +216,7 @@ Each field's value MUST be a valid fill value for that field's data type.
 "fill_value": {"x": 1.23, "y": 4.56}
 ```
 
-For nested structured fields, the value must itself be an object mapping the
+For nested `struct` fields, the value must itself be an object mapping the
 nested field names to their fill values:
 
 ```json
@@ -233,21 +238,21 @@ the `bytes` codec for compression.
 
 ### Endianness handling
 
-When a structured type contains multi-byte numeric fields, the `bytes` codec
+When a `struct` type contains multi-byte numeric fields, the `bytes` codec
 MUST be configured with an explicit `endian` setting
 (e.g. `{"name": "bytes", "configuration": {"endian": "little"}}`). All
 multi-byte fields MUST use the byte order specified by the `endian` parameter.
 
-Structured types composed entirely of single-byte fields (e.g. `uint8`,
+`Struct` types composed entirely of single-byte fields (e.g. `uint8`,
 `int8`) have no byte-order ambiguity and MAY omit the `endian` configuration.
 
 > **Legacy compatibility:** Arrays where the `bytes` codec has no `endian`
 > configuration (i.e. `{"name": "bytes"}` with no `configuration` key) SHOULD
 > be treated as little-endian by implementations. Implementations SHOULD warn
-> when `endian` is absent for structured types with multi-byte numeric fields.
+> when `endian` is absent for `struct` types with multi-byte numeric fields.
 
 Variable-length codecs (e.g. `vlen-utf8`) are not compatible with the
-`structured` data type.
+`struct` data type.
 
 ## Notes
 
@@ -256,8 +261,8 @@ Variable-length codecs (e.g. `vlen-utf8`) are not compatible with the
 > structured dtype layout (created with `align=True`), which inserts padding
 > for memory alignment, is NOT supported by this specification.
 
-> **Note:** Field names MUST be unique within a `structured` data type.
-> Implementations MUST reject `structured` types with duplicate field names.
+> **Note:** Field names MUST be unique within a `struct` data type.
+> Implementations MUST reject `struct` types with duplicate field names.
 
 > **Note:** The order of fields in the `"fields"` array is significant and
 > MUST be preserved. Fields are encoded in declaration order.

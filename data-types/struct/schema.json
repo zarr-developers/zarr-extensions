@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "structured",
+  "title": "struct",
   "$defs": {
     "dtype": {
       "oneOf": [
@@ -28,7 +28,7 @@
   "type": "object",
   "properties": {
     "name": {
-      "const": "structured"
+      "const": "struct"
     },
     "configuration": {
       "type": "object",
