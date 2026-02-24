@@ -1,6 +1,6 @@
 # Optional data type
 
-Defines a data type for optional (nullable) values that can contain either a value of a specified underlying data type or be missing/null.
+Defines a data type for optional (nullable) values that can contain either a value of a specified underlying data type or be missing/undefined/null.
 
 This data type is designed for the [`optional`](../../codecs/optional/README.md) codec, which separately encodes a validity mask and the data.
 
