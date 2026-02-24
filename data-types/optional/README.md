@@ -13,8 +13,8 @@ This approach is preferred because the codecs contained within the `optional` co
 The name of the underlying data type.
 This can be any valid Zarr V3 data type name.
 
-### `configuration`
-The configuration object for the underlying data type.
+### `configuration` (optional)
+The configuration object for the underlying data type (if required).
 This should match the configuration requirements of the specified underlying data type.
 
 ## Permitted fill values
