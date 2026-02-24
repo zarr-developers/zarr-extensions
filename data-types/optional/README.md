@@ -103,7 +103,7 @@ Despite the above recommendation, implementations MAY support the `optional` dat
 Array-to-array codecs that only manipulate shape (e.g. `reshape`) SHOULD support the `optional` data type.
 In general, codecs that perform element-wise transformations (e.g. `scale-offset`) SHOULD persist the optional semantics by applying transformations only to valid (non-null) values, while leaving null values unchanged.
 However, future codecs may define their own specific handling of the `optional` data type.
-For example, [ternary logic](https://en.wikipedia.org/wiki/Three-valued_logic) could be applied, which would require a different handling of null values.
+For example, [ternary logic](https://en.wikipedia.org/wiki/Three-valued_logic) may be applicable, which requires a different handling of null values.
 
 ## Example
 
