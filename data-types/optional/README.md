@@ -4,7 +4,7 @@ Defines a data type for optional (nullable) values that can contain either a val
 
 The `optional` data type does not define how null values should be _interpreted_ and represented in-memory.
 This is an implementation detail and MUST not impact encoding/decoding.
-If an implementation requires a specific in-memory representation for null values (e.g. `NA` or `missing` in Julia), they are encouraged to do this through a registered attribute.
+If an implementation requires a specific in-memory representation for null values (e.g. `missing` or `nothing` in Julia), they are encouraged to do this through a registered attribute.
 See the [In-memory representation](#in-memory-representations) section for examples of how null values could be represented in different programming languages.
 
 ## Configuration parameters
@@ -80,7 +80,7 @@ The `na_object` could be set via a runtime option, or alternatively be encoded s
 
 ### Julia
 
-The Julia `missing` or `NA` values could be used to represent null values in an `optional` data type.
+The Julia `missing` or `nothing` values could be used to represent null values in an `optional` data type.
 The `null` value type could be set via a runtime option, or alternatively be encoded separately as an attribute, for example.
 An `enum`-like codec would be required to distinguish between `missing` or `NA` values within a single array.
 
