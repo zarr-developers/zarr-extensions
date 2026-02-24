@@ -85,6 +85,10 @@ The Julia `missing` or `nothing` values could be used to represent null values i
 The `null` value type could be set via a runtime option, or alternatively be encoded separately as an attribute, for example.
 An `enum`-like codec would be required to distinguish between `missing` or `NA` values within a single array.
 
+### R
+
+In R, `NA` may be used to represent `null` values in an optional data type.
+
 ## Codec Compatibility
 
 ### `optional` Codec
