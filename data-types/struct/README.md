@@ -132,9 +132,9 @@ scalar `value` field:
 
 ## Bytes codec encoding
 
-When the `bytes` codec is used (as required), each `struct` scalar is encoded
-as the packed concatenation of the encoded bytes of each field's value, in
-field declaration order. No padding bytes are inserted between fields,
+When the `bytes` codec is used, each `struct` scalar is encoded as the packed
+concatenation of the encoded bytes of each field's value, in field declaration
+order. No padding bytes are inserted between fields,
 regardless of alignment considerations.
 
 For nested `struct` types, encoding proceeds depth-first: each field is
@@ -198,6 +198,21 @@ field:│    point.x    │    point.y    │            value              │
 The total encoded size is (4 + 4) + 8 = 16 bytes, with `point` at offset 0
 (containing `x` at 0, `y` at 4) and `value` at offset 8.
 
+### Endianness
+
+When a `struct` type contains multi-byte numeric fields, the `bytes` codec
+MUST be configured with an explicit `endian` setting
+(e.g. `{"name": "bytes", "configuration": {"endian": "little"}}`). All
+multi-byte fields MUST use the byte order specified by the `endian` parameter.
+
+`Struct` types composed entirely of single-byte fields (e.g. `uint8`,
+`int8`) have no byte-order ambiguity and MAY omit the `endian` configuration.
+
+> **Legacy compatibility:** Arrays where the `bytes` codec has no `endian`
+> configuration (i.e. `{"name": "bytes"}` with no `configuration` key) SHOULD
+> be treated as little-endian by implementations. Implementations SHOULD warn
+> when `endian` is absent for `struct` types with multi-byte numeric fields.
+
 ## Fill value representation
 
 The `fill_value` for arrays with the `struct` data type MUST be a JSON
@@ -225,31 +240,19 @@ nested field names to their fill values:
 
 > **Legacy compatibility:** Existing arrays may encode the fill value as a
 > [base64](https://en.wikipedia.org/wiki/Base64)-encoded string of the raw
-> packed bytes (e.g. `"AAAAAAAAAAA="` for 8 zero bytes). Implementations
-> SHOULD support reading this form for backward compatibility, but MUST NOT
-> write it for new arrays.
+> packed bytes (e.g. `"AAAAAAAAAAA="` for 8 zero bytes). The byte order of
+> these packed bytes follows the `endian` parameter of the `bytes` codec, or
+> little-endian if `endian` is absent. Implementations SHOULD support reading
+> this form for backward compatibility, but MUST NOT write it for new arrays.
 
 ## Codec compatibility
 
-This data type is compatible with any codec that supports a fixed number of
-bytes per array element. The `bytes` codec MUST be used as the array-to-bytes
-codec. Other codecs (e.g. `gzip`, `zstd`, `blosc`) MAY be applied on top of
-the `bytes` codec for compression.
-
-### Endianness handling
-
-When a `struct` type contains multi-byte numeric fields, the `bytes` codec
-MUST be configured with an explicit `endian` setting
-(e.g. `{"name": "bytes", "configuration": {"endian": "little"}}`). All
-multi-byte fields MUST use the byte order specified by the `endian` parameter.
-
-`Struct` types composed entirely of single-byte fields (e.g. `uint8`,
-`int8`) have no byte-order ambiguity and MAY omit the `endian` configuration.
-
-> **Legacy compatibility:** Arrays where the `bytes` codec has no `endian`
-> configuration (i.e. `{"name": "bytes"}` with no `configuration` key) SHOULD
-> be treated as little-endian by implementations. Implementations SHOULD warn
-> when `endian` is absent for `struct` types with multi-byte numeric fields.
+The `struct` data type works with any array-to-bytes codec that encodes each
+array element as a contiguous, fixed-size binary blob equal to the total encoded
+size of the struct. The `bytes` codec is the standard choice for this role.
+Other array-to-bytes codecs (for example, a future per-field encoding codec)
+MAY be used provided they satisfy this constraint. Byte-manipulation codecs
+(e.g. `gzip`, `zstd`, `blosc`) MAY be applied on top for compression.
 
 Variable-length codecs (e.g. `vlen-utf8`) are not compatible with the
 `struct` data type.
