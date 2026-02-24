@@ -2,11 +2,6 @@
 
 Defines a data type for optional (nullable) values that can contain either a value of a specified underlying data type or be missing/undefined/null.
 
-This data type is designed for the [`optional`](../../codecs/optional/README.md) codec, which separately encodes a validity mask and the data.
-
-While array-to-array codecs MAY support the `optional` data type, implementations SHOULD use the `optional` codec as the sole top-level codec.
-This approach is preferred because the codecs contained within the `optional` codec configuration do not need to explicitly handle optional data type semantics.
-
 ## Configuration parameters
 
 ### `name`
@@ -62,6 +57,20 @@ The table below demonstrates valid `data_type` and `fill_value` combinations wit
 </tbody>
 </table>
 
+## Codec Compatibility
+
+### `optional` Codec
+
+This data type is primarily designed for the [`optional`](../../codecs/optional/README.md) codec, which separately encodes a validity mask and the non-null data.
+
+### Other Array-to-Array Codecs
+
+While array-to-array codecs MAY support the `optional` data type, users are RECOMMENDED to use the `optional` codec as the sole top-level codec.
+This approach is preferred because the codecs contained within the `optional` codec configuration do not need to explicitly handle optional data type semantics since they operate on the underlying data type.
+
+Despite the above recommendation, implementations MAY support the `optional` data type with other array-to-array codecs.
+Array-to-array codecs that only manipulate shape (e.g. `reshape`) SHOULD support the `optional` data type.
+Codecs that perform element-wise transformations (e.g. `scale-offset`) MUST persist the optional semantics by applying transformations only to valid (non-null) values, while leaving null values unchanged.
 
 ## Example
 
