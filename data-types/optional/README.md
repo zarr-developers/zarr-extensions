@@ -11,7 +11,7 @@ This approach is preferred because the codecs contained within the `optional` co
 
 ### `name`
 The name of the underlying data type.
-This can be any valid Zarr data type name.
+This can be any valid Zarr V3 data type name.
 
 ### `configuration`
 The configuration object for the underlying data type.
