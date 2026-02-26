@@ -24,10 +24,8 @@ size is the sum of the sizes of all fields.
 
 The name of this data type is the string `"struct"`.
 
-> **Backwards compatibility:** The name `"structured"` MUST be treated as a
-> read-only alias for `"struct"`. Implementations MUST be able to read arrays
-> whose metadata uses `"structured"` as the data type name, but MUST NOT write
-> new arrays using `"structured"`.
+> **Note:** Implementations SHOULD also support reading arrays that use the
+> legacy [`"structured"`](../structured/README.md) data type name.
 
 ### Configuration
 
@@ -208,11 +206,6 @@ multi-byte fields MUST use the byte order specified by the `endian` parameter.
 `Struct` types composed entirely of single-byte fields (e.g. `uint8`,
 `int8`) have no byte-order ambiguity and MAY omit the `endian` configuration.
 
-> **Legacy compatibility:** Arrays where the `bytes` codec has no `endian`
-> configuration (i.e. `{"name": "bytes"}` with no `configuration` key) SHOULD
-> be treated as little-endian by implementations. Implementations SHOULD warn
-> when `endian` is absent for `struct` types with multi-byte numeric fields.
-
 ## Fill value representation
 
 The `fill_value` for arrays with the `struct` data type MUST be a JSON
@@ -237,13 +230,6 @@ nested field names to their fill values:
 ```json
 "fill_value": {"point": {"x": 1.0, "y": 2.0}, "value": 3.14}
 ```
-
-> **Legacy compatibility:** Existing arrays may encode the fill value as a
-> [base64](https://en.wikipedia.org/wiki/Base64)-encoded string of the raw
-> packed bytes (e.g. `"AAAAAAAAAAA="` for 8 zero bytes). The byte order of
-> these packed bytes follows the `endian` parameter of the `bytes` codec, or
-> little-endian if `endian` is absent. Implementations SHOULD support reading
-> this form for backward compatibility, but MUST NOT write it for new arrays.
 
 ## Codec compatibility
 
