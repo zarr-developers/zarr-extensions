@@ -111,7 +111,8 @@ In this example, a `uint16` array with values in the range `[1000, 1255]` is shi
 
 ### Float64 to uint8 with NaN preservation
 
-In this example, a `float64` array with values in the range `[0.0, 2540.0]` and a fill value of `NaN` is stored as `uint8`. The `scale_offset` codec maps values from `[0.0, 2540.0]` to `[1.0, 255.0]` by applying `(x - offset) * scale` with `offset = -10` and `scale = 0.1`, reserving `0` for `NaN`. The `cast_value` codec then casts to `uint8`, using `scalar_map` to explicitly map `NaN` to `0` on encode and `0` to `NaN` on decode. This ensures a lossless round-trip for the fill value.
+In this example, a `float64` array with values in the range `[0.0, 2540.0]` and a fill value of `NaN` is stored as `uint8`. The `scale_offset` codec maps values from `[0.0, 2540.0]` to `[1.0, 255.0]` by applying `(x - offset) * scale` with `offset = -10` and `scale = 0.1`, reserving `0` for `NaN`. The `cast_value` codec then casts to `uint8`, using `scalar_map` to explicitly map `NaN` to `0` on encode and `0` to `NaN` on decode. This ensures a lossless round-trip for the fill value. There is no such assurance for 
+the array values, however.
 
 ```json
 {
