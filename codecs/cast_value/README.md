@@ -50,11 +50,11 @@ Additional keys are reserved for future versions of this codec. Metadata with ad
 
 ### data_type
 
-The value of the `data_type` field is Zarr V3 data type metadata that defines the data type which the input scalars will be cast to. It also defines the data type of the input to the decoding routine. The fill value of the output array MUST be cast to the target data type using the same semantics as element casting. This is necessary to ensure that partial chunks are decoded correctly.
+The value of the `data_type` field is Zarr V3 data type metadata that defines the data type which the input scalars will be cast to. It also defines the data type of the input to the decoding routine. The fill value of the output array MUST be cast to the target data type using the same casting semantics as elements. This is necessary to ensure that partial chunks are decoded correctly. Implementations SHOULD validate at metadata construction time that the fill value can be successfully cast in both the forward (encode) and inverse (decode) directions using the codec's configuration. If the fill value cannot survive a round-trip cast, implementations MUST treat this as an error.
 
 ### rounding
 
-The value of the `rounding` field is a string that defines how values are rounded when casting to a data type with insufficient numerical precision.
+The value of the `rounding` field is a string that defines how values are rounded when casting to a data type with insufficient numerical precision. This applies to any cast where the target data type cannot exactly represent the input value, including casting between floating-point types of different widths and casting from integer types to floating-point types with insufficient mantissa bits (e.g. `int64` to `float32`).
 
 The following values are permitted:
 
@@ -79,10 +79,11 @@ The following values are permitted:
 | `"clamp"` | A value with a quantity exceeding the representable range is clamped to the minimum or maximum value of the target data type. For output data types with representations of ±Infinity, values outside the finite range of the data type MUST be mapped to ±Infinity. |
 | `"wrap"` | A value exceeding the representable range is mapped to the value in the representable range that is congruent to that input value modulo `2^N` where `N` is the size in bits of the output data type. Only permitted when `data_type` is an integral type that uses a two's complement representation for purposes of modular arithmetic. |
 
-If this field is not present, implementations MUST use `"clamp"`.
+If this field is not present, out-of-range values are not handled by the codec. In this case, implementations MUST treat any out-of-range value as an encoding or decoding failure.
 
 For example, given an input scalar of `128.0` and an output data type of `"int8"`:
-- If `out_of_range` is `"clamp"` or unset, then the encoded scalar is `127`.
+- If `out_of_range` is not set, the codec MUST fail.
+- If `out_of_range` is `"clamp"`, then the encoded scalar is `127`.
 - If `out_of_range` is `"wrap"`, then the encoded scalar is `-128`.
 
 ### scalar_map
@@ -126,8 +127,8 @@ When casting a floating-point scalar to an integer, NumPy coerces unrepresentabl
                     ]
                 }
             }
-        }, 
-    "bytes"
+        },
+        "bytes"
     ]
 }
 ```
