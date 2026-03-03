@@ -86,6 +86,11 @@ For example, given an input scalar of `128.0` and an output data type of `"int8"
 - If `out_of_range` is `"clamp"`, then the encoded scalar is `127`.
 - If `out_of_range` is `"wrap"`, then the encoded scalar is `-128`.
 
+For signed types, wrapping follows two's complement semantics. For example, given an output data type of `"int16"`:
+- An input scalar of `32768` wraps to `-32768`.
+- An input scalar of `32769` wraps to `-32767`.
+- An input scalar of `-32769` wraps to `32767`.
+
 ### scalar_map
 
 If present, the value of the `scalar_map` field is a JSON object with the following optional fields:
