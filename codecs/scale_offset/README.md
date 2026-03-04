@@ -2,7 +2,11 @@
 
 Defines an `array -> array` codec that subtracts an offset, then multiplies by a scaling factor. This transformation is commonly used to map floating-point values into the support range of an integer data type, which achieves a lossy form of compression.
 
-This codec is only defined for data types where multiplication, division, addition, and subtraction are well-defined.
+This codec is only defined for data types where multiplication, division, addition, and subtraction are well-defined. The following data types defined in this repository are supported:
+
+- Integer types: `int2`, `int4`, `int8`, `int16`, `int32`, `int64`
+- Unsigned integer types: `uint2`, `uint4`, `uint8`, `uint16`, `uint32`, `uint64`
+- Floating-point types: `float4_e2m1fn`, `float6_e2m3fn`, `float6_e3m2fn`, `float8_e3m4`, `float8_e4m3`, `float8_e4m3b11fnuz`, `float8_e4m3fnuz`, `float8_e5m2`, `float8_e5m2fnuz`, `float8_e8m0fnu`, `bfloat16`, `float16`, `float32`, `float64`
 
 ## Codec metadata
 

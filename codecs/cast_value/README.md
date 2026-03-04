@@ -2,7 +2,11 @@
 
 Defines an `array -> array` codec that converts (casts) the values of the input array to a new data type by converting the numerical value of each element. This codec does not re-interpret binary representations, and it leaves all other array properties intact.
 
-This codec is only defined for data types that model real numbers: floating-point and integral data types.
+This codec is only defined for data types that model real numbers: floating-point and integral data types. The following data types defined in this repository are supported:
+
+- Integer types: `int2`, `int4`, `int8`, `int16`, `int32`, `int64`
+- Unsigned integer types: `uint2`, `uint4`, `uint8`, `uint16`, `uint32`, `uint64`
+- Floating-point types: `float4_e2m1fn`, `float6_e2m3fn`, `float6_e3m2fn`, `float8_e3m4`, `float8_e4m3`, `float8_e4m3b11fnuz`, `float8_e4m3fnuz`, `float8_e5m2`, `float8_e5m2fnuz`, `float8_e8m0fnu`, `bfloat16`, `float16`, `float32`, `float64`
 
 ## Procedure
 
