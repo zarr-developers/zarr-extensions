@@ -25,20 +25,22 @@ size is the sum of the sizes of all fields.
 The name of this data type is the string `"struct"`.
 
 > **Note:** Implementations SHOULD also support reading arrays that use the
-> legacy [`"structured"`](../structured/README.md) data type name.
+> legacy [`"structured"`](../structured/README.md) data type name, including
+> legacy field definitions in tuple form (see the `"structured"` specification
+> for details).
 
 ### Configuration
 
 This data type requires a configuration object. The configuration object MUST
-contain a `"fields"` key whose value is a JSON array of fields.
+contain a `"fields"` key whose value is an ordered JSON array of field objects.
 
-Each field MUST be a 2-element JSON array `[field_name, field_dtype]`, where:
+Each field MUST be a JSON object with the following keys:
 
-- `field_name` MUST be a non-empty string that identifies the field. Field names
-  MUST be unique within the same `struct` data type; nested `struct`
-  types have independent namespaces.
-- `field_dtype` MUST be a valid Zarr v3 data type representation whose size in
-  bytes is fixed and known at the time the array is opened:
+- `"name"`: A non-empty string that identifies the field. Field names MUST be
+  unique within the same `struct` data type; nested `struct` types have
+  independent namespaces.
+- `"data_type"`: A valid Zarr v3 data type representation whose size in bytes
+  is fixed and known at the time the array is opened:
   - For [core data types](https://zarr-specs.readthedocs.io/en/latest/v3/data-types/index.html#core-data-types),
     this MUST be a string (e.g. `"float32"`, `"int32"`, `"uint8"`).
   - For extension data types that require configuration (e.g. `numpy.datetime64`),
@@ -46,7 +48,9 @@ Each field MUST be a 2-element JSON array `[field_name, field_dtype]`, where:
   - Variable-length data types (e.g. `"string"`) MUST NOT be used as field
     types, as they do not have a fixed encoded size.
 
-The `"fields"` array MUST contain at least one field.
+The `"fields"` array MUST contain at least one field. The order of fields in
+the array is significant: it defines the encoding order for the `bytes` codec
+and MUST be preserved by implementations.
 
 The `struct` data type MAY be used recursively: a field's data type MAY
 itself be `"struct"`, enabling nested record types.
@@ -65,8 +69,8 @@ records, each with an `x` and a `y` coordinate stored as 32-bit floats:
     "name": "struct",
     "configuration": {
       "fields": [
-        ["x", "float32"],
-        ["y", "float32"]
+        {"name": "x", "data_type": "float32"},
+        {"name": "y", "data_type": "float32"}
       ]
     }
   },
@@ -89,17 +93,17 @@ a `configuration` object specifying `unit` and `scale_factor`:
 ```json
 {
   "fields": [
-    [
-      "timestamp",
-      {
+    {
+      "name": "timestamp",
+      "data_type": {
         "name": "numpy.datetime64",
         "configuration": {
           "unit": "s",
           "scale_factor": 1
         }
       }
-    ],
-    ["value", "float32"]
+    },
+    {"name": "value", "data_type": "float32"}
   ]
 }
 ```
@@ -111,19 +115,19 @@ scalar `value` field:
 ```json
 {
   "fields": [
-    [
-      "point",
-      {
+    {
+      "name": "point",
+      "data_type": {
         "name": "struct",
         "configuration": {
           "fields": [
-            ["x", "float32"],
-            ["y", "float32"]
+            {"name": "x", "data_type": "float32"},
+            {"name": "y", "data_type": "float32"}
           ]
         }
       }
-    ],
-    ["value", "float64"]
+    },
+    {"name": "value", "data_type": "float64"}
   ]
 }
 ```
@@ -147,9 +151,9 @@ As a concrete example, consider the following `struct` type:
 ```json
 {
   "fields": [
-    ["id",    "int32"],
-    ["flags", "uint8"],
-    ["value", "float64"]
+    {"name": "id",    "data_type": "int32"},
+    {"name": "flags", "data_type": "uint8"},
+    {"name": "value", "data_type": "float64"}
   ]
 }
 ```
@@ -172,13 +176,19 @@ For nested `struct` types, the same principle applies recursively. Consider:
 ```json
 {
   "fields": [
-    ["point", {
-      "name": "struct",
-      "configuration": {
-        "fields": [["x", "float32"], ["y", "float32"]]
+    {
+      "name": "point",
+      "data_type": {
+        "name": "struct",
+        "configuration": {
+          "fields": [
+            {"name": "x", "data_type": "float32"},
+            {"name": "y", "data_type": "float32"}
+          ]
+        }
       }
-    }],
-    ["value", "float64"]
+    },
+    {"name": "value", "data_type": "float64"}
   ]
 }
 ```

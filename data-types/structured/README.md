@@ -24,6 +24,20 @@ Legacy `"structured"` arrays may have metadata that differs from the current
 `"struct"` specification. Implementations supporting `"structured"` MUST
 handle these legacy forms.
 
+### Tuple-based field definitions
+
+Legacy `"structured"` arrays define fields as 2-element arrays
+`[field_name, field_dtype]`. For example:
+
+```json
+{
+  "fields": [
+    ["x", "float32"],
+    ["y", "float32"]
+  ]
+}
+```
+
 ### Missing endian configuration
 
 Arrays where the `bytes` codec has no `endian` configuration
