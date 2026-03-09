@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "n5"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "codecs": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "$ref": "https://raw.githubusercontent.com/zarr-developers/zarr-extensions/refs/heads/main/codecs/transpose/schema.json"
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "https://raw.githubusercontent.com/zarr-developers/zarr-extensions/refs/heads/main/codecs/bytes/schema.json"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "configuration": {
+                      "type": "object",
+                      "properties": {
+                        "endian": {
+                          "type": "string",
+                          "enum": [
+                            "big"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "items": {
+            "type": "#/$defs/codec"
+          },
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "level"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "name",
+    "configuration"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "codec": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "configuration": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "string"
+        }
+      ]
+    }
+  }
+}
