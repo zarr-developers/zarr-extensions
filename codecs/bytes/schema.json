@@ -1,25 +1,35 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string",
-      "const": "bytes"
-    },
-    "configuration": {
+  "oneOf": [
+    {
       "type": "object",
       "properties": {
-        "endian": {
+        "name": {
           "type": "string",
-          "enum": [
-            "little",
-            "big"
-          ]
+          "const": "bytes"
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "endian": {
+              "type": "string",
+              "enum": [
+                "little",
+                "big"
+              ]
+            }
+          },
+          "additionalProperties": false
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ]
+    },
+    {
+      "type": "string",
+      "const": "bytes"
     }
-  },
-  "additionalProperties": false,
-  "required": ["name"]
+  ]
 }
