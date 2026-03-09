@@ -28,9 +28,7 @@
                       "properties": {
                         "endian": {
                           "type": "string",
-                          "enum": [
-                            "big"
-                          ]
+                          "const": "big"
                         }
                       }
                     }
