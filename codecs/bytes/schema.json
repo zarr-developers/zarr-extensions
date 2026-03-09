@@ -4,9 +4,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "enum": [
-        "bytes"
-      ]
+      "const": "bytes"
     },
     "configuration": {
       "type": "object",
