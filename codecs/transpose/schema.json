@@ -4,9 +4,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "enum": [
-        "transpose"
-      ]
+      "const": "transpose"
     },
     "configuration": {
       "type": "object",
