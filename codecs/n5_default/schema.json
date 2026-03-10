@@ -4,7 +4,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "const": "n5"
+      "const": "n5_default"
     },
     "configuration": {
       "type": "object",
@@ -44,7 +44,7 @@
         }
       },
       "required": [
-        "level"
+        "codecs"
       ],
       "additionalProperties": false
     }
