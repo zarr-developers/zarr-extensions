@@ -51,7 +51,6 @@ for example the `lz4` codec: <https://github.com/zarr-developers/numcodecs/issue
 ### Storage
 
 Arrays can be made compatible with both N5 and Zarr by having an N5-style `attributes.json` and Zarr-style `zarr.json` under the same directory/prefix.
-Care should be taken to keep the metadata in sync between the two.
 
 For reading external N5 data, it is RECOMMENDED that developers provide a Zarr [store](https://zarr-specs.readthedocs.io/en/latest/v3/core/index.html#id25) which wraps over another Zarr store and follows this procedure:
 
