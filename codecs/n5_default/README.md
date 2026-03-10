@@ -52,7 +52,8 @@ for example the `lz4` codec: <https://github.com/zarr-developers/numcodecs/issue
 
 Arrays can be made compatible with both N5 and Zarr by having an N5-style `attributes.json` and Zarr-style `zarr.json` under the same directory/prefix.
 
-For reading external N5 data, it is RECOMMENDED that developers provide a Zarr [store](https://zarr-specs.readthedocs.io/en/latest/v3/core/index.html#id25) which wraps over another Zarr store and follows this procedure:
+For reading external N5 data, it is RECOMMENDED that developers provide a Zarr [store](https://zarr-specs.readthedocs.io/en/latest/v3/core/index.html#id25)
+(an "N5 Default Store") which wraps over another Zarr store and follows this procedure:
 
 - If a key matching `{store_prefix}zarr.json` is requested:
   - Fetch the value at `{store_prefix}attributes.json`
@@ -63,6 +64,15 @@ For reading external N5 data, it is RECOMMENDED that developers provide a Zarr [
 Do the reverse on a write request.
 
 N5 arrays' fill value is implicitly 0.
+
+Non-root N5 groups do not require an `attributes.json`.
+The specification states that any directory on the file system is an N5 group.
+For storage backends like S3 which do not store a literal object to represent a prefix, this concept is less clear.
+It is RECOMMENDED that developers provide another Zarr [store](https://zarr-specs.readthedocs.io/en/latest/v3/core/index.html#id25)
+(an "Implicit Group Store") to wrap over the above N5 Default Store and follows this procedure:
+
+- If a key matching `{store_prefix}zarr.json` is requested:
+  - If no object is found, return a default Zarr group metadata document `{"zarr_format": 3, "node_type": "group"}`
 
 ### Chunk grid
 
