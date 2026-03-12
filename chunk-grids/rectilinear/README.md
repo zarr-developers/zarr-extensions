@@ -68,11 +68,13 @@ which could define new semantics for the `chunk_shapes` field.
 
 #### Chunk edge lengths
 
+All edge lengths MUST be positive integers (i.e., at least 1).
+
 The edge lengths of the chunks for an array axis with length `L` can be declared in two ways.
 
 - as an integer
-  
-  A single integer defines the step size of a regular 1-dimensional grid. 
+
+  A single integer defines the step size of a regular 1-dimensional grid.
   
   To convert a single integer `m` into a sequence of explicit chunk edge lengths for an array axis 
   with length `L`, repeat the integer `m` until it defines a sequence with a sum greater than or equal to `L`.
@@ -91,7 +93,7 @@ permitted.
 
 This specification defines a JSON representation for run-length encoded sequences.
 
-A run-length encoded sequence of `N` repetitions of some value `V` is denoted by the JSON array `[V, N]`. Both `V` and `N` MUST be integers.
+A run-length encoded sequence of `N` repetitions of some value `V` is denoted by the JSON array `[V, N]`. Both `V` and `N` MUST be positive integers (i.e., at least 1).
 
 For example, the sequence `[1, 1, 1, 1, 1]` becomes `[1, 5]` after applying this run-length encoding. 
 

@@ -20,7 +20,7 @@
         {
           "type": "integer",
           "format": "uint",
-          "minimum": 0
+          "minimum": 1
         },
         {
           "type": "array",
@@ -40,19 +40,19 @@
             {
               "type": "integer",
               "format": "uint",
-              "minimum": 0
+              "minimum": 1
             },
             {
               "type": "integer",
               "format": "uint",
-              "minimum": 0
+              "minimum": 1
             }
           ]
         },
         {
           "type": "integer",
           "format": "uint",
-          "minimum": 0
+          "minimum": 1
         }
       ]
     },
