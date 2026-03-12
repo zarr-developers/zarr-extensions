@@ -13,8 +13,8 @@ irregularly spaced. From a chunking perspective, a rectilinear grid is defined b
 The following diagram illustrates a rectilinear chunk grid. The chunk edge lengths are not to scale.
 
 ```bash
-              24                  14       
-   ┌───────────────────────┌──────────────┐
+              24                  14
+   ┌───────────────────────┬──────────────┐
    │                       │              │
    │                       │              │
    │ chunk (0,0)           │ chunk (0,1)  │
@@ -22,20 +22,20 @@ The following diagram illustrates a rectilinear chunk grid. The chunk edge lengt
    │                       │              │
    │                       │              │
    │                       │              │
-   │───────────────────────└──────────────│
+   ├───────────────────────┼──────────────┤
    │                       │              │
    │                       │              │
 10 │ chunk (1,0)           │ chunk (1,1)  │
    │                       │              │
    │                       │              │
-   └───────────────────────└──────────────┘                      
+   └───────────────────────┴──────────────┘
 ```
 
 Every array index resolves to a specific chunk, which can be identified by its index in the chunk 
 grid, and an index *within* that chunk, which we refer to here as the "chunk index".
 
-In this example, the array index `(36, 15)` resolves to the chunk grid index `(1, 0)` and the  
-chunk index `(12, 15)`. 
+In this example, the array index `(20, 15)` resolves to the chunk grid index `(1, 0)` and the
+chunk index `(4, 15)`. 
 
 More generally, given a tuple of tuples of edge lengths `L` and an array index `idx`, the `nth` 
 element of `idx` (denoted `idx[n]`) maps to a chunk grid index by applying the following procedure: 
