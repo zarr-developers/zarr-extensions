@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "numcodecs.zstd"
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "type": "integer"
+            },
+            "checksum": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    { "const": "numcodecs.zstd" }
+  ]
+}
