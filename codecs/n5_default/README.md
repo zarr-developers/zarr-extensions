@@ -80,8 +80,8 @@ Because N5 blocks encode their own shape, boundary chunks MAY be padded (like Za
 Different N5 implementations either pad (zarr-python v2, tensorstore) or truncate (java) by default.
 N5 codec implementations SHOULD be able to handle both cases, or indeed a mixture within a single array.
 
-In this case, the Zarr metadata inferred from N5 metadata MAY use a [regular chunk grid](https://zarr-specs.readthedocs.io/en/latest/v3/core/index.html#regular-grids).
-However, where N5 data uses truncated boundary blocks, this may require implementations to allocate additional memory, pad the block and then trim it down again: therefore it MAY be more efficient to use a chunk grid like [zarrs.regular_bounded](https://chunkgrid.zarrs.dev/regular_bounded) or [rectilinear](github.com/zarr-developers/zarr-extensions/pull/25).
+In this case, the Zarr metadata inferred from N5 metadata MAY use a [`"regular"` chunk grid](https://zarr-specs.readthedocs.io/en/latest/v3/core/index.html#regular-grids).
+However, where N5 data uses truncated boundary blocks, this may require implementations to allocate additional memory, pad the block and then trim it down again: therefore it MAY be more efficient to use a chunk grid like [`"zarrs.regular_bounded"`](https://chunkgrid.zarrs.dev/regular_bounded) or [`"rectilinear"`](github.com/zarr-developers/zarr-extensions/pull/25).
 
 ## Background
 
