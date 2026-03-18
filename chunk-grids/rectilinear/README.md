@@ -33,7 +33,7 @@ The following diagram illustrates a rectilinear chunk grid. The chunk edge lengt
 
 Every array index resolves to a specific chunk, which can be identified by its index in the chunk 
 grid, and an index *within* that chunk, which we refer to here as the "chunk index".
-In this example, the chunk grid edge lengths are `[[16, 10], [24, 14]]` i.e., the `(0,0)` chunk has shape `[16, 24]`, the `(0, 1)` has shape `[14, 16]` etc.
+In this example, the chunk grid edge lengths are `[[16, 10], [24, 14]]` i.e., the chunk at chunk index `(0,0)` has shape `[16, 24]`, the chunk at chunk index `(0, 1)` has shape `[14, 16]`, etc.
 
 In this example, the array index `(20, 15)` resolves to the chunk grid index `(1, 0)` and the
 chunk index `(4, 15)`. 
