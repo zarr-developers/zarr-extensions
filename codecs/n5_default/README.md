@@ -126,5 +126,3 @@ The below is copied verbatim from the [N5 spec version 4.0.0](https://github.com
 >   - compressed data (big endian)
 
 For default-mode chunks of dimensionality `N`, the header is therefore expected to be `2 + 2 + 4*N` bytes long.
-
-The N5 codec can, therefore, only be applied to arrays with chunk shapes whose shape can be expressed by an array of `uint32`, where that array's length can be expressed by a `uint16`.
