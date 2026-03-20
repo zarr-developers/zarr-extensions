@@ -26,9 +26,9 @@ Zero or one additional codecs MAY be added, which MUST be bytes-to-bytes.
 ### Decoding
 
 1. Parse the [N5 header](#header-format)
-2. Validate that the block mode is "default" (`0x0000`) and that the dimensionality is consistent with expectation
-3. Apply the codec chain to the remaining bytes of the block, using the shape from the block header as the decoded representation
-4. Pad or truncate the resulting N-dimensional array to match the original decoded representation
+2. Validate that the block mode is "default" (`0x0000`) and that the number of dimensions specified in the header matches that of the Zarr array
+3. Apply the codec chain to the remaining bytes of the block, using the shape from the block header in the expected decoded representation
+4. Pad or truncate the resulting N-dimensional array to match the expected shape of the requested Zarr chunk as calculated by the chunk grid
 
 ## Compatibility notes
 
@@ -83,11 +83,24 @@ N5 codec implementations SHOULD be able to handle both cases, or indeed a mixtur
 In this case, the Zarr metadata inferred from N5 metadata MAY use a [`"regular"` chunk grid](https://zarr-specs.readthedocs.io/en/latest/v3/core/index.html#regular-grids).
 However, where N5 data uses truncated boundary blocks, this may require implementations to allocate additional memory, pad the block and then trim it down again: therefore it MAY be more efficient to use a chunk grid like [`"zarrs.regular_bounded"`](https://chunkgrid.zarrs.dev/regular_bounded) or [`"rectilinear"`](github.com/zarr-developers/zarr-extensions/pull/25).
 
+## Limitations
+
+This codec can only decode N5 data which
+
+- uses the Default block mode (`0x0000`)
+
+This codec can only encode Zarr arrays which
+
+- have a number of dimensions representable by a `uint16`
+- have a shape representable by an array of `uint32`
+- uses no compressor, or a compressor whose configuration can equally be expressed by N5 compression objects
+- uses a data type available to N5: `u?int(8|16|32|64)`, `float(32|64)`
+
 ## Background
 
 N5 is format similar to Zarr (chunked arrays in hierarchical groups with JSON metadata).
 It is most commonly used in volumetric bioimaging, particularly within the Java (imglib2/ Fiji) ecosystem.
-Zarr v2 had some degree of N5 support.
+[`zarr-python` v2](https://zarr.readthedocs.io/en/v2.18.5/) had some degree of N5 support.
 
 Some key differences include
 
@@ -111,3 +124,7 @@ The below is copied verbatim from the [N5 spec version 4.0.0](https://github.com
 >   - dimension 1[,...,n] (uint32 big endian)
 >   - [ mode == varlength ? number of elements (uint32 big endian) ]
 >   - compressed data (big endian)
+
+For default-mode chunks of dimensionality `N`, the header is therefore expected to be `2 + 2 + 4*N` bytes long.
+
+The N5 codec can, therefore, only be applied to arrays with chunk shapes whose shape can be expressed by an array of `uint32`, where that array's length can be expressed by a `uint16`.
