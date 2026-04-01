@@ -1,0 +1,15 @@
+{
+  "blockSize": [
+    256,
+    128
+  ],
+  "compression": {
+    "level": 0,
+    "type": "zstd"
+  },
+  "dataType": "float32",
+  "dimensions": [
+    256,
+    128
+  ]
+}

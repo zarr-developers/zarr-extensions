@@ -32,22 +32,6 @@ Zero or one additional codecs MAY be added, which MUST be bytes-to-bytes.
 
 ## Compatibility notes
 
-Arrays compatible between Zarr and N5 MUST additionally have the `/`-separated [v2 chunk key encoding](https://zarr-specs.readthedocs.io/en/latest/v3/chunk-key-encodings/v2/).
-
-Note that N5 block compressors and Zarr bytes-to-bytes codecs of the same name MAY have different behaviour,
-for example the `lz4` codec: <https://github.com/zarr-developers/numcodecs/issues/175>.
-
-| N5 compressor | Equivalent Zarr codec | Notes |
-| ------------- | --------------------- | ----- |
-| raw | Not needed | Equivalent to no bytes-to-bytes codec |
-| bzip2 | | |
-| gzip | [gzip](https://zarr-specs.readthedocs.io/en/latest/v3/codecs/gzip/index.html) | |
-| lz4 | | See [zarr-developers/numcodecs#175](https://github.com/zarr-developers/numcodecs/issues/175) |
-| xz | | |
-| [blosc](https://github.com/saalfeldlab/n5-blosc) | [blosc](https://zarr-specs.readthedocs.io/en/latest/v3/codecs/blosc/) | |
-| [zstd](https://github.com/JaneliaSciComp/n5-zstandard/) | [zstd](https://github.com/zarr-developers/zarr-extensions/tree/main/codecs/zstd) | |
-| [jpeg](github.com/saalfeldlab/n5-jpeg/) | | See [zarr-developers/zarr-extensions#15](https://github.com/zarr-developers/zarr-extensions/issues/15) |
-
 ### Storage
 
 Arrays can be made compatible with both N5 and Zarr by having an N5-style `attributes.json` and Zarr-style `zarr.json` under the same directory/prefix.
@@ -63,8 +47,6 @@ For reading external N5 data, it is RECOMMENDED that developers provide a Zarr [
 
 Do the reverse on a write request.
 
-N5 arrays' fill value is implicitly 0.
-
 Non-root N5 groups do not require an `attributes.json`.
 The specification states that any directory on the file system is an N5 group.
 For storage backends like S3 which do not store a literal object to represent a prefix, this concept is less clear.
@@ -74,6 +56,11 @@ It is RECOMMENDED that developers provide another Zarr [store](https://zarr-spec
 - If a key matching `{store_prefix}zarr.json` is requested:
   - If no object is found, return a default Zarr group metadata document `{"zarr_format": 3, "node_type": "group"}`
 
+### Fill value
+
+N5 arrays do not define an explicit fill value.
+Conventionally they use `0` for numeric data.
+
 ### Chunk grid
 
 Because N5 blocks encode their own shape, boundary chunks MAY be padded (like Zarr + regular chunk grid) or truncated.
@@ -82,6 +69,26 @@ N5 codec implementations SHOULD be able to handle both cases, or indeed a mixtur
 
 In this case, the Zarr metadata inferred from N5 metadata MAY use a [`"regular"` chunk grid](https://zarr-specs.readthedocs.io/en/latest/v3/core/index.html#regular-grids).
 However, where N5 data uses truncated boundary blocks, this may require implementations to allocate additional memory, pad the block and then trim it down again: therefore it MAY be more efficient to use a chunk grid like [`"zarrs.regular_bounded"`](https://chunkgrid.zarrs.dev/regular_bounded) or [`"rectilinear"`](github.com/zarr-developers/zarr-extensions/pull/25).
+
+### Chunk key encoding
+
+Zarr arrays reading N5 data MUST use a `/`-separated [v2 chunk key encoding](https://zarr-specs.readthedocs.io/en/latest/v3/chunk-key-encodings/v2/).
+
+### Compressors / bytes-to-bytes codecs
+
+Note that N5 block compressors and Zarr bytes-to-bytes codecs of the same name MAY be incompatible,
+for example the `lz4` codec: <https://github.com/zarr-developers/numcodecs/issues/175>.
+
+| N5 compressor | Equivalent Zarr codec | Notes |
+| ------------- | --------------------- | ----- |
+| raw | Not needed | Equivalent to no bytes-to-bytes codec |
+| bzip2 | | |
+| gzip | [gzip](https://zarr-specs.readthedocs.io/en/latest/v3/codecs/gzip/index.html) | |
+| lz4 | | See [zarr-developers/numcodecs#175](https://github.com/zarr-developers/numcodecs/issues/175) |
+| xz | | |
+| [blosc](https://github.com/saalfeldlab/n5-blosc) | [blosc](https://zarr-specs.readthedocs.io/en/latest/v3/codecs/blosc/) | |
+| [zstd](https://github.com/JaneliaSciComp/n5-zstandard/) | [zstd](https://github.com/zarr-developers/zarr-extensions/tree/main/codecs/zstd) | |
+| [jpeg](github.com/saalfeldlab/n5-jpeg/) | | See [zarr-developers/zarr-extensions#15](https://github.com/zarr-developers/zarr-extensions/issues/15) |
 
 ## Limitations
 
@@ -126,3 +133,68 @@ The below is copied verbatim from the [N5 spec version 4.0.0](https://github.com
 >   - compressed data (big endian)
 
 For default-mode chunks of dimensionality `N`, the header is therefore expected to be `2 + 2 + 4*N` bytes long.
+
+## Example
+
+A full example of an (empty) zstandard-compressed array compatible with both Zarr and default-mode N5 can be found in [`examples/zstd_array`](./examples/zstd_array/).
+
+This uses the following Zarr configuration:
+
+```jsonc
+{
+  // ...
+  "chunk_grid": {
+    "name": "regular",
+    "configuration": {
+      // ...
+    }
+  },
+  "chunk_key_encoding": {
+    "name": "v2",
+    "configuration": {
+      "separator": "/"
+    }
+  },
+  "fill_value": 0,
+  "codecs": [
+    {
+      "name": "n5_default",
+      "configuration": {
+        "codecs": [
+          {
+            // required
+            "name": "transpose",
+            "configuration": {
+              "order": [
+                // for a 2D array
+                1,
+                0
+              ]
+            }
+          },
+          {
+            // required
+            "name": "bytes",
+            "configuration": {
+              "endian": "big"
+            }
+          },
+          {
+            // this codec can be omitted or replaced depending on the N5's `compression` setting
+            "name": "zstd",
+            "configuration": {
+              "level": 0,
+              "checksum": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+## Implementations
+
+- <https://github.com/clbarnes/zarrs_n5> (rust/ [zarrs](https://github.com/zarrs/zarrs))
+- <https://github.com/clbarnes/zarr-python-n5> (python/ [zarr-python](https://github.com/zarr-developers/zarr-python))
