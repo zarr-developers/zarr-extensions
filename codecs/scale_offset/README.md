@@ -27,24 +27,26 @@ The value of the `configuration` field is a JSON object with the following struc
 
 | Field | Type | Required |
 | -     | -    | -        |
-| [`offset`](#offset)  | JSON-encoded scalar | no |
-| [`scale`](#scale) | JSON-encoded scalar | no |
+| [`offset`](#offset)  | number | no |
+| [`scale`](#scale) | number | no |
 
 Additional keys are reserved for future versions of this codec. Metadata with additional keys MUST be treated as invalid by readers.
 
 If neither `scale` nor `offset` are specified, the entire `configuration` field may be omitted. In this case the codec is effectively a no-op.
 
+Implementations MUST ensure that the `scale` and `offset` fields are representable in the data type of the array passed as input to the codec. 
+
 ### offset
 
-The value of the `offset` field is a scalar that defines the quantity subtracted from input values during encoding. If present, this value MUST be encoded to JSON using the Zarr V3 fill value encoding for the input array's data type. A missing `offset` field encodes the additive identity element for the data type, e.g., 0 for numeric data types.
+The value of the `offset` field is a scalar that defines the quantity subtracted from input values during encoding. If present, this value MUST be a JSON number. A missing `offset` field encodes the additive identity element for the data type, e.g., 0 for numeric data types. 
 
 ### scale
 
-The value of the `scale` field is a scalar that defines the quantity multiplied with input values during encoding, after `offset` has been subtracted. If present, this value MUST be encoded to JSON using the Zarr V3 fill value encoding for the input array's data type. A missing `scale` field encodes the multiplicative identity element for the data type, e.g., 1 for numeric data types.
+The value of the `scale` field is a scalar that defines the quantity multiplied with input values during encoding, after `offset` has been subtracted. If present, this value MUST be a JSON number. A missing `scale` field encodes the multiplicative identity element for the data type, e.g., 1 for numeric data types.
 
 ## Algorithm
 
-The encoding and decoding transformations MUST be performed using the arithmetic semantics of the input array's data type. If any intermediate or final value produced during encoding or decoding is not representable in that data type, implementations MUST treat this as an error.
+The encoding and decoding transformations MUST be performed using the arithmetic semantics of the input array's data type.
 
 ### Encoding
 
@@ -281,7 +283,8 @@ The `scale_offset` codec is based on the `FixedScaleOffset` class defined in the
 
 ## Change log
 
-No changes yet.
+1. Narrowed the type used for `scale` and `offset` fields from a data type-dependent encoding to JSON numbers. This is a backwards-compatible change
+because, for all data types supported by this codec, the only valid `scale` and `offset` values are encoded as JSON numbers. Issue: https://github.com/zarr-developers/zarr-extensions/issues/51  PR: #XXXX.
 
 ## Current maintainers
 
