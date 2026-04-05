@@ -275,7 +275,7 @@ Would be transformed to the following codecs:
 ```
 
 These codecs would transform a `float32` array with a `fill_value` of `10.0` and values from the range `[10.0, 100.0]` into 
-a `uint8` array with a `fill_value` of `0` and values in the range `[0, 10]`.
+a `uint8` array with a `fill_value` of `0` and values in the range `[0, 9]`.
 
 ## References
 
