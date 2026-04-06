@@ -8,8 +8,8 @@
     "configuration": {
       "type": "object",
       "properties": {
-        "offset": {},
-        "scale": {}
+        "offset": {"type": "number"},
+        "scale": {"type": "number"}
       },
       "additionalProperties": false
     }
