@@ -284,7 +284,11 @@ The `scale_offset` codec is based on the `FixedScaleOffset` class defined in the
 ## Change log
 
 1. Narrowed the type used for `scale` and `offset` fields from a data type-dependent encoding to JSON numbers. This is a backwards-compatible change
-because, for all data types supported by this codec, the only valid `scale` and `offset` values are encoded as JSON numbers. Issue: https://github.com/zarr-developers/zarr-extensions/issues/51  PR: #XXXX.
+because, for all data types supported by this codec, the only valid `scale` and `offset` values are encoded as JSON numbers. 
+
+Additionally, the rules for intermediate values generated during scale and offset calculations are relaxed. Previously, all intermediate values were required to be elements of the input array's data type. Now, the requirement is simply that the arithemtic semantics of the input array's data type are used to apply the scale and offset.
+
+Issue: https://github.com/zarr-developers/zarr-extensions/issues/51  PR: #52
 
 ## Current maintainers
 
