@@ -20,9 +20,7 @@
           "uniqueItems": true
         }
       },
-      "required": [
-        "order"
-      ],
+      "required": ["order"],
       "additionalProperties": false
     }
   },

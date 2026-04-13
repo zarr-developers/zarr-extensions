@@ -43,16 +43,11 @@
           "maxItems": 3
         }
       },
-      "required": [
-        "codecs"
-      ],
+      "required": ["codecs"],
       "additionalProperties": false
     }
   },
-  "required": [
-    "name",
-    "configuration"
-  ],
+  "required": ["name", "configuration"],
   "additionalProperties": false,
   "$defs": {
     "codec": {
@@ -67,9 +62,7 @@
               "type": "object"
             }
           },
-          "required": [
-            "name"
-          ],
+          "required": ["name"],
           "additionalProperties": false
         },
         {

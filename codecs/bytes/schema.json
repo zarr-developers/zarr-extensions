@@ -13,19 +13,14 @@
           "properties": {
             "endian": {
               "type": "string",
-              "enum": [
-                "little",
-                "big"
-              ]
+              "enum": ["little", "big"]
             }
           },
           "additionalProperties": false
         }
       },
       "additionalProperties": false,
-      "required": [
-        "name"
-      ]
+      "required": ["name"]
     },
     {
       "type": "string",
