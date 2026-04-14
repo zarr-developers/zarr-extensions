@@ -10,10 +10,7 @@
       "$ref": "#/$defs/rectilinear"
     }
   },
-  "required": [
-    "name",
-    "configuration"
-  ],
+  "required": ["name", "configuration"],
   "$defs": {
     "ChunkEdgeLength": {
       "anyOf": [
@@ -69,10 +66,7 @@
           "$ref": "#/$defs/inline"
         }
       },
-      "required": [
-        "kind",
-        "chunk_shapes"
-      ]
+      "required": ["kind", "chunk_shapes"]
     },
     "inline": {
       "const": "inline"

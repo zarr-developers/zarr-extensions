@@ -11,7 +11,23 @@
       "properties": {
         "unit": {
           "type": "string",
-          "enum": ["Y", "M", "W", "D", "h", "m", "s", "ms", "us", "μs", "ns", "ps", "fs", "as", "generic"]
+          "enum": [
+            "Y",
+            "M",
+            "W",
+            "D",
+            "h",
+            "m",
+            "s",
+            "ms",
+            "us",
+            "μs",
+            "ns",
+            "ps",
+            "fs",
+            "as",
+            "generic"
+          ]
         },
         "scale_factor": {
           "type": "integer",
