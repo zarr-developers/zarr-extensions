@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "fanout"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "max_children": {
+          "type": "integer",
+          "minimum": 100,
+          "default": 1000
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}
