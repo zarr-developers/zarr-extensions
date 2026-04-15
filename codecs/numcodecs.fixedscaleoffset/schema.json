@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "numcodecs.fixedscaleoffset"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "number"
+        },
+        "scale": {
+          "type": "number"
+        },
+        "dtype": {
+          "type": "string"
+        },
+        "astype": {
+          "type": "string"
+        }
+      },
+      "required": ["offset", "scale", "dtype"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
