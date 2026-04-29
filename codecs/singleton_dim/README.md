@@ -52,6 +52,7 @@ which MUST be either `"insert"` or `"remove"`, and whose value MUST be an unsign
     - The number of elements will be the same, and if the input data were contiguous, no copies will be needed
 
 Note that the order of operations is important, as inserting or removing an element from the array changes the indices at which all following elements will be found.
+Later operations apply to the _new_ indices, not the original indices.
 
 ```python
 def encode(codec: dict, array: np.ndarray) -> np.ndarray:
