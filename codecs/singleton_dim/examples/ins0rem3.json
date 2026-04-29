@@ -1,0 +1,13 @@
+{
+    "name": "singleton_dim",
+    "configuration": {
+        "operations": [
+            {
+                "insert": 0
+            },
+            {
+                "remove": 3
+            }
+        ]
+    }
+}
