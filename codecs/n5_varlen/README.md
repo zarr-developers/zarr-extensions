@@ -48,13 +48,15 @@ described in [`n5_default`](../n5_default/README.md) applies.
 1. Parse the [N5 block header](#header-format).
 2. Validate that the block mode is varlength (`0x0001`) and that the number of dimensions
    in the header matches the number of dimensions of the Zarr array.
-3. Read the next `num_bytes` bytes as the compressed payload.
+3. Read the next `numElements × element_size` bytes as the compressed payload.
+   For `label_multiset`, the element is a byte, so `numElements` equals the byte count.
 4. Apply the inner codec pipeline (in decode order) to produce the decoded array.
 
 ### Encoding
 
 1. Apply the inner codec pipeline (in encode order) to the array, producing a byte sequence.
-2. Write the N5 block header with `num_bytes` set to the length of the byte sequence.
+2. Write the N5 block header with `numElements` set to `byte_count / element_size`.
+   For `label_multiset`, the element is a byte, so `numElements` equals the byte count.
 3. Write the byte sequence.
 
 ## Header format
@@ -68,19 +70,21 @@ Offset  Size   Endian  Field
 0       2      BE      mode         uint16  must be 0x0001 (varlength)
 2       2      BE      ndim         uint16  number of dimensions
 4       4·ndim BE      dims[0..ndim-1]  uint32 each  block shape
-4+4·ndim  4    BE      num_bytes    uint32  byte length of payload
+4+4·ndim  4    BE      numElements  uint32  number of elements in payload
 ```
 
 Total header size: `2 + 2 + 4·ndim + 4` bytes.
 
-The `num_bytes` field records the total number of bytes in the payload that follows the
-header (i.e., the encoded output of the inner codec pipeline). For uncompressed data this
-equals `file_size - header_size`.
+The `numElements` field records the number of elements in the payload, following the
+[N5 spec](https://github.com/saalfeldlab/n5/tree/fb50c2c3f1b411abd201a6c701cfd9c61486cd85).
+The byte length of the payload is `numElements × element_size`. For `label_multiset`,
+the serialized payload is a byte stream (element size = 1), so `numElements` equals
+the byte count of the payload and equals `file_size - header_size`.
 
 > **Note:** For default-mode N5 blocks, the header has no 4th field; after `dims[]`,
-> the payload begins immediately. The varlength header adds this 4-byte `num_bytes`
-> field to record the payload length, since it cannot be derived from the chunk shape
-> alone for variable-width data types.
+> the payload begins immediately. The varlength header adds this 4-byte `numElements`
+> field, since the payload length cannot be derived from the chunk shape alone for
+> variable-width data types.
 
 ## Example
 
@@ -170,7 +174,7 @@ Bytes 2–3:       00 03              ndim = 3 (uint16 BE)
 Bytes 4–7:       00 00 00 20        dims[0] = 32 (uint32 BE)
 Bytes 8–11:      00 00 00 20        dims[1] = 32 (uint32 BE)
 Bytes 12–15:     00 00 00 20        dims[2] = 32 (uint32 BE)
-Bytes 16–19:     XX XX XX XX        num_bytes (uint32 BE) — byte count of payload
+Bytes 16–19:     XX XX XX XX        numElements (uint32 BE) — element count (bytes, for label_multiset)
 ─── n5_label_multiset payload begins here ───────────────────────────────────────
 Bytes 20–23:     00 00 00 00        argMaxSize = 0 (int32 BE)
 Bytes 24–131099: …                  listEntryOffsets[32768] (int32 BE each, 4·32768 bytes)
@@ -192,14 +196,15 @@ N5 defines three block modes:
 | Mode | Value | Description |
 |------|-------|-------------|
 | default | `0x0000` | Fixed-width elements; shape from header |
-| varlength | `0x0001` | Variable-width payload; byte count from header |
+| varlength | `0x0001` | Variable-width payload; element count from header |
 | object | `0x0002` | Arbitrary serialized objects |
 
 The `n5_default` codec handles mode `0x0000`. This codec handles mode `0x0001`.
 
 In N5's Java reference implementation, varlength blocks are used for `LabelMultisetType`
-arrays written by imglib2-label-multisets. The `num_bytes` field in the header equals
-`file_size - header_size` for uncompressed data.
+arrays written by imglib2-label-multisets. For `LabelMultisetType`, the serialized payload
+is a byte stream (element size = 1), so the `numElements` field equals
+`file_size - header_size`.
 
 ## Change log
 
