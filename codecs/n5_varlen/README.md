@@ -155,6 +155,12 @@ legacy payload format; `n5_varlen` wraps the result with the varlength block hea
 
 ## Annotated binary layout
 
+The varlength block header format is specified in the
+[N5 spec](https://github.com/saalfeldlab/n5/tree/fb50c2c3f1b411abd201a6c701cfd9c61486cd85).
+The payload layout below is derived from the
+[imglib2-label-multisets](https://github.com/saalfeldlab/imglib2-label-multisets)
+Java reference implementation.
+
 For a 32×32×32 `label_multiset` chunk using `n5_label_multiset` with no compression,
 the complete on-disk block is:
 
