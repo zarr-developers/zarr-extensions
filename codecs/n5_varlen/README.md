@@ -77,10 +77,10 @@ The `num_bytes` field records the total number of bytes in the payload that foll
 header (i.e., the encoded output of the inner codec pipeline). For uncompressed data this
 equals `file_size - header_size`.
 
-> **Note:** For default-mode N5 blocks, the header omits `num_bytes` and instead contains
-> the number of array elements. The varlength header always includes `num_bytes` in place
-> of an element count, since the number of bytes cannot be derived from the chunk shape
-> for variable-width data types.
+> **Note:** For default-mode N5 blocks, the header has no 4th field; after `dims[]`,
+> the payload begins immediately. The varlength header adds this 4-byte `num_bytes`
+> field to record the payload length, since it cannot be derived from the chunk shape
+> alone for variable-width data types.
 
 ## Example
 
