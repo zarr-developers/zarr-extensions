@@ -1,0 +1,56 @@
+{
+  "zarr_format": 3,
+  "node_type": "array",
+  "shape": [
+    256,
+    128
+  ],
+  "data_type": "float32",
+  "chunk_grid": {
+    "name": "regular",
+    "configuration": {
+      "chunk_shape": [
+        256,
+        128
+      ]
+    }
+  },
+  "chunk_key_encoding": {
+    "name": "v2",
+    "configuration": {
+      "separator": "/"
+    }
+  },
+  "fill_value": 0,
+  "codecs": [
+    {
+      "name": "n5_default",
+      "configuration": {
+        "codecs": [
+          {
+            "name": "transpose",
+            "configuration": {
+              "order": [
+                1,
+                0
+              ]
+            }
+          },
+          {
+            "name": "bytes",
+            "configuration": {
+              "endian": "big"
+            }
+          },
+          {
+            "name": "zstd",
+            "configuration": {
+              "level": 0,
+              "checksum": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
