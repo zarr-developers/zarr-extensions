@@ -84,23 +84,29 @@ zarr-python's `FixedLengthUTF32` class (`src/zarr/core/dtype/npy/string.py`):
    `bytes` codec's `endian` parameter, which MUST be set explicitly. The data
    type configuration itself carries no endianness.
 
-6. **Fill value representation** — a JSON string. The fill value MUST NOT
-   contain more than `length_bytes / 4` code points; shorter strings are
-   conceptually padded with `U+0000` to capacity. Example. Does not describe a
-   "default" fill value — that is not part of the Zarr data type model.
+6. **JSON scalar encoding** — define how a scalar of this data type is encoded
+   in/decoded from JSON: a JSON string of at most `length_bytes / 4` code
+   points, with trailing `U+0000` padding stripped on encode and re-added on
+   decode. Strings exceeding capacity are rejected. Worked example.
 
-7. **Codec compatibility** — works with any array-to-bytes codec that encodes
+7. **Fill value representation** — defined by reference: the `fill_value` MUST
+   be a valid JSON scalar encoding (per the section above). This frames the
+   fill value as one application of the general JSON scalar encoding rather
+   than a separately-specified format. Does not describe a "default" fill
+   value — that is not part of the Zarr data type model.
+
+8. **Codec compatibility** — works with any array-to-bytes codec that encodes
    each element as a fixed-size `length_bytes` blob; the `bytes` codec is the
    standard choice. Variable-length codecs (`vlen-utf8`, `vlen-bytes`) are NOT
    compatible. Byte-manipulation / compression codecs may be layered on top.
 
-8. **Notes** — `length_bytes` is always a multiple of 4; `U+0000` padding matches
+9. **Notes** — `length_bytes` is always a multiple of 4; `U+0000` padding matches
    NumPy semantics; distinct from the variable-length `string` type; relationship
    to the Zarr V2 `<U` dtype name.
 
-9. **Change log** — "No changes yet."
+10. **Change log** — "No changes yet."
 
-10. **Current maintainers** — zarr-python core development team (matching sibling
+11. **Current maintainers** — zarr-python core development team (matching sibling
     specs).
 
 ## schema.json structure

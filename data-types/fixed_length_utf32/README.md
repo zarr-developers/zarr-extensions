@@ -96,15 +96,28 @@ codec (for example, `{"name": "bytes", "configuration": {"endian": "little"}}`).
 The codec MUST be configured with an explicit `endian` setting. The data type
 configuration itself does not carry endianness information.
 
+## JSON scalar encoding
+
+A scalar of this data type is encoded in JSON as a JSON string. The string is
+the sequence of Unicode code points held by the scalar, in order, with any
+trailing `U+0000` padding code points removed.
+
+A JSON string is a valid encoding of a scalar of this data type only if it
+contains at most `length_bytes / 4` code points. Decoding a JSON string with
+more than `length_bytes / 4` code points is invalid and MUST be rejected. A
+JSON string with fewer than `length_bytes / 4` code points decodes to the
+scalar whose remaining code points are `U+0000` padding, consistent with the
+bytes codec encoding described above.
+
+For example, with a `length_bytes` of `48` (a capacity of 12 code points), the
+JSON string `"foo"` encodes the scalar containing the code points `U+0066`,
+`U+006F`, `U+006F` followed by nine `U+0000` padding code points.
+
 ## Fill value representation
 
-The value of the `fill_value` metadata key MUST be a JSON string.
-
-The fill value string MUST NOT contain more than `length_bytes / 4` code
-points. A fill value with fewer code points than this capacity is padded with
-`U+0000` code points to fill the scalar, following the same rule as the bytes
-codec encoding described above. A fill value string with more than
-`length_bytes / 4` code points is invalid and MUST be rejected.
+The value of the `fill_value` metadata key MUST be a valid
+[JSON scalar encoding](#json-scalar-encoding) of a scalar of this data type:
+that is, a JSON string of at most `length_bytes / 4` code points.
 
 ```json
 "fill_value": "foo"
