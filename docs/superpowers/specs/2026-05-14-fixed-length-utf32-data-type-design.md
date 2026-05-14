@@ -104,9 +104,13 @@ zarr-python's `FixedLengthUTF32` class (`src/zarr/core/dtype/npy/string.py`):
    NumPy semantics; distinct from the variable-length `string` type; relationship
    to the Zarr V2 `<U` dtype name.
 
-10. **Change log** — "No changes yet."
+10. **References** — links to the Unicode Standard (the normative UTF-32
+    definition) and the NumPy `numpy.str_` / dtype-objects documentation that
+    this data type mirrors.
 
-11. **Current maintainers** — zarr-python core development team (matching sibling
+11. **Change log** — "No changes yet."
+
+12. **Current maintainers** — zarr-python core development team (matching sibling
     specs).
 
 ## schema.json structure

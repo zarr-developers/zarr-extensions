@@ -2,16 +2,18 @@
 
 Defines a data type for fixed-length UTF-32 strings. Each element of an array
 with this data type is a Unicode string with a fixed maximum number of code
-points, encoded as a fixed-size sequence of UTF-32 code units.
+points, encoded as a fixed-size sequence of
+[UTF-32](https://www.unicode.org/versions/latest/) code units.
 
 ## Background
 
 This data type is designed for compatibility with
-[NumPy's fixed-width string dtype](https://numpy.org/doc/stable/reference/arrays.dtypes.html)
+[NumPy's fixed-width string dtype](https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.str_)
 (`numpy.str_`, spelled `<U` or `>U`). NumPy stores each element of such an array
-as a fixed number of 4-byte UTF-32 code units, zero-padding strings that are
-shorter than the declared width. The `fixed_length_utf32` data type is the
-Zarr V3 representation of exactly this NumPy dtype.
+as a fixed number of UCS4 (equivalently, [UTF-32](https://www.unicode.org/versions/latest/))
+code units of 4 bytes each, zero-padding strings that are shorter than the
+declared width. The `fixed_length_utf32` data type is the Zarr V3
+representation of exactly this NumPy dtype.
 
 The NumPy fixed-width string dtype is also the native string dtype used by
 Zarr V2. Specifying `fixed_length_utf32` therefore gives Zarr V3 a well-defined,
@@ -148,6 +150,17 @@ this data type, as they do not encode elements at a fixed size.
 > [`string`](../string/README.md) data type. Use `fixed_length_utf32` when a
 > fixed per-element size is required, such as for NumPy or Zarr V2
 > compatibility.
+
+## References
+
+- [The Unicode Standard](https://www.unicode.org/versions/latest/) — the
+  definition of UTF-32 as a Unicode encoding form (see the "Encoding Forms"
+  section of the Core Specification).
+- [`numpy.str_`](https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.str_)
+  — the NumPy fixed-width unicode string scalar type that this data type
+  mirrors, whose contents are exposed as UCS4 (UTF-32).
+- [NumPy data type objects](https://numpy.org/doc/stable/reference/arrays.dtypes.html)
+  — describes the `<U` / `>U` dtype string syntax used by Zarr V2.
 
 ## Change log
 
