@@ -117,7 +117,9 @@ base64 that decodes to at most `length_bytes` bytes. Decoding a string that
 yields more than `length_bytes` bytes is invalid and MUST be rejected. A string
 that decodes to fewer than `length_bytes` bytes decodes to the scalar whose
 remaining bytes are `0x00` padding, consistent with the bytes codec encoding
-described above.
+described above. The empty string `""` is a valid encoding: it is valid base64
+that decodes to zero bytes, and it denotes the scalar whose bytes are all `0x00`
+padding (equivalently, the empty byte string).
 
 For example, with a `length_bytes` of `10`, the byte string `b"Hi"` is encoded
 as the base64 string `"SGk="`, which decodes to the bytes `0x48 0x69` followed

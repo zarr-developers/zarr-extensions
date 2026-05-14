@@ -167,7 +167,10 @@ object form (no bare-string form):
 - **JSON scalar encoding:** base64 string only, matching zarr-python's
   `NullTerminatedBytes`. The integer-array form permitted by the
   variable-length `bytes` spec is intentionally not adopted, to stay aligned
-  with the implementation.
+  with the implementation. The empty string `""` is explicitly called out as a
+  valid encoding (valid base64 decoding to zero bytes, denoting the empty byte
+  string — zarr-python's default in-memory scalar), so implementations do not
+  disagree on whether it is a legal fill value.
 - **Endianness:** not applicable; the spec states this explicitly rather than
   omitting it, for parity with `fixed_length_utf32`.
 - **`raw_bytes`:** intentionally not mentioned. `raw_bytes` is not yet specified
