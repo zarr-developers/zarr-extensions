@@ -62,14 +62,15 @@ elements are fixed-length UTF-32 strings holding up to 12 code points
 }
 ```
 
-## Scalar byte layout
+## Bytes codec encoding
 
-Each scalar is encoded as exactly `length_bytes / 4` code points. Each code
-point is encoded as a 4-byte UTF-32 code unit. The code points of the string
-are written in order; if the string contains fewer than `length_bytes / 4` code
-points, the remaining code points are filled with `U+0000` (the four bytes
-`0x00 0x00 0x00 0x00`) after the string content. This zero-padding matches the
-behavior of NumPy's fixed-width string dtype.
+When the `bytes` codec is used, each scalar is encoded as exactly
+`length_bytes / 4` code points. Each code point is encoded as a 4-byte UTF-32
+code unit. The code points of the string are written in order; if the string
+contains fewer than `length_bytes / 4` code points, the remaining code points
+are filled with `U+0000` (the four bytes `0x00 0x00 0x00 0x00`) after the
+string content. This zero-padding matches the behavior of NumPy's fixed-width
+string dtype.
 
 As a concrete example, consider a `fixed_length_utf32` data type with a
 `length_bytes` of `12` (a capacity of three code points) holding the string
@@ -97,14 +98,13 @@ configuration itself does not carry endianness information.
 
 ## Fill value representation
 
-The value of the `fill_value` metadata key MUST be a JSON string. The default
-fill value is the empty string `""`.
+The value of the `fill_value` metadata key MUST be a JSON string.
 
 The fill value string MUST NOT contain more than `length_bytes / 4` code
 points. A fill value with fewer code points than this capacity is padded with
-`U+0000` code points to fill the scalar, following the same rule as the scalar
-byte layout above. A fill value string with more than `length_bytes / 4` code
-points is invalid and MUST be rejected.
+`U+0000` code points to fill the scalar, following the same rule as the bytes
+codec encoding described above. A fill value string with more than
+`length_bytes / 4` code points is invalid and MUST be rejected.
 
 ```json
 "fill_value": "foo"

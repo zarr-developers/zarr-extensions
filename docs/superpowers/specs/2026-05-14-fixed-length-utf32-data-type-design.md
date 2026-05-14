@@ -37,7 +37,9 @@ zarr-python's `FixedLengthUTF32` class (`src/zarr/core/dtype/npy/string.py`):
 - Endianness: the dtype carries endianness via the `HasEndianness` mixin, but the
   V3 JSON configuration stores only `length_bytes`; byte order is delegated to
   the array-to-bytes codec.
-- Fill value: a JSON string; default scalar is the empty string `""`.
+- Fill value: a JSON string. (zarr-python uses an empty-string scalar as its
+  in-memory default, but "default fill value" is not part of the Zarr data type
+  model, so the spec does not describe one.)
 - Not an object-codec dtype — it does not use a variable-length codec. Each
   scalar is a fixed-size `length_bytes` blob, encoded by the `bytes` codec.
 - Emits `v3_unstable_dtype_warning`, i.e. it is explicitly an extension dtype,
@@ -70,20 +72,22 @@ zarr-python's `FixedLengthUTF32` class (`src/zarr/core/dtype/npy/string.py`):
      `length_bytes` MUST be >= 4.
    - Example array metadata fragment.
 
-4. **Scalar byte layout** — each scalar encodes exactly `length_bytes / 4` code
-   points; each code point is a 4-byte UTF-32 code unit. Strings shorter than
-   capacity are padded with `U+0000` (`0x00000000`) code points after the
-   content. Include an ASCII byte-diagram (struct-spec style) for a worked
-   example, e.g. a 3-code-point-capacity scalar holding `"Hi"`.
+4. **Bytes codec encoding** — when the `bytes` codec is used, each scalar
+   encodes exactly `length_bytes / 4` code points; each code point is a 4-byte
+   UTF-32 code unit. Strings shorter than capacity are padded with `U+0000`
+   (`0x00000000`) code points after the content. Include an ASCII byte-diagram
+   (struct-spec style) for a worked example, e.g. a 3-code-point-capacity scalar
+   holding `"Hi"`. Section heading matches the `struct` spec, framing this as
+   codec encoding rather than an intrinsic codec-independent layout.
 
 5. **Endianness** — the byte order of the 4-byte code units is determined by the
    `bytes` codec's `endian` parameter, which MUST be set explicitly. The data
    type configuration itself carries no endianness.
 
-6. **Fill value representation** — a JSON string; default is the empty string
-   `""`. The fill value MUST NOT contain more than `length_bytes / 4` code
-   points; shorter strings are conceptually padded with `U+0000` to capacity.
-   Example.
+6. **Fill value representation** — a JSON string. The fill value MUST NOT
+   contain more than `length_bytes / 4` code points; shorter strings are
+   conceptually padded with `U+0000` to capacity. Example. Does not describe a
+   "default" fill value — that is not part of the Zarr data type model.
 
 7. **Codec compatibility** — works with any array-to-bytes codec that encodes
    each element as a fixed-size `length_bytes` blob; the `bytes` codec is the
@@ -135,6 +139,10 @@ a bare-string form), so the schema accepts only the object form:
 - **Endianness:** delegated to the `bytes` codec's `endian` parameter, mirroring
   zarr-python and the `struct` spec; not part of the data type configuration.
 - **Fill value length:** MUST NOT exceed `length_bytes / 4` code points; shorter
-  strings are padded with `U+0000`. Longer strings are rejected.
-- **Byte layout:** spec includes an explicit byte-layout description with an
-  ASCII byte-diagram.
+  strings are padded with `U+0000`. Longer strings are rejected. The spec does
+  not describe a "default" fill value — defaults are not part of the Zarr data
+  type model.
+- **Byte layout:** the spec includes an explicit encoding description with an
+  ASCII byte-diagram, under a "Bytes codec encoding" heading (matching the
+  `struct` spec) to frame it as codec behavior rather than a codec-independent
+  intrinsic layout.
