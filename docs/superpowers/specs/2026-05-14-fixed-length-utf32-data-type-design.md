@@ -64,7 +64,11 @@ zarr-python's `FixedLengthUTF32` class (`src/zarr/core/dtype/npy/string.py`):
    for NumPy compatibility and thereby compatibility with Zarr V2 string data.
    Contrast with the variable-length `string` data type.
 
-3. **Data type representation**
+3. **Data type representation** — presented in tabular form following the
+   `rectilinear` chunk grid spec: a table for the top-level metadata fields
+   (`name`, `configuration`) with an internal link from `configuration` to a
+   `### Configuration` subsection, which has its own field table for
+   `length_bytes` linking to a `#### length_bytes` subsection.
    - **Name:** the string `"fixed_length_utf32"`.
    - **Configuration:** required object with one key, `"length_bytes"` — a
      positive integer that is a multiple of 4, the fixed encoded size of each

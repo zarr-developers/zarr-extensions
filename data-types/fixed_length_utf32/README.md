@@ -21,26 +21,30 @@ interoperable representation for string data originating from Zarr V2 arrays: a
 Zarr V2 dtype such as `"<U12"` corresponds to the Zarr V3 `fixed_length_utf32`
 data type with a `length_bytes` of `48`.
 
-This data type is distinct from the variable-length
-[`string`](../string/README.md) data type, whose elements have no fixed encoded
-size.
-
 ## Data type representation
 
-### Name
+A `fixed_length_utf32` data type is represented in array metadata as a JSON
+object with the following fields:
 
-The name of this data type is the string `"fixed_length_utf32"`.
+| field | type | required |
+| - | - | - |
+| `name` | Literal `"fixed_length_utf32"` | yes |
+| `configuration` | [Configuration](#configuration) | yes |
 
 ### Configuration
 
-This data type requires a configuration object. The configuration object MUST
-contain a single key, `"length_bytes"`, whose value is a positive integer that
-is a multiple of `4`. It defines the fixed encoded size, in bytes, of every
-scalar of this data type.
+The `configuration` field is a JSON object with the following fields:
 
-Because UTF-32 uses 4 bytes per code point, the maximum number of code points
-per scalar is `length_bytes / 4`. The smallest permitted value of
-`length_bytes` is `4`, corresponding to a capacity of one code point.
+| field | type | required | notes |
+| - | - | - | - |
+| `length_bytes` | positive integer, multiple of `4` | yes | The fixed encoded size, in bytes, of every scalar of this data type. See [`length_bytes`](#length_bytes). |
+
+#### `length_bytes`
+
+`length_bytes` defines the fixed encoded size, in bytes, of every scalar of
+this data type. Because UTF-32 uses 4 bytes per code point, the maximum number
+of code points per scalar is `length_bytes / 4`. The smallest permitted value
+of `length_bytes` is `4`, corresponding to a capacity of one code point.
 
 ### Example
 
