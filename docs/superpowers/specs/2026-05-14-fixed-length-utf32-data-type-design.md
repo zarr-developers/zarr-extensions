@@ -84,9 +84,10 @@ zarr-python's `FixedLengthUTF32` class (`src/zarr/core/dtype/npy/string.py`):
    holding `"Hi"`. Section heading matches the `struct` spec, framing this as
    codec encoding rather than an intrinsic codec-independent layout.
 
-5. **Endianness** — the array-to-bytes codec MUST behave deterministically with
-   respect to byte order; e.g. the `bytes` codec MUST have its `endian` field
-   set. The data type configuration itself carries no endianness.
+5. **Endianness** — each code unit's byte order MUST be unambiguous; when the
+   `bytes` codec is used it MUST be configured with an explicit `endian`
+   setting, mirroring the `struct` spec. The data type configuration itself
+   carries no endianness.
 
 6. **JSON scalar encoding** — define how a scalar of this data type is encoded
    in/decoded from JSON: a JSON string of at most `length_bytes / 4` code

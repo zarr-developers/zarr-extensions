@@ -2,18 +2,18 @@
 
 Defines a data type for fixed-length UTF-32 strings. Each element of an array
 with this data type is a Unicode string with a fixed maximum number of code
-points, encoded as a fixed-size sequence of
-[UTF-32](https://www.unicode.org/versions/latest/) code units.
+points, where each code point is encoded as a 4-byte
+[UTF-32](https://www.unicode.org/versions/latest/) code unit.
 
 ## Background
 
 This data type is designed for compatibility with
 [NumPy's fixed-width string dtype](https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.str_)
 (`numpy.str_`, spelled `<U` or `>U`). NumPy stores each element of such an array
-as a fixed number of UCS4 (equivalently, [UTF-32](https://www.unicode.org/versions/latest/))
-code units of 4 bytes each, zero-padding strings that are shorter than the
-declared width. The `fixed_length_utf32` data type is the Zarr V3
-representation of exactly this NumPy dtype.
+as a fixed number of code points, each encoded as a 4-byte UCS4 (equivalently,
+[UTF-32](https://www.unicode.org/versions/latest/)) code unit, zero-padding
+strings that are shorter than the declared width. The `fixed_length_utf32` data
+type is the Zarr V3 representation of exactly this NumPy dtype.
 
 The NumPy fixed-width string dtype is also the native string dtype used by
 Zarr V2. Specifying `fixed_length_utf32` therefore gives Zarr V3 a well-defined,
@@ -23,8 +23,9 @@ data type with a `length_bytes` of `48`.
 
 ## Data type representation
 
-A `fixed_length_utf32` data type is represented in array metadata as a JSON
-object with the following fields:
+A `fixed_length_utf32` data type is represented in array metadata as the value
+of the `data_type` metadata key. The value MUST be a JSON object with the
+following fields:
 
 | field | type | required |
 | - | - | - |
@@ -96,10 +97,10 @@ regardless of the length of the string it holds.
 
 ### Endianness
 
-Each UTF-32 code unit is a 4-byte value, so the array-to-bytes codec MUST
-behave deterministically with respect to byte order. For example, the `bytes`
-codec MUST have its `endian` field set
-(`{"name": "bytes", "configuration": {"endian": "little"}}`).
+Each UTF-32 code unit is a 4-byte value, so its byte order MUST be unambiguous.
+When the `bytes` codec is used, it MUST be configured with an explicit `endian`
+setting (e.g. `{"name": "bytes", "configuration": {"endian": "little"}}`), and
+all code units MUST use the byte order it specifies.
 
 ## JSON scalar encoding
 
