@@ -92,11 +92,10 @@ regardless of the length of the string it holds.
 
 ### Endianness
 
-Each UTF-32 code unit is a 4-byte value, so its byte order MUST be specified.
-The byte order is determined by the `endian` parameter of the array-to-bytes
-codec (for example, `{"name": "bytes", "configuration": {"endian": "little"}}`).
-The codec MUST be configured with an explicit `endian` setting. The data type
-configuration itself does not carry endianness information.
+Each UTF-32 code unit is a 4-byte value, so the array-to-bytes codec MUST
+behave deterministically with respect to byte order. For example, the `bytes`
+codec MUST have its `endian` field set
+(`{"name": "bytes", "configuration": {"endian": "little"}}`).
 
 ## JSON scalar encoding
 
