@@ -18,12 +18,6 @@ small mathematical vectors, and quaternions — anywhere each array element
 is naturally an N-tuple of values of the same type, and N is known in
 advance.
 
-Compared to adding an extra trailing dimension to the outer Zarr array,
-`fixed_size_list` keeps the per-scalar tuple structure inside the scalar:
-the outer array's shape, chunk grid, and indexing describe only the
-user-facing element count, while the tuple-of-N structure is part of the
-data type itself.
-
 ## Data type representation
 
 A `fixed_size_list` data type is represented in array metadata as the
@@ -47,17 +41,7 @@ The `configuration` field is a JSON object with the following fields:
 #### `base_data_type`
 
 `base_data_type` is the data type of every element of the list. It MUST be
-a valid Zarr v3 data type representation whose size in bytes is fixed and
-known:
-
-- For [core data types](https://zarr-specs.readthedocs.io/en/latest/v3/data-types/index.html#core-data-types),
-  this MUST be a string (e.g. `"float32"`, `"int32"`, `"uint8"`).
-- For extension data types, this MUST be an object with a `"name"` key
-  and an optional `"configuration"` key, matching the encoding rules of
-  that extension data type. Some extension data types (e.g.
-  [`numpy.datetime64`](../numpy.datetime64/README.md)) require a
-  `"configuration"`; others (e.g. [`bfloat16`](../bfloat16/README.md))
-  do not.
+a valid Zarr v3 data type.
 
 Variable-length data types (e.g. [`string`](../string/README.md)) MUST NOT
 be used as the `base_data_type`, as they do not have a fixed encoded size.
@@ -72,67 +56,6 @@ lists).
 `list_size` is the number of `base_data_type` scalars contained in each
 `fixed_size_list` scalar. It MUST be an integer greater than or equal
 to `1`. The field name matches Apache Arrow's `FixedSizeList::list_size`.
-
-The total encoded size in bytes of a `fixed_size_list` scalar is
-`sizeof(base_data_type) * list_size`.
-
-### Example
-
-The example below shows a fragment of array metadata for an array whose
-elements are 3-tuples of `float32` (for example, RGB pixels or 3D points):
-
-```json
-{
-    "data_type": {
-        "name": "fixed_size_list",
-        "configuration": {
-            "base_data_type": "float32",
-            "list_size": 3
-        }
-    },
-    "fill_value": [0.0, 0.0, 0.0],
-    "codecs": [{
-        "name": "bytes",
-        "configuration": {"endian": "little"}
-    }]
-}
-```
-
-A parametrized inner type uses the object form for `base_data_type`:
-
-```json
-{
-    "name": "fixed_size_list",
-    "configuration": {
-        "base_data_type": {
-            "name": "numpy.datetime64",
-            "configuration": {"unit": "s", "scale_factor": 1}
-        },
-        "list_size": 4
-    }
-}
-```
-
-A nested example — a list of 16 2D points, each point represented as a
-`struct` with `x` and `y` `float32` fields:
-
-```json
-{
-    "name": "fixed_size_list",
-    "configuration": {
-        "base_data_type": {
-            "name": "struct",
-            "configuration": {
-                "fields": [
-                    {"name": "x", "data_type": "float32"},
-                    {"name": "y", "data_type": "float32"}
-                ]
-            }
-        },
-        "list_size": 16
-    }
-}
-```
 
 ## Bytes codec encoding
 
@@ -207,6 +130,64 @@ written out explicitly. This matches the [`struct`](../struct/README.md)
 requirement that every field have an explicit fill value, and avoids
 ambiguity for extension base types whose "zero" or "default" value is not
 well defined.
+
+## Examples
+
+The example below shows a fragment of array metadata for an array whose
+elements are 3-tuples of `float32` (for example, RGB pixels or 3D points):
+
+```json
+{
+    "data_type": {
+        "name": "fixed_size_list",
+        "configuration": {
+            "base_data_type": "float32",
+            "list_size": 3
+        }
+    },
+    "fill_value": [0.0, 0.0, 0.0],
+    "codecs": [{
+        "name": "bytes",
+        "configuration": {"endian": "little"}
+    }]
+}
+```
+
+A parametrized inner type uses the object form for `base_data_type`:
+
+```json
+{
+    "name": "fixed_size_list",
+    "configuration": {
+        "base_data_type": {
+            "name": "numpy.datetime64",
+            "configuration": {"unit": "s", "scale_factor": 1}
+        },
+        "list_size": 4
+    }
+}
+```
+
+A nested example — a list of 16 2D points, each point represented as a
+`struct` with `x` and `y` `float32` fields:
+
+```json
+{
+    "name": "fixed_size_list",
+    "configuration": {
+        "base_data_type": {
+            "name": "struct",
+            "configuration": {
+                "fields": [
+                    {"name": "x", "data_type": "float32"},
+                    {"name": "y", "data_type": "float32"}
+                ]
+            }
+        },
+        "list_size": 16
+    }
+}
+```
 
 ## Codec compatibility
 
