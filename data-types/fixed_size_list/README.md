@@ -147,12 +147,6 @@ that exposes an endianness configuration MUST set it appropriately:
 > identically typed unnamed fields, but is more compact in metadata and
 > uses positional JSON arrays rather than named JSON objects.
 
-> **Note:** `fixed_size_list` is distinct from adding a trailing axis to
-> the outer Zarr array. A trailing axis participates in the array's shape,
-> chunk grid, and indexing; `fixed_size_list` keeps the tuple structure
-> inside the scalar, so the outer array's shape describes only the
-> user-facing element count.
-
 ## References
 
 - [Apache Arrow Columnar Format — Fixed-Size List Layout](https://arrow.apache.org/docs/format/Columnar.html#fixed-size-list-layout)
