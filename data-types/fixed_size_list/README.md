@@ -60,8 +60,9 @@ Variable-length data types (e.g. [`string`](../string/README.md)) MUST NOT
 be used as the `base_data_type`, as they do not have a fixed encoded size.
 
 `base_data_type` MAY itself be `fixed_size_list` or
-[`struct`](../struct/README.md), enabling recursive nesting (for example,
-a fixed-size list of structs, or a fixed-size list of fixed-size lists).
+[`struct`](../struct/README.md), enabling nested composite types (for
+example, a fixed-size list of structs, or a fixed-size list of fixed-size
+lists).
 
 #### `list_size`
 
