@@ -140,13 +140,6 @@ that exposes an endianness configuration MUST set it appropriately:
   governed by the rules of that inner data type, and MUST be configured
   whenever the compound type contains any multi-byte numeric leaf.
 
-## Notes
-
-> **Note:** A `fixed_size_list` with `list_size` of `N` shares the same
-> bytes-codec encoding as a [`struct`](../struct/README.md) of `N`
-> identically typed unnamed fields, but is more compact in metadata and
-> uses positional JSON arrays rather than named JSON objects.
-
 ## References
 
 - [Apache Arrow Columnar Format — Fixed-Size List Layout](https://arrow.apache.org/docs/format/Columnar.html#fixed-size-list-layout)
