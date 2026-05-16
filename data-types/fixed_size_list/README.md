@@ -82,12 +82,6 @@ for `base_data_type`.
 "fill_value": [0.0, 0.0, 0.0]
 ```
 
-There is no scalar-broadcast shorthand. Per-position fill values MUST be
-written out explicitly. This matches the [`struct`](../struct/README.md)
-requirement that every field have an explicit fill value, and avoids
-ambiguity for extension base types whose "zero" or "default" value is not
-well defined.
-
 ## Examples
 
 The example below shows a fragment of array metadata for an array whose
