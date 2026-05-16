@@ -40,9 +40,6 @@ The `configuration` field is a JSON object with the following fields:
 
 #### `base_data_type`
 
-`base_data_type` is the data type of every element of the list. It MUST be
-a valid Zarr v3 data type.
-
 Variable-length data types (e.g. [`string`](../string/README.md)) MUST NOT
 be used as the `base_data_type`, as they do not have a fixed encoded size.
 
@@ -205,22 +202,16 @@ is inherited from the `base_data_type`:
 
 ## Notes
 
-> **Note:** `fixed_size_list` is the homogeneous, positional counterpart of
-> [`struct`](../struct/README.md). A `fixed_size_list` with `list_size` of
-> `N` is conceptually equivalent to a `struct` of `N` identically typed
-> unnamed fields — they share the same bytes-codec encoding — but
-> `fixed_size_list` is more compact in metadata and uses positional JSON
-> arrays rather than named JSON objects.
+> **Note:** A `fixed_size_list` with `list_size` of `N` shares the same
+> bytes-codec encoding as a [`struct`](../struct/README.md) of `N`
+> identically typed unnamed fields, but is more compact in metadata and
+> uses positional JSON arrays rather than named JSON objects.
 
 > **Note:** `fixed_size_list` is distinct from adding a trailing axis to
 > the outer Zarr array. A trailing axis participates in the array's shape,
 > chunk grid, and indexing; `fixed_size_list` keeps the tuple structure
 > inside the scalar, so the outer array's shape describes only the
 > user-facing element count.
-
-> **Note:** The `base_data_type` MUST have a fixed, known encoded size.
-> Variable-length data types such as [`string`](../string/README.md) MUST
-> NOT be used.
 
 ## References
 
