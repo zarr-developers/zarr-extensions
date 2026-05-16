@@ -109,7 +109,7 @@ A parametrized inner type uses the object form for `base_data_type`:
 }
 ```
 
-A recursive example — a list of 16 2D points, each point represented as a
+A nested example — a list of 16 2D points, each point represented as a
 `struct` with `x` and `y` `float32` fields:
 
 ```json
@@ -163,6 +163,12 @@ is inherited from the `base_data_type`:
   and every encoded element uses that byte order.
 - If `base_data_type` is single-byte (e.g. `uint8`, `int8`, `bool`), the
   `endian` configuration MAY be omitted.
+- If `base_data_type` is itself a compound data type (e.g.
+  [`struct`](../struct/README.md) or `fixed_size_list`), endianness is
+  governed by the rules of that inner data type. In practice this means
+  the `bytes` codec MUST be configured with an explicit `endian` setting
+  whenever the compound type contains any multi-byte numeric leaf, and
+  MAY omit it when every leaf is single-byte.
 
 ## JSON scalar encoding
 
