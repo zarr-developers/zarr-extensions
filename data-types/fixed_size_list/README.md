@@ -35,7 +35,7 @@ The `configuration` field is a JSON object with the following fields:
 
 | field | type | required | notes |
 | - | - | - | - |
-| `base_data_type` | A Zarr v3 data type representation: a string for core data types, or an object with a `name` key (and an optional `configuration` key) for extension data types | yes | The data type of each element of the list. MUST be a data type whose encoded size in bytes is fixed and known at the time the array is opened. Variable-length data types (e.g. [`string`](../string/README.md)) MUST NOT be used. See [`base_data_type`](#base_data_type). |
+| `base_data_type` | The JSON representation of a Zarr v3 data type | yes | The data type of each element of the list. MUST be a data type whose encoded size in bytes is fixed and known at the time the array is opened. Variable-length data types (e.g. [`string`](../string/README.md)) MUST NOT be used. See [`base_data_type`](#base_data_type). |
 | `list_size` | integer ≥ 1 | yes | The number of `base_data_type` scalars contained in each `fixed_size_list` scalar. See [`list_size`](#list_size). |
 
 #### `base_data_type`
