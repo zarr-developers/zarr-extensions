@@ -41,7 +41,7 @@ The `configuration` field is a JSON object with the following fields:
 
 | field | type | required | notes |
 | - | - | - | - |
-| `base_data_type` | A Zarr v3 data type representation: a string for core data types, or an object with `name` and `configuration` for parametrized extension data types | yes | The data type of each element of the list. MUST be a data type whose encoded size in bytes is fixed and known at the time the array is opened. Variable-length data types (e.g. [`string`](../string/README.md)) MUST NOT be used. See [`base_data_type`](#base_data_type). |
+| `base_data_type` | A Zarr v3 data type representation: a string for core data types, or an object with a `name` key (and an optional `configuration` key) for extension data types | yes | The data type of each element of the list. MUST be a data type whose encoded size in bytes is fixed and known at the time the array is opened. Variable-length data types (e.g. [`string`](../string/README.md)) MUST NOT be used. See [`base_data_type`](#base_data_type). |
 | `list_size` | integer ≥ 1 | yes | The number of `base_data_type` scalars contained in each `fixed_size_list` scalar. See [`list_size`](#list_size). |
 
 #### `base_data_type`
@@ -52,9 +52,12 @@ known:
 
 - For [core data types](https://zarr-specs.readthedocs.io/en/latest/v3/data-types/index.html#core-data-types),
   this MUST be a string (e.g. `"float32"`, `"int32"`, `"uint8"`).
-- For extension data types that require configuration (e.g.
-  [`numpy.datetime64`](../numpy.datetime64/README.md)), this MUST be an
-  object with a `"name"` key and a `"configuration"` key.
+- For extension data types, this MUST be an object with a `"name"` key
+  and an optional `"configuration"` key, matching the encoding rules of
+  that extension data type. Some extension data types (e.g.
+  [`numpy.datetime64`](../numpy.datetime64/README.md)) require a
+  `"configuration"`; others (e.g. [`bfloat16`](../bfloat16/README.md))
+  do not.
 
 Variable-length data types (e.g. [`string`](../string/README.md)) MUST NOT
 be used as the `base_data_type`, as they do not have a fixed encoded size.
