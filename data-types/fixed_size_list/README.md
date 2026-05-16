@@ -1,28 +1,15 @@
 # `fixed_size_list` data type
 
-Defines a data type for fixed-length, positional sequences of a single inner
-("base") data type. Each scalar of a `fixed_size_list` array is a tuple of
-exactly `list_size` values, all of the same `base_data_type`.
+A data type for fixed-length tuples of a single inner data type.
 
 ## Background
 
 `fixed_size_list` models Apache Arrow's
 [`FixedSizeList`](https://arrow.apache.org/docs/format/Columnar.html#fixed-size-list-layout)
-layout. It is the homogeneous, positional counterpart to the
-[`struct`](../struct/README.md) data type: where `struct` describes a
-heterogeneous record with named fields, `fixed_size_list` describes a
-homogeneous tuple with positional elements.
-
-Typical use cases include RGB(A) pixels, fixed-length feature embeddings,
-small mathematical vectors, and quaternions — anywhere each array element
-is naturally an N-tuple of values of the same type, and N is known in
-advance.
+layout. It is the homogeneous, positional counterpart to
+[`struct`](../struct/README.md).
 
 ## Data type representation
-
-A `fixed_size_list` data type is represented in array metadata as the
-value of the `data_type` metadata key. The value MUST be a JSON object with
-the following fields:
 
 | field | type | required |
 | - | - | - |
@@ -31,39 +18,19 @@ the following fields:
 
 ### Configuration
 
-The `configuration` field is a JSON object with the following fields:
-
 | field | type | required | notes |
 | - | - | - | - |
-| `base_data_type` | The JSON representation of a Zarr v3 data type | yes | The data type of each element of the list. MUST be a data type whose encoded size in bytes is fixed and known at the time the array is opened. Variable-length data types (e.g. [`string`](../string/README.md)) MUST NOT be used. See [`base_data_type`](#base_data_type). |
-| `list_size` | integer ≥ 1 | yes | The number of `base_data_type` scalars contained in each `fixed_size_list` scalar. See [`list_size`](#list_size). |
-
-#### `base_data_type`
-
-Variable-length data types (e.g. [`string`](../string/README.md)) MUST NOT
-be used as the `base_data_type`, as they do not have a fixed encoded size.
+| `base_data_type` | The JSON representation of a Zarr v3 data type | yes | The data type of each element. MUST have a fixed encoded size. |
+| `list_size` | integer ≥ 1 | yes | The number of `base_data_type` scalars in each `fixed_size_list` scalar. |
 
 `base_data_type` MAY itself be `fixed_size_list` or
-[`struct`](../struct/README.md), enabling nested composite types (for
-example, a fixed-size list of structs, or a fixed-size list of fixed-size
-lists).
-
-#### `list_size`
-
-`list_size` is the number of `base_data_type` scalars contained in each
-`fixed_size_list` scalar. It MUST be an integer greater than or equal
-to `1`. The field name matches Apache Arrow's `FixedSizeList::list_size`.
+[`struct`](../struct/README.md), enabling nested composite types.
 
 ## JSON scalar encoding
 
-A scalar of this data type is encoded in JSON as a JSON array of exactly
-`list_size` entries. Each entry MUST be a valid JSON encoding of a scalar
-of `base_data_type`, in position order.
-
-A JSON value is a valid encoding of a `fixed_size_list` scalar only if it
-is a JSON array whose length is exactly `list_size` and whose every entry
-is a valid JSON encoding of `base_data_type`. JSON arrays with a different
-length, or with any invalid entry, MUST be rejected.
+A scalar is encoded in JSON as an array of exactly `list_size` entries,
+each a valid JSON encoding of a scalar of `base_data_type`, in position
+order.
 
 For example, with `base_data_type` of `"float32"` and `list_size` of `3`:
 
@@ -73,10 +40,8 @@ For example, with `base_data_type` of `"float32"` and `list_size` of `3`:
 
 ## Fill value representation
 
-The value of the `fill_value` metadata key MUST be a valid
-[JSON scalar encoding](#json-scalar-encoding) of a scalar of this data
-type: a JSON array of exactly `list_size` entries, each a valid fill value
-for `base_data_type`.
+The `fill_value` is a JSON array of `list_size` entries, each a valid
+fill value for `base_data_type`.
 
 ```json
 "fill_value": [0.0, 0.0, 0.0]
@@ -84,8 +49,7 @@ for `base_data_type`.
 
 ## Examples
 
-The example below shows a fragment of array metadata for an array whose
-elements are 3-tuples of `float32` (for example, RGB pixels or 3D points):
+An array of 3-tuples of `float32`:
 
 ```json
 {
@@ -104,7 +68,7 @@ elements are 3-tuples of `float32` (for example, RGB pixels or 3D points):
 }
 ```
 
-A parametrized inner type uses the object form for `base_data_type`:
+A parametrized inner type:
 
 ```json
 {
@@ -119,8 +83,7 @@ A parametrized inner type uses the object form for `base_data_type`:
 }
 ```
 
-A nested example — a list of 16 2D points, each point represented as a
-`struct` with `x` and `y` `float32` fields:
+A list of 16 2D points (each point a `struct`):
 
 ```json
 {
@@ -142,29 +105,18 @@ A nested example — a list of 16 2D points, each point represented as a
 
 ## Codec compatibility
 
-This data type is compatible with any array-to-bytes codec that can
-faithfully encode and decode each `fixed_size_list` scalar as a tuple of
-`list_size` values of `base_data_type`. The
+Any array-to-bytes codec that round-trips a tuple of `list_size`
+`base_data_type` values may be used. The
 [`bytes`](https://zarr-specs.readthedocs.io/en/latest/v3/codecs/bytes/index.html)
-codec is the standard choice and is described below; other array-to-bytes
-codecs MAY be used and need not produce fixed-size output (for example, a
-codec that applies run-length encoding before serializing). Byte-manipulation
-codecs (for example, `gzip`, `zstd`, `blosc`) MAY be applied on top for
-compression.
+codec is the standard choice.
 
 ### Bytes codec encoding
 
-When the `bytes` codec is used, each `fixed_size_list` scalar is encoded as
-the packed concatenation of `list_size` encoded `base_data_type` values, in
-position order, with no padding between elements.
+Each scalar is the packed concatenation of `list_size` encoded
+`base_data_type` values.
 
-The total encoded size of a `fixed_size_list` scalar is
-`sizeof(base_data_type) * list_size` bytes.
-
-As a concrete example, consider a `fixed_size_list` with
-`base_data_type` of `"float32"` and `list_size` of `3`. Each scalar is
-encoded as 12 bytes — three contiguous IEEE 754 single-precision values in
-the codec's chosen byte order:
+For `base_data_type` of `"float32"` and `list_size` of `3`, each scalar is
+12 bytes:
 
 ```
  byte:  0   1   2   3   4   5   6   7   8   9  10  11
@@ -176,10 +128,8 @@ the codec's chosen byte order:
 
 ### Endianness
 
-A `fixed_size_list` adds no endianness rules of its own. Byte-order behavior
-is inherited from the `base_data_type`. Any array-to-bytes codec that
-exposes an endianness configuration MUST have that configuration set
-appropriately for the `base_data_type`:
+Endianness is inherited from `base_data_type`. Any array-to-bytes codec
+that exposes an endianness configuration MUST set it appropriately:
 
 - If `base_data_type` is a multi-byte numeric type (e.g. `float32`,
   `int32`), endianness MUST be configured.
