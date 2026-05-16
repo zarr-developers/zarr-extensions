@@ -57,46 +57,6 @@ lists).
 `fixed_size_list` scalar. It MUST be an integer greater than or equal
 to `1`. The field name matches Apache Arrow's `FixedSizeList::list_size`.
 
-## Bytes codec encoding
-
-When the `bytes` codec is used, each `fixed_size_list` scalar is encoded as
-the packed concatenation of `list_size` encoded `base_data_type` values, in
-position order, with no padding between elements.
-
-The total encoded size of a `fixed_size_list` scalar is
-`sizeof(base_data_type) * list_size` bytes.
-
-As a concrete example, consider a `fixed_size_list` with
-`base_data_type` of `"float32"` and `list_size` of `3`. Each scalar is
-encoded as 12 bytes — three contiguous IEEE 754 single-precision values in
-the codec's chosen byte order:
-
-```
- byte:  0   1   2   3   4   5   6   7   8   9  10  11
-      ├───────────────┼───────────────┼───────────────┤
-      │    elem[0]    │    elem[1]    │    elem[2]    │
-      │   (float32)   │   (float32)   │   (float32)   │
-      └───────────────┴───────────────┴───────────────┘
-```
-
-### Endianness
-
-A `fixed_size_list` adds no endianness rules of its own. Byte-order behavior
-is inherited from the `base_data_type`:
-
-- If `base_data_type` is a multi-byte numeric type (e.g. `float32`,
-  `int32`), the `bytes` codec MUST be configured with an explicit `endian`
-  setting (e.g. `{"name": "bytes", "configuration": {"endian": "little"}}`),
-  and every encoded element uses that byte order.
-- If `base_data_type` is single-byte (e.g. `uint8`, `int8`, `bool`), the
-  `endian` configuration MAY be omitted.
-- If `base_data_type` is itself a compound data type (e.g.
-  [`struct`](../struct/README.md) or `fixed_size_list`), endianness is
-  governed by the rules of that inner data type. In practice this means
-  the `bytes` codec MUST be configured with an explicit `endian` setting
-  whenever the compound type contains any multi-byte numeric leaf, and
-  MAY omit it when every leaf is single-byte.
-
 ## JSON scalar encoding
 
 A scalar of this data type is encoded in JSON as a JSON array of exactly
@@ -202,6 +162,46 @@ Variable-length codecs (for example,
 [`vlen-utf8`](../../codecs/vlen-utf8/README.md) and
 [`vlen-bytes`](../../codecs/vlen-bytes/README.md)) are NOT compatible with
 this data type, as they do not encode elements at a fixed size.
+
+### Bytes codec encoding
+
+When the `bytes` codec is used, each `fixed_size_list` scalar is encoded as
+the packed concatenation of `list_size` encoded `base_data_type` values, in
+position order, with no padding between elements.
+
+The total encoded size of a `fixed_size_list` scalar is
+`sizeof(base_data_type) * list_size` bytes.
+
+As a concrete example, consider a `fixed_size_list` with
+`base_data_type` of `"float32"` and `list_size` of `3`. Each scalar is
+encoded as 12 bytes — three contiguous IEEE 754 single-precision values in
+the codec's chosen byte order:
+
+```
+ byte:  0   1   2   3   4   5   6   7   8   9  10  11
+      ├───────────────┼───────────────┼───────────────┤
+      │    elem[0]    │    elem[1]    │    elem[2]    │
+      │   (float32)   │   (float32)   │   (float32)   │
+      └───────────────┴───────────────┴───────────────┘
+```
+
+#### Endianness
+
+A `fixed_size_list` adds no endianness rules of its own. Byte-order behavior
+is inherited from the `base_data_type`:
+
+- If `base_data_type` is a multi-byte numeric type (e.g. `float32`,
+  `int32`), the `bytes` codec MUST be configured with an explicit `endian`
+  setting (e.g. `{"name": "bytes", "configuration": {"endian": "little"}}`),
+  and every encoded element uses that byte order.
+- If `base_data_type` is single-byte (e.g. `uint8`, `int8`, `bool`), the
+  `endian` configuration MAY be omitted.
+- If `base_data_type` is itself a compound data type (e.g.
+  [`struct`](../struct/README.md) or `fixed_size_list`), endianness is
+  governed by the rules of that inner data type. In practice this means
+  the `bytes` codec MUST be configured with an explicit `endian` setting
+  whenever the compound type contains any multi-byte numeric leaf, and
+  MAY omit it when every leaf is single-byte.
 
 ## Notes
 
