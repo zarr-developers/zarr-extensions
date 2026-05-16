@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "fixed_size_list",
+  "$defs": {
+    "dtype": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "configuration": {
+              "type": "object"
+            }
+          },
+          "required": ["name", "configuration"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "fixed_size_list"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "base_data_type": {
+          "$ref": "#/$defs/dtype"
+        },
+        "list_size": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": ["base_data_type", "list_size"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
