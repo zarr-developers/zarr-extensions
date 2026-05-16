@@ -174,23 +174,21 @@ the codec's chosen byte order:
       └───────────────┴───────────────┴───────────────┘
 ```
 
-#### Endianness
+### Endianness
 
 A `fixed_size_list` adds no endianness rules of its own. Byte-order behavior
-is inherited from the `base_data_type`:
+is inherited from the `base_data_type`. Any array-to-bytes codec that
+exposes an endianness configuration MUST have that configuration set
+appropriately for the `base_data_type`:
 
 - If `base_data_type` is a multi-byte numeric type (e.g. `float32`,
-  `int32`), the `bytes` codec MUST be configured with an explicit `endian`
-  setting (e.g. `{"name": "bytes", "configuration": {"endian": "little"}}`),
-  and every encoded element uses that byte order.
-- If `base_data_type` is single-byte (e.g. `uint8`, `int8`, `bool`), the
-  `endian` configuration MAY be omitted.
+  `int32`), endianness MUST be configured.
+- If `base_data_type` is single-byte (e.g. `uint8`, `int8`, `bool`),
+  endianness configuration MAY be omitted.
 - If `base_data_type` is itself a compound data type (e.g.
   [`struct`](../struct/README.md) or `fixed_size_list`), endianness is
-  governed by the rules of that inner data type. In practice this means
-  the `bytes` codec MUST be configured with an explicit `endian` setting
-  whenever the compound type contains any multi-byte numeric leaf, and
-  MAY omit it when every leaf is single-byte.
+  governed by the rules of that inner data type, and MUST be configured
+  whenever the compound type contains any multi-byte numeric leaf.
 
 ## Notes
 
