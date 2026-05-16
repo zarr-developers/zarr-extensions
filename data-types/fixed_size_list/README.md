@@ -142,17 +142,15 @@ A nested example — a list of 16 2D points, each point represented as a
 
 ## Codec compatibility
 
-This data type is compatible with any array-to-bytes codec that encodes
-each array element as a contiguous, fixed-size binary blob of
-`sizeof(base_data_type) * list_size` bytes. The
+This data type is compatible with any array-to-bytes codec that can
+faithfully encode and decode each `fixed_size_list` scalar as a tuple of
+`list_size` values of `base_data_type`. The
 [`bytes`](https://zarr-specs.readthedocs.io/en/latest/v3/codecs/bytes/index.html)
-codec is the standard choice for this role. Byte-manipulation codecs (for
-example, `gzip`, `zstd`, `blosc`) MAY be applied on top for compression.
-
-Variable-length codecs (for example,
-[`vlen-utf8`](../../codecs/vlen-utf8/README.md) and
-[`vlen-bytes`](../../codecs/vlen-bytes/README.md)) are NOT compatible with
-this data type, as they do not encode elements at a fixed size.
+codec is the standard choice and is described below; other array-to-bytes
+codecs MAY be used and need not produce fixed-size output (for example, a
+codec that applies run-length encoding before serializing). Byte-manipulation
+codecs (for example, `gzip`, `zstd`, `blosc`) MAY be applied on top for
+compression.
 
 ### Bytes codec encoding
 
