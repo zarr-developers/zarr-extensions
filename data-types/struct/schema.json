@@ -19,7 +19,7 @@
               "type": "object"
             }
           },
-          "required": ["name", "configuration"],
+          "required": ["name"],
           "additionalProperties": false
         }
       ]
