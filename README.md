@@ -24,16 +24,18 @@ The `README.md` file SHOULD include or link to external documents with the follo
 Extensions SHOULD have a `schema.json` file that contains the JSON schema for the metadata, if the README.md does not provide a link to an external schema.
 The JSON schema should be formatted with `npx prettier -w **/schema.json`.
 
+Extensions SHOULD have an implementation that proves the viability of the proposed extension.
+
 Please note that all extensions documents will be licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
 Only open a PR if you are willing to license your extension under this license.
 
-The PR will be reviewed by the [Zarr steering council](https://github.com/orgs/zarr-developers/teams/steering-council).
+The PR will be reviewed by the [Zarr Format Working Group (ZFWG)](https://github.com/orgs/zarr-developers/teams/format-wg).
 We aim to be very open about registering extensions.
 The review will be done largely based on avoiding confusing extension names and preventing malicious activity as well as maintaining the formal requirements of the extensions.
 We recommend opening a "draft PR" first, if you still want to solicit feedback from others in the community. As soon as you turn your PR into a regular PR, the review will be processed.
 Extension maintainers are responsible for their extensions.
-Updates to the extensions will also be reviewed by the steering council.
-The steering council reserves the right to reassign extensions to other maintainers in case of prolonged inactivity or other reasons at its own discretion.
+Updates to the extensions will also be reviewed by the ZFWG.
+The ZFWG reserves the right to reassign extensions to other maintainers in case of prolonged inactivity or other reasons at its own discretion.
 
 ## Registering an attribute
 
@@ -61,7 +63,7 @@ It is RECOMMENDED that the `README.md` links to external specification documents
 Linking to external specification documents ensures flexibility and avoids potential conflicts. 
 For straightforward and non-controversial cases, detailed specifications and schemas may still be included in this repository.
 
-The PR will be reviewed by the [Zarr steering council](https://github.com/orgs/zarr-developers/teams/steering-council) using the same review process as for extensions.
+The PR will be reviewed by the [ZFWG](https://github.com/orgs/zarr-developers/teams/format-wg) using the same review process as for extensions.
 Please note that all registered attributes documents will be licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
 Only open a PR if you are willing to license your registered attribute under this license.
 
