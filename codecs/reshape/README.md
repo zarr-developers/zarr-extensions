@@ -23,10 +23,10 @@ the *output* array `B` as a function of the shape `A_shape` of the input array
 
   ```
   B_shape[i] := prod(A_shape[input_dims]]
-  ```.
+  ```
 
   Specifying the corresponding `input_dims` rather than an explicit `size` is
-  paticularly useful when using variable-size chunking.
+  particularly useful when using variable-size chunking.
 
 - the special value `-1`, which must occur at most once, specifying that
   `B_shape[i]` is determined automatically in order to satisfy the
@@ -45,7 +45,7 @@ implementations MUST return an error if the following constraints are not
 satisfied:
 
 - the flattened list of input dimensions, over all elements of `shape`, must be
-  in monotonically increasing order, i.e. `"shape": [[0, 1], 10, [3, 4]]` is
+  in strictly monotonically increasing order, i.e. `"shape": [[0, 1], 10, [3, 4]]` is
   allowed but the following are NOT allowed:
 
   - `"shape": [[1], [0]]`
@@ -61,7 +61,7 @@ satisfied:
   `prod(B_shape[:i]) == prod(A_shape[input_dims[0]])` and
   `prod(B_shape[i+1:]) == prod(A_shape[input_dims[k-1]+1:])`.
 
-This two constraints ensure that if the size of output dimension `i` is
+These two constraints ensure that if the size of output dimension `i` is
 specified by `input_dims`, the coordinates in the input array along `input_dims`
 actually correspond to the raveled index along output dimension `i`.
 
@@ -86,6 +86,13 @@ codec configured with a compression level of 1 and with the checksum stored:
         }
       },
       {
+        "name": "zstd",
+        "configuration": {
+            "level": 1,
+            "checksum": true
+        }
+      },
+      {
         "name": "bytes"
         "configuration": {"endian": "little"}
       }
@@ -102,7 +109,7 @@ configuration parameter, and the output shape `B_shape` is determined as
 specified above.
 
 As this codec does NOT alter the lexicographical order of elements, the contents
-of the output array `B` is related to the contents of the input array `A` by:
+of the output array `B` are related to the contents of the input array `A` by:
 `ravel(B) == ravel(A)`.
 
 Implementations should, when possible, construct a virtual view rather than copy
