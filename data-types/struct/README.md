@@ -268,7 +268,9 @@ Variable-length codecs (e.g. `vlen-utf8`) are not compatible with the
 
 ## Change log
 
-No changes yet.
+- Relaxed the JSON schema to permit field data types declared as a JSON
+  object without a `configuration` key, e.g. `{"name": "float64"}`
+  ([#63](https://github.com/zarr-developers/zarr-extensions/pull/63)).
 
 ## Current maintainers
 
