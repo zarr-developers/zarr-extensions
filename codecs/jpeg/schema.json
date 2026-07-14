@@ -18,7 +18,19 @@
           "enum": ["ycbcr", "rgb"]
         },
         "subsampling": {
-          "enum": ["4:4:4", "4:2:2", "4:2:0"]
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "minItems": 1,
+          "maxItems": 3
         }
       },
       "additionalProperties": false

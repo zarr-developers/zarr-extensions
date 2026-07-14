@@ -25,9 +25,20 @@ The value of the `name` member in the codec object MUST be `jpeg`.
 
   For maximum interoperability, note that encoders and decoders are only guaranteed to support `grayscale` and `ycbcr`; `rgb` (storing color components without conversion) is not supported by all implementations and SHOULD be used only when portability is not a concern. This parameter is defined as an open-ended color space, rather than a simple on/off transform, so that additional color spaces (e.g. XYB, CMYK) can be added later as a backwards-compatible extension.
 
-- `subsampling` (string, optional): the chroma subsampling scheme, one of `4:4:4`, `4:2:2`, or `4:2:0`. It is only meaningful together with `encoded_color_space: ycbcr`, where it defaults to `4:2:0`. With `encoded_color_space: rgb` it MUST be `4:4:4` (or omitted). It MUST NOT be set for grayscale data.
+- `subsampling` (array, optional): the chroma subsampling, expressed declaratively as the per-component JPEG sampling factors. It is an array with **one entry per component**, and each entry is a two-element array `[horizontal, vertical]` giving that component's horizontal and vertical sampling factor as integers in the range `1`–`4`. A component with factor `[2, 2]` is stored at twice the horizontal and vertical resolution of a component with factor `[1, 1]`; the chroma components (Cb, Cr) are therefore subsampled relative to luma (Y) by the ratio of their sampling factors. The chroma components MUST have factor `[1, 1]`, and each luma factor MUST be greater than or equal to the corresponding chroma factor.
 
-An implementation MUST reject a configuration whose parameters are invalid for the chunk's channel count (for example, 3-component data without `encoded_color_space`, or `subsampling` other than `4:4:4` together with `encoded_color_space: rgb`) rather than silently ignoring them.
+  For 3-component data, `subsampling` is only meaningful together with `encoded_color_space: ycbcr`, where it defaults to `[[2, 2], [1, 1], [1, 1]]` (the common `4:2:0` scheme). With `encoded_color_space: rgb` it MUST be `[[1, 1], [1, 1], [1, 1]]` (no subsampling) or omitted, since those components are independent and MUST NOT be subsampled. It MUST NOT be set for grayscale data.
+
+  The common human-readable `J:a:b` chroma-subsampling notation maps to `subsampling` as follows. Implementations MUST support at least these schemes:
+
+  | `J:a:b` | `subsampling` | Chroma resolution vs. luma |
+  |---|---|---|
+  | `4:4:4` | `[[1, 1], [1, 1], [1, 1]]` | full (no subsampling) |
+  | `4:2:2` | `[[2, 1], [1, 1], [1, 1]]` | half horizontally |
+  | `4:4:0` | `[[1, 2], [1, 1], [1, 1]]` | half vertically |
+  | `4:2:0` | `[[2, 2], [1, 1], [1, 1]]` | half horizontally and vertically |
+
+An implementation MUST reject a configuration whose parameters are invalid for the chunk's channel count (for example, 3-component data without `encoded_color_space`, a `subsampling` array whose length does not match the component count, or a `subsampling` other than `[[1, 1], [1, 1], [1, 1]]` together with `encoded_color_space: rgb`) rather than silently ignoring them.
 
 ## Supported data types
 
@@ -88,10 +99,6 @@ The output is a standard JFIF/JPEG bitstream using baseline (Color Transform, Bl
 [ITU-T81] ITU-T Recommendation T.81 | ISO/IEC 10918-1. Information technology – Digital compression and coding of continuous-tone still images – Requirements and guidelines. September 1992. URL: https://www.w3.org/Graphics/JPEG/itu-t81.pdf
 
 [ITU-T871] ITU-T Recommendation T.871 | ISO/IEC 10918-5. Information technology – Digital compression and coding of continuous-tone still images: JPEG File Interchange Format (JFIF). May 2011. URL:    https://www.itu.int/rec/T-REC-T.871
-
-[ITU-T81]: https://www.w3.org/Graphics/JPEG/itu-t81.pdf
-
-[ITU-T871]: https://www.itu.int/rec/T-REC-T.871
 
 ## Current maintainers
 
