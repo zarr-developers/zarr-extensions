@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "numcodecs.blosc"
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "cname": {
+              "type": "string",
+              "enum": ["zstd", "blosclz", "lz4", "lz4hc", "zlib", "snappy"]
+            },
+            "clevel": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 12
+            },
+            "shuffle": {
+              "type": "integer",
+              "minimum": -1,
+              "maximum": 2
+            },
+            "blocksize": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    { "const": "numcodecs.blosc" }
+  ]
+}

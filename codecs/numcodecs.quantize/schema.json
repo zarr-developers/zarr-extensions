@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "numcodecs.quantize"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "digits": {
+          "type": "integer",
+          "minimum": -1
+        },
+        "dtype": {
+          "type": "string"
+        },
+        "astype": {
+          "type": "string"
+        }
+      },
+      "required": ["digits", "dtype"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
