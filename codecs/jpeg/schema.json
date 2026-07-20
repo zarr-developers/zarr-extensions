@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "jpeg"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "quality": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 90
+        },
+        "encoded_color_space": {
+          "enum": ["ycbcr", "rgb"]
+        },
+        "subsampling": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "minItems": 1,
+          "maxItems": 3
+        }
+      },
+      "additionalProperties": false,
+      "required": ["quality"]
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
