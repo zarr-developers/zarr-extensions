@@ -90,11 +90,12 @@ The following snippet of array metadata demonstrates the metadata for the `scale
 
 ### Uint16 range reduction
 
-In this example, a `uint16` array with values in the range `[1000, 1255]` is shifted down by `1000` so that values fall in the range `[0, 255]`, then cast to `uint8` via the `cast_value` codec.
+In this example, a `uint16` array with values in the range `[1000, 1255]` is shifted down by `1000` so that values fall in the range `[0, 255]`, then cast to `uint8` via the `cast_value` codec.  Note that with these codecs,`fill_value` is constrained to the range `[1000, 1255]`.
 
 ```json
 {
     "data_type": "uint16",
+    "fill_value": 1000,
     "codecs": [
         {
             "name": "scale_offset",
@@ -112,6 +113,7 @@ In this example, a `uint16` array with values in the range `[1000, 1255]` is shi
     ]
 }
 ```
+
 
 ### Float64 to uint8 with NaN preservation
 
