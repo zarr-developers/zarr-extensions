@@ -7,15 +7,13 @@ JPEG is a **lossy** image compression format, so this codec MUST NOT be used whe
 
 It is intended for `uint8` image data (grayscale or RGB) where a controlled loss of precision is acceptable in exchange for a high compression ratio.
 
-This codec is interoperable with the `jpeg` chunk encoding used by [neuroglancer](https://github.com/google/neuroglancer).
-
 ## Codec name
 
 The value of the `name` member in the codec object MUST be `jpeg`.
 
 ## Configuration parameters
 
-- `quality` (integer, optional, default `90`): the JPEG encoding quality, in the range `0`–`100`. Higher values preserve more detail at the cost of a larger encoded size. Decoding does not depend on it.
+- `quality` (integer): the JPEG encoding quality, in the range `0`–`100`. Higher values preserve more detail at the cost of a larger encoded size. Decoding does not depend on it.
 
 - `encoded_color_space` (string): the color space of the samples as stored in the JPEG stream, for 3-component data. One of:
   - `ycbcr`: the RGB input is converted to YCbCr before encoding (the JFIF-standard color space, and a prerequisite for chroma subsampling). Suitable for natural color images.
@@ -61,13 +59,13 @@ JPEG stores images with either **1 component** (grayscale) or **3 components** (
 
 `(H, W, 1)` is accepted as grayscale so that data can be sharded over a size-1 channel axis.
 
+When using different chunk shapes, the [`reshape`](../reshape/) codec should be used prior to the `jpeg` codec to change the chunk shapes into compatible shapes. 
+
 The chunk is flattened in **C order** (last axis varies fastest), so the channel axis must be the innermost axis. If it is not, place a [`transpose`](../transpose/) codec before `jpeg` to move it there.
 
-The trailing spatial axes give the JPEG image `height` (`H`) and `width` (`W`). Each MUST NOT exceed `65535`, since the JPEG format stores each dimension as a 16-bit value. A decoder reshapes the decoded samples by the chunk shape.
+The spatial axes give the JPEG image `height` (`H`) and `width` (`W`). Each MUST NOT exceed `65535`, since the JPEG format stores each dimension as a 16-bit value. A decoder reshapes the decoded samples by the chunk shape.
 
 JPEG encodes samples in blocks — a *minimum coded unit* (MCU) of 8×8 samples, or up to 16×16 when chroma subsampling is used. When `H` or `W` is not a multiple of the block size, the encoder pads the image up to the next block boundary and the decoder crops back to the stored dimensions, so the chunk shape still round-trips exactly; however, the padded samples share quantized blocks with the real edge samples and can introduce extra artifacts near the right and bottom edges. To avoid this, `H` and `W` SHOULD be multiples of `16` (which covers every subsampling mode; `8` suffices for `4:4:4`). Because Zarr pads boundary chunks to the full chunk shape, choosing a chunk shape whose spatial dimensions are multiples of `16` ensures every encoded image — including boundary chunks — is block-aligned.
-
-These rules apply to the inner chunk shape when used inside [`sharding_indexed`](../sharding_indexed/).
 
 ## Format and algorithm
 
@@ -76,7 +74,7 @@ The output is a standard JFIF/JPEG bitstream using baseline (Color Transform, Bl
 ### Encoding
 
 1. The component count (1 or 3) is determined from the chunk shape as described above; unsupported shapes are rejected.
-2. The `uint8` chunk data is read in C order into a contiguous buffer; the trailing spatial axes give the image `height` (`H`) and `width` (`W`).
+2. The `uint8` chunk data is read in C order into a contiguous buffer; the spatial axes give the image `height` (`H`) and `width` (`W`).
 3. For 3-component data, the samples are converted to the `encoded_color_space` (RGB → YCbCr for `ycbcr`, no conversion for `rgb`) together with the chroma `subsampling` (for `ycbcr`). For `rgb`, the APP14 Adobe marker indicating an "unknown" transform is written.
 4. The samples are encoded as a baseline JPEG at the configured `quality`.
 

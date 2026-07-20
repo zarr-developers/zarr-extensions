@@ -33,9 +33,10 @@
           "maxItems": 3
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": ["quality"]
     }
   },
-  "required": ["name"],
+  "required": ["name", "configuration"],
   "additionalProperties": false
 }
