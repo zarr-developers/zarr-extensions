@@ -19,13 +19,13 @@ The value of the `name` member in the codec object MUST be `jpeg`.
   - `ycbcr`: the RGB input is converted to YCbCr before encoding (the JFIF-standard color space, and a prerequisite for chroma subsampling). Suitable for natural color images.
   - `rgb`: the three components are stored as-is, with no color-space conversion. Suitable for independent scientific channels (fluorescence, multispectral, …) whose channels are not real colors. The encoder MUST write an APP14 Adobe marker indicating an "unknown" transform, so that decoders do not apply an inverse YCbCr transform.
 
-  This parameter is REQUIRED for 3-component data and has **no default**: the two color spaces are meant for different kinds of data, and silently applying YCbCr would destroy fidelity for data whose channels are not colors. It MUST NOT be set for grayscale data, whose encoded color space is always `grayscale` and is determined by the chunk shape.
+  This parameter is REQUIRED for 3-component data and has **no default**: the two color spaces are meant for different kinds of data, and silently applying YCbCr would destroy fidelity for data whose channels are not colors. 
 
   For maximum interoperability, note that encoders and decoders are only guaranteed to support `grayscale` and `ycbcr`; `rgb` (storing color components without conversion) is not supported by all implementations and SHOULD be used only when portability is not a concern. This parameter is defined as an open-ended color space, rather than a simple on/off transform, so that additional color spaces (e.g. XYB, CMYK) can be added later as a backwards-compatible extension.
 
 - `subsampling` (array, required): the subsampling applied to the components of the encoded color space, expressed declaratively as the per-component JPEG sampling factors. It is an array with **one entry per component**, and each entry is a two-element array `[horizontal, vertical]` giving that component's horizontal and vertical sampling factor as integers in the range `1`–`4`. The factors are **relative**: a component is subsampled by the ratio of its factors to the largest factor across all components, so a component with factor `[1, 1]` is stored at half the resolution (in each direction) of a component with factor `[2, 2]`. All-equal factors (e.g. `[[1, 1], [1, 1], [1, 1]]`) therefore mean no subsampling. For `ycbcr`, this is how the chroma components (Cb, Cr) are subsampled relative to luma (Y). The second and third components MUST have factor `[1, 1]`, and the first component's factor MUST be greater than or equal to it in each direction.
 
-For 3-component data, `subsampling` is only meaningful together with `encoded_color_space: ycbcr`, where it defaults to `[[2, 2], [1, 1], [1, 1]]` (the common `4:2:0` scheme). With `encoded_color_space: rgb` it MUST be `[[1, 1], [1, 1], [1, 1]]` (no subsampling) or omitted, since those components are independent and MUST NOT be subsampled. For grayscale (1-component) data, `subsampling` MAY be set but its only valid value is `[[1, 1]]`; since there is only one component there is nothing to subsample relative to, so it has no effect.
+For 3-component data, `subsampling` is only meaningful together with `encoded_color_space: ycbcr`; the common `4:2:0` scheme is `[[2, 2], [1, 1], [1, 1]]`. With `encoded_color_space: rgb` it MUST be `[[1, 1], [1, 1], [1, 1]]` (no subsampling), since those components are independent and MUST NOT be subsampled. For grayscale (1-component) data, `subsampling` MUST be `[[1, 1]]`; since there is only one component there is nothing to subsample relative to, so it has no effect.
 
 The common human-readable `J:a:b` chroma-subsampling notation maps to `subsampling` as follows. Implementations MUST support at least these schemes:
 
@@ -53,7 +53,7 @@ JPEG stores images with either **1 component** (grayscale) or **3 components** (
 | `(N,)` (1D) | rejected — reshape to 2D first |
 | `(H, W)` | 1-component (grayscale) |
 | `(H, W, 1)` | 1-component (grayscale) |
-| `(H, W, 3)` | 3-component (`encoded_color_space` REQUIRED) |
+| `(H, W, 3)` | 3-component |
 | `(H, W, 2)` or `(H, W, C)` with `C ≥ 4` | rejected — reshape/shard so the channel axis is 1 or 3 |
 | 4D or higher | rejected — transpose/reshape down to 2D or 3D |
 
@@ -68,18 +68,6 @@ The spatial axes give the JPEG image `height` (`H`) and `width` (`W`). Each MUST
 JPEG encodes samples in blocks — a *minimum coded unit* (MCU) of 8×8 samples, or up to 16×16 when subsampling is used. When `H` or `W` is not a multiple of the block size, the encoder pads the image up to the next block boundary and the decoder crops back to the stored dimensions, so the chunk shape still round-trips exactly; however, the padded samples share quantized blocks with the real edge samples and can introduce extra artifacts near the right and bottom edges. To avoid this, `H` and `W` SHOULD be multiples of `16` (which covers every subsampling mode; `8` suffices for `4:4:4`). Because Zarr pads boundary chunks to the full chunk shape, choosing a chunk shape whose spatial dimensions are multiples of `16` ensures every encoded image — including boundary chunks — is block-aligned.
 
 ## Examples
-
-### Grayscale
-
-A 2D `uint8` chunk (shape `(H, W)`). `encoded_color_space` MUST NOT be set — it is fixed to `grayscale` by the chunk shape — and `subsampling` is not needed (it would be a no-op).
-
-```json
-{
-    "codecs": [
-        { "name": "jpeg", "configuration": { "quality": 90 } }
-    ]
-}
-```
 
 ### Natural color (RGB → YCbCr, 4:2:0)
 
@@ -121,7 +109,7 @@ The same shape at higher fidelity: YCbCr conversion but every component kept at 
 
 ### Independent scientific channels (`rgb`, no color transform)
 
-Three unrelated `uint8` channels (e.g. fluorescence) that are not real colors. No color-space conversion is applied, and the components MUST NOT be subsampled.
+No color-space conversion is applied, and the components MUST NOT be subsampled.
 
 ```json
 {
@@ -140,7 +128,7 @@ Three unrelated `uint8` channels (e.g. fluorescence) that are not real colors. N
 
 ### Channel axis not innermost
 
-`jpeg` requires the channel axis to be innermost. For a chunk laid out as `(3, H, W)`, place a [`transpose`](../transpose/) codec first to move the channel axis last.
+For a chunk laid out as `(3, H, W)`, place a [`transpose`](../transpose/) codec first to move the channel axis last.
 
 ```json
 {
