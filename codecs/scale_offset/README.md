@@ -114,7 +114,7 @@ In this example, a `uint16` array with values in the range `[1000, 1255]` is shi
 }
 ```
 
-Using a adding a `cast_value` codec with a `scalar_map` makes it possible for any `fill_value` to be used by mapping it into the valid range without changing the data type. Here, first mapping the `fill_value` `0 → 1000` has equivalent behavior to the example above.
+Using a `cast_value` codec with a `scalar_map` makes it possible for any `fill_value` to be used by mapping it into the valid range without changing the data type. Here, first mapping the `fill_value` `0 → 1000` has equivalent behavior to the example above.
 
 ```json
 {
