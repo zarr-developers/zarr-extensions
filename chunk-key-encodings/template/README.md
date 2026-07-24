@@ -89,7 +89,7 @@ Examples include
 {
     "name": "template",
     "configuration": {
-        "format": "{2}-{0}_{1}",
+        "format": "{2}-{0}_{1}"
     }
 }
 ```
