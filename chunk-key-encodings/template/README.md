@@ -144,19 +144,6 @@ It is also flexible enough to cover the core [default](https://zarr-specs.readth
 
 It also brings the possibility of accessing legacy arrays stored as stacks of images (e.g. [as used by CATMAID](https://catmaid.readthedocs.io/en/stable/tile_sources.html#directory-based-image-stack)) directly through zarr.
 
-## Drawbacks
-
-### Complexity
-
-Implementing a string interpolation scheme adds some complexity, but not very much.
-The rust core implementation is <300 lines.
-
-### Performance
-
-String interpolation could feasibly involve a lot of string allocations and is heavier than simple prefix/suffix CKEs.
-Benchmarking the rust implementation shows encoding operations take ~100ns,
-which is negligible compared to the cost of chunk IO.
-
 ## Implementations
 
 - rust: <https://github.com/clbarnes/generic_cke>
