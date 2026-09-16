@@ -5,6 +5,8 @@ A flexible chunk key encoding inspired by rust/ python format string templates.
 ## Template string syntax
 
 Templates are strings including braced `{}` expressions denoting where to insert values.
+Literal braces MAY be escaped by doubling them, e.g. `{{`.
+
 The expression consists of one of
 
 - a positive integer representing a zero-based index into the chunk coordinate
@@ -24,6 +26,51 @@ Optionally, this MAY be followed by a colon, then a 0, then the minimum width of
 - `{1:05}` denotes the second value of the chunk coordinate, in decimal format, left-padded with zeros until it is 5 digits long
   - If the coordinate value's decimal representation is already 5 or more digits long, ignore the padding term
 
+Outside of braces, the template string:
+
+- MUST NOT begin with `/`, but MAY contain it elsewhere
+- MUST NOT contain the substrings `..`, `\`, `\0`, or `//`
+- MUST NOT contain the substring `zarr.json`
+
+The template string MUST contain at least one braced template expression.
+
+### Grammar
+
+The template string syntax can be described by the following BNF grammar.
+For brevity, only the [characters recommended by the Zarr specification](https://zarr-specs.readthedocs.io/en/v3.1.0/v3/core/index.html#node-names) are considered for literals,
+but implementations SHOULD implement full unicode support.
+
+Note that the grammar describes the syntactic structure only;
+the additional lexical constraints listed above
+(e.g. MUST NOT begin with `/`, MUST NOT contain `..`, `\`, `\0`, `//`, or `zarr.json`)
+and the validation rules below still apply.
+
+```bnf
+<template>      ::= <element> | <element> <template>
+<element>       ::= <expression> | <escaped-brace> | <literal-char>
+
+<expression>    ::= "{" <index> "}" | "{" <index> ":" <padding> "}"
+<padding>       ::= "0" <positive>
+
+<index>         ::= "*" | <integer>
+<integer>       ::= "0" | <positive> | "-" <positive>
+<positive>      ::= <nonzero> | <nonzero> <positive>
+
+<escaped-brace> ::= "{{" | "}}"
+<literal-char>  ::= <letter> | <digit> | "-" | "_" | "."
+<letter>        ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
+                  | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t"
+                  | "u" | "v" | "w" | "x" | "y" | "z"
+                  | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
+                  | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
+                  | "U" | "V" | "W" | "X" | "Y" | "Z"
+
+<digit>         ::= "0" | <nonzero>
+<nonzero>       ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+```
+
+### Regular expression
+
 Template expressions match the regular expression
 
 ```regex
@@ -37,13 +84,7 @@ For each term, the matched groups are
 - 3: the whole formatting configuration
 - 4: the number of digits to left-pad the value up to
 
-Outside of braces, the template string:
-
-- MUST NOT begin with `/`, but MAY contain it elsewhere
-- MUST NOT contain the substrings `..`, `\`, `\0`, or `//`
-- MUST NOT contain the substring `zarr.json`
-
-The template string MUST contain at least one braced template expression.
+Note that this regular expression does not support escaped braces.
 
 ## Serialisation
 
@@ -102,3 +143,23 @@ This chunk key encoding covers the use cases for the proposed [prefix](https://g
 It is also flexible enough to cover the core [default](https://zarr-specs.readthedocs.io/en/latest/v3/chunk-key-encodings/default/index.html) and [v2](https://zarr-specs.readthedocs.io/en/latest/v3/chunk-key-encodings/v2/index.html) chunk key encodings.
 
 It also brings the possibility of accessing legacy arrays stored as stacks of images (e.g. [as used by CATMAID](https://catmaid.readthedocs.io/en/stable/tile_sources.html#directory-based-image-stack)) directly through zarr.
+
+## Drawbacks
+
+### Complexity
+
+Implementing a string interpolation scheme adds some complexity, but not very much.
+The rust core implementation is <300 lines.
+
+### Performance
+
+String interpolation could feasibly involve a lot of string allocations and is heavier than simple prefix/suffix CKEs.
+Benchmarking the rust implementation shows encoding operations take ~100ns,
+which is negligible compared to the cost of chunk IO.
+
+## Implementations
+
+- rust: <https://github.com/clbarnes/generic_cke>
+  - appropriate for standalone usage
+  - optional (default) feature for usage with zarrs
+  - python bindings for use with zarr-python
