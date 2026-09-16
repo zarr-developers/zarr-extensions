@@ -161,5 +161,5 @@ which is negligible compared to the cost of chunk IO.
 
 - rust: <https://github.com/clbarnes/generic_cke>
   - appropriate for standalone usage
-  - optional (default) feature for usage with zarrs
-  - python bindings for use with zarr-python
+  - optional (default) feature for usage with [zarrs](https://crates.io/crates/zarrs)
+  - python bindings for use with [zarr-python](https://pypi.org/project/zarr/)
