@@ -62,6 +62,12 @@
             "$ref": "#/$defs/ChunkEdgeLength"
           }
         },
+        "encoded_chunk_shapes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChunkEdgeLength"
+          }
+        },
         "kind": {
           "$ref": "#/$defs/inline"
         }
