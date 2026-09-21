@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/zarr-developers/zarr-extensions/refs/heads/main/chunk-key-encodings/template/schema.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "template"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "pattern": "\\{((\\*|-?\\d+)(:0(\\d+))?)\\}"
+        },
+        "separator": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "format"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "name",
+    "configuration"
+  ],
+  "additionalProperties": false
+}

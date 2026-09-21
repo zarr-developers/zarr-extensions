@@ -1,0 +1,10 @@
+template	separator	chunk_coordinate	encoded	note
+c/{*}	/	11,22,33	c/11/22/33	"default" chunk key encoding with separator "/"
+{*}	.	11,22,33	11.22.33	"v2" chunk key encoding with separator "."
+prefix/{*}	/	11,22,33	prefix/11/22/33	prefix use case
+{*}.suffix	_	11,22,33	11_22_33.suffix	suffix use case
+{2}/{0}/{1}	.	11,22,33	33/11/22	re-ordering of chunk coordinates
+{-1}/{*}	/	11,22,33	33/11/22	negative and catch-all indices
+{*:04}	/	11,22,33	0011/0022/0033	zero-padding chunk indices
+{*:02}	/	111,2,33	111/02/33	zero-padding chunk indices where some values exceed the padded length
+a{{b{*}}}c	.	11,22,33	a{b11.22.33}c	escaped curly braces
