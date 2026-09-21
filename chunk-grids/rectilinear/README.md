@@ -60,6 +60,7 @@ subtracting `C[c-1]` from `idx[n]` if `c > 0`, or subtracting 0 otherwise.
 | - | - | - | - |
 | `kind` | Literal `"inline"` | yes | see [kinds of encodings](#kinds-of-encodings) |
 | `chunk_shapes` | array of [Chunk edge lengths](#chunk-edge-lengths) | yes |  The length of `chunk_shapes` MUST match the number of dimensions of the array. 
+| `encoded_chunk_shapes` | array of [Chunk edge lengths](#chunk-edge-lengths) | no | see [encoded chunk shapes](#encoded-chunk-shapes). If present, the length of `encoded_chunk_shapes` MUST match the number of dimensions of the array. |
 
 #### Kinds of encodings
 
@@ -98,6 +99,35 @@ A run-length encoded sequence of `N` repetitions of some value `V` is denoted by
 
 For example, the sequence `[1, 1, 1, 1, 1]` becomes `[1, 5]` after applying this run-length encoding. 
 
+#### Encoded chunk shapes
+
+By default, the shape a chunk decodes to is given by its edge lengths in `chunk_shapes`. The 
+optional `encoded_chunk_shapes` field permits a chunk to decode to a larger shape than the extent 
+it contributes to the array.
+
+`encoded_chunk_shapes` is declared exactly like [chunk edge lengths](#chunk-edge-lengths), using the 
+same integer, explicit list and run-length encoded forms. It MUST expand to the same number of edge 
+lengths per axis as `chunk_shapes` does, and each of its edge lengths MUST be greater than or equal 
+to the corresponding edge length in `chunk_shapes`. When declared as a single integer `m`, `m` is 
+repeated until it defines a sequence with the same number of edge lengths as the corresponding axis 
+of `chunk_shapes`, rather than until its sum reaches the array shape.
+
+When `encoded_chunk_shapes` is present, for the chunk at chunk grid index `c`:
+
+- the chunk decodes to an array whose shape is given by the `c`th edge length of 
+  `encoded_chunk_shapes` along each axis,
+- the elements it contributes to the array are those whose chunk index along each axis is less than 
+  the `c`th edge length of `chunk_shapes` along that axis,
+- the remaining elements of the decoded chunk are not part of the array, and readers MUST ignore 
+  them.
+
+`chunk_shapes` alone continues to resolve an array index to a chunk grid index and a chunk index, 
+exactly as described in [Indexing](#indexing), and the requirement that the sum of its edge lengths 
+equal or exceed the array shape applies to `chunk_shapes` as before. `encoded_chunk_shapes` affects 
+only how many elements each chunk decodes to.
+
+Omitting `encoded_chunk_shapes` is equivalent to declaring it equal to `chunk_shapes`.
+
 ## Example
 
 This example demonstrates different ways of declaring the edge lengths for a rectilinear chunk grid 
@@ -123,6 +153,34 @@ via the `chunk_shapes` field.
 }
 ```
 
+### Example with encoded chunk shapes
+
+This example demonstrates `encoded_chunk_shapes`. Two arrays, each of length 550 and chunked 
+regularly at 200, are presented as a single array of length 1100 without re-encoding any chunk. 
+Each source array's final chunk decodes to 200 elements but contributes only the 150 that belong to 
+the array.
+
+```javascript
+{
+    ...
+    "shape": [1100],
+    "chunk_grid": {
+        "name": "rectilinear",
+        "configuration": {
+            "kind": "inline",
+            // expands to [200, 200, 150, 200, 200, 150]
+            "chunk_shapes": [[[200, 2], 150, [200, 2], 150]],
+            // integer. expands to [200, 200, 200, 200, 200, 200]
+            "encoded_chunk_shapes": [200]
+        }
+    }
+}
+```
+
+The chunks therefore begin at array indices 0, 200, 400, 550, 750 and 950. The chunks at chunk grid 
+indices 2 and 5 each decode to 200 elements, of which the first 150 are part of the array and the 
+remaining 50 are ignored.
+
 ## Compatibility with other chunk grids
 
 A rectilinear grid is a generalization of a regular grid (a grid of regularly-spaced elements). Any 
@@ -144,7 +202,8 @@ Key differences between this specification and ZEP 0003:
 - This specification uses the field name `"chunk_shapes"` in the `configuration` field, while ZEP 0003 uses the field name `"chunk_shape"`.
 
 ## Change log
-No changes yet.
+- Added the optional `encoded_chunk_shapes` field, which permits a chunk to decode to a larger shape
+  than the extent it contributes to the array.
 
 ## Current maintainers
 - Davis Bennett (@d-v-b)
