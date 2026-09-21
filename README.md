@@ -1,4 +1,4 @@
-# zarr-extensions
+# Zarr Extensions Registry
 
 This repository is the normative source of registered names for the Zarr v3 specification. This includes Zarr extensions as well as a catalog of registered attributes for [Zarr version 3](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html).
 
