@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "nanovdb"
+    },
+    "configuration": {
+      "type": "object",
+      "description": "NanoVDB encoding parameters, recorded so the encoding is deliberate and reproducible across the chunks of an array. Decoders MUST derive grid geometry and grid type from the buffer itself and MUST NOT rely on these members to parse it, but MUST verify consistency with them and with the array metadata. tree_config is the exception: the buffer does not record branching factors, so a decoder must reject a configuration it does not implement. A voxel is active if and only if its value differs from the array's fill_value, so the active set is fully determined by the data and needs no configuration.",
+      "properties": {
+        "dimension_roles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["grid", "z", "y", "x", "channel"]
+          },
+          "minItems": 3,
+          "allOf": [
+            {
+              "contains": {
+                "const": "z"
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "const": "y"
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "const": "x"
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "const": "channel"
+              },
+              "minContains": 0,
+              "maxContains": 1
+            }
+          ],
+          "description": "How this codec encodes each dimension of its input, one token per dimension, outermost first. The input is the array chunk after any preceding array -> array codec, so when a 'transpose' precedes this codec the roles are in the transposed order and are NOT index-aligned with the array's shape or dimension_names. 'grid' dimensions are enumerated across grids within the chunk's buffer; 'z', 'y' and 'x' are the tree's coordinate axes; 'channel' becomes the grid value type (extent 1 scalar, 3 Vec3, 4 Vec4). The tokens MUST appear in the order: zero or more 'grid', then 'z', 'y', 'x', then at most one 'channel' as the innermost dimension. JSON Schema can express the multiplicities but not that ordering, which is normative in the README. The roles say only how the codec processes a dimension and assert nothing about what it means."
+        },
+        "grid_type": {
+          "type": "string",
+          "enum": [
+            "Float",
+            "Double",
+            "Int16",
+            "Int32",
+            "Int64",
+            "UInt8",
+            "UInt32",
+            "Mask",
+            "Fp4",
+            "Fp8",
+            "Fp16",
+            "FpN",
+            "Vec3f",
+            "Vec3d",
+            "Vec4f",
+            "Vec4d",
+            "RGBA8"
+          ],
+          "description": "NanoVDB GridType of the encoded grid. Not redundant with the array data_type: Fp4, Fp8, Fp16, and FpN encode a float32 array at reduced precision, the Vec types pair a float32 or float64 array with a 'channel' dimension of extent 3 or 4, and RGBA8 packs a uint8 'channel' dimension of extent 3 or 4 into one 32-bit word with red in the lowest byte."
+        },
+        "tree_config": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "minItems": 3,
+          "maxItems": 3,
+          "const": [5, 4, 3],
+          "description": "Node branching factors as the Log2Dim of each level from the root side to the leaf. [5, 4, 3] is the only registered configuration: 8^3 leaves, 128^3 lower internal nodes, 4096^3 upper internal nodes. It is the only configuration any released NanoVDB implementation reads or writes, and a reader cannot recover the configuration from the buffer, so a wrong assumption is a silent misread. Any future value must also have exactly three entries; NanoVDB's tree depth is not parameterized."
+        },
+        "stats": {
+          "type": "string",
+          "enum": ["none", "bbox", "minmax", "all"],
+          "description": "Per-node statistics carried by the grid. 'bbox' includes active bounding boxes, 'minmax' adds per-node minimum and maximum, 'all' adds average and standard deviation."
+        }
+      },
+      "required": ["dimension_roles", "grid_type", "tree_config", "stats"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
