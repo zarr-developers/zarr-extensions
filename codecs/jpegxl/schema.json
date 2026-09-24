@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "jpegxl"
+    },
+    "configuration": {
+      "type": "object",
+      "description": "JPEG XL encoding parameters, recorded so the encoding is deliberate and reproducible across the chunks of an array. Decoders MUST derive geometry, data type, and color encoding from the codestream and MUST NOT use any of these.",
+      "properties": {
+        "lossless": {
+          "type": "boolean",
+          "description": "Whether the codestream is mathematically lossless. When true, distance MUST be 0."
+        },
+        "distance": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Butteraugli distance target; 0 means mathematically lossless, larger values allow more loss for smaller output."
+        },
+        "effort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Encoder effort/speed setting; higher spends more time to reduce encoded size."
+        },
+        "decodingspeed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4,
+          "description": "Encoder tier trading encoded size for decode speed (0 = default/smallest)."
+        },
+        "photometric": {
+          "type": "string",
+          "enum": ["gray", "rgb", "xyb", "unknown"],
+          "description": "Color space the encoder writes into the codestream. "
+        },
+        "bitspersample": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32,
+          "description": "Sample bit depth used at encode."
+        },
+        "primaries": {
+          "type": "string",
+          "enum": ["srgb", "p3", "bt2100", "custom"],
+          "description": "Color primaries written into the codestream."
+        },
+        "transfer": {
+          "type": "string",
+          "enum": ["srgb", "linear", "pq", "hlg", "dci", "bt709", "gamma", "unknown"],
+          "description": "Transfer function written into the codestream. "
+        },
+        "usecontainer": {
+          "type": "boolean",
+          "description": "Whether to wrap codestream in a ISOBMFF container."
+        }
+      },
+      "required": [
+        "lossless",
+        "distance",
+        "effort",
+        "decodingspeed",
+        "photometric",
+        "bitspersample",
+        "primaries",
+        "transfer",
+        "usecontainer"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "lossless": { "const": true } } },
+          "then": { "properties": { "distance": { "const": 0 } } }
+        },
+        {
+          "if": { "properties": { "lossless": { "const": false } } },
+          "then": { "properties": { "distance": { "exclusiveMinimum": 0 } } }
+        }
+      ]
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
