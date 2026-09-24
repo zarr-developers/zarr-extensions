@@ -21,7 +21,18 @@ The value of the `name` member in the codec object MUST be `jpeg`.
 
   This parameter is REQUIRED for 3-component data and has **no default**: the two color spaces are meant for different kinds of data, and silently applying YCbCr would destroy fidelity for data whose channels are not colors. 
 
-  For maximum interoperability, note that encoders and decoders are only guaranteed to support `grayscale` and `ycbcr`; `rgb` (storing color components without conversion) is not supported by all implementations and SHOULD be used only when portability is not a concern. This parameter is defined as an open-ended color space, rather than a simple on/off transform, so that additional color spaces (e.g. XYB, CMYK) can be added later as a backwards-compatible extension.
+  For maximum interoperability, note that encoders and decoders are only guaranteed to support grayscale (1-component) data and `ycbcr`; `rgb` (storing color components without conversion) is not supported by all implementations and SHOULD be used only when portability is not a concern. This parameter is defined as an open-ended color space, rather than a simple on/off transform, so that additional color spaces (e.g. XYB, CMYK) can be added later as a backwards-compatible extension.
+
+- `decoded_color_space` (string, optional): the color space of the chunk data, i.e. the input to encoding and the output of decoding. One of `rgb` or `ycbcr` for 3-component data, and `grayscale` for 1-component data. Defaults to `rgb` for 3-component data and `grayscale` for 1-component data. Together with `encoded_color_space` it determines the color conversion applied during encoding, and its inverse during decoding. The JPEG stream does not record this value, so decoders need it to return the original color space:
+
+  | `decoded_color_space` | `encoded_color_space` | Conversion |
+  |---|---|---|
+  | `grayscale` | — | none |
+  | `rgb` | `ycbcr` | RGB → YCbCr |
+  | `rgb` | `rgb` | none |
+  | `ycbcr` | `ycbcr` | none (data is already YCbCr) |
+
+  Any other combination MUST be rejected. Implementations are only guaranteed to support `grayscale` and `rgb` → `ycbcr`.
 
 - `subsampling` (array, required): the subsampling applied to the components of the encoded color space, expressed declaratively as the per-component JPEG sampling factors. It is an array with **one entry per component**, and each entry is a two-element array `[horizontal, vertical]` giving that component's horizontal and vertical sampling factor as integers in the range `1`–`4`. The factors are **relative**: a component is subsampled by the ratio of its factors to the largest factor across all components, so a component with factor `[1, 1]` is stored at half the resolution (in each direction) of a component with factor `[2, 2]`. All-equal factors (e.g. `[[1, 1], [1, 1], [1, 1]]`) therefore mean no subsampling. For `ycbcr`, this is how the chroma components (Cb, Cr) are subsampled relative to luma (Y). The second and third components MUST have factor `[1, 1]`, and the first component's factor MUST be greater than or equal to it in each direction.
 
@@ -126,6 +137,26 @@ No color-space conversion is applied, and the components MUST NOT be subsampled.
 }
 ```
 
+### Data already in YCbCr
+
+A 3-component chunk whose samples are already YCbCr. No conversion is applied, but the JPEG still records YCbCr as its color space, and decoding returns YCbCr samples.
+
+```json
+{
+    "codecs": [
+        {
+            "name": "jpeg",
+            "configuration": {
+                "quality": 90,
+                "encoded_color_space": "ycbcr",
+                "decoded_color_space": "ycbcr",
+                "subsampling": [[2, 2], [1, 1], [1, 1]]
+            }
+        }
+    ]
+}
+```
+
 ### Channel axis not innermost
 
 For a chunk laid out as `(3, H, W)`, place a [`transpose`](../transpose/) codec first to move the channel axis last.
@@ -153,13 +184,13 @@ The output is a standard JFIF/JPEG bitstream using baseline (Color Transform, Bl
 ### Encoding
 
 1. The component count (1 or 3) is determined from the chunk shape as described above; unsupported shapes are rejected.
-2. The `uint8` chunk data is read in C order into a contiguous buffer; the trailing spatial axes give the image `height` (`H`) and `width` (`W`).
-3. For 3-component data, the samples are converted to the `encoded_color_space` (RGB → YCbCr for `ycbcr`, no conversion for `rgb`) together with the `subsampling` (for `ycbcr`). For `rgb`, the APP14 Adobe marker indicating an "unknown" transform is written.
+2. The `uint8` chunk data is read in C order into a contiguous buffer; the spatial axes give the image `height` (`H`) and `width` (`W`).
+3. For 3-component data, the samples are converted from `decoded_color_space` to `encoded_color_space` as given in the table above, and the `subsampling` is applied. For `rgb`, the APP14 Adobe marker indicating an "unknown" transform is written.
 4. The samples are encoded as a baseline JPEG at the configured `quality`.
 
 ### Decoding
 
-1. The JPEG bitstream is decoded to its `uint8` samples in raster order. The inverse color transform is determined by the stream itself: the APP14 marker, when present, indicates whether an inverse YCbCr transform is applied.
+1. The JPEG bitstream is decoded to its `uint8` samples in raster order. `encoded_color_space` and `subsampling` are ignored, since the stream itself records them (the APP14 marker, when present, indicates the stored color space). The samples are converted from the stored color space to `decoded_color_space`.
 2. For grayscale, the single-component samples are read directly. For color, the three interleaved components are read per pixel.
 3. The samples are reshaped to the chunk shape.
 
@@ -167,7 +198,7 @@ The output is a standard JFIF/JPEG bitstream using baseline (Color Transform, Bl
 
 - This codec matches neuroglancer `precomputed`'s `jpeg` encoding for 1- and 3-channel `uint8` data, with no data reordering. 
   
-- This works because Zarr's C-order over `[z, y, x, channel]` visits samples in the same order (channel, then x, then y, then z) as neuroglancer's Fortran-order over `[x, y, z]`.
+- This works because Zarr's C-order over `[z, y, x, channel]` (reshaped to `(z·y, x, channel)` with the [`reshape`](../reshape/) codec) visits samples in the same order (channel, then x, then y, then z) as neuroglancer's Fortran-order over `[x, y, z]`.
 
 - Because JPEG is lossy, decoded values are generally not bit-identical to the original values. Implementations and users should choose `quality` accordingly.
 

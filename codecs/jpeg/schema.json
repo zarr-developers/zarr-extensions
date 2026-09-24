@@ -11,11 +11,13 @@
         "quality": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 100,
-          "default": 90
+          "maximum": 100
         },
         "encoded_color_space": {
           "enum": ["ycbcr", "rgb"]
+        },
+        "decoded_color_space": {
+          "enum": ["rgb", "ycbcr", "grayscale"]
         },
         "subsampling": {
           "type": "array",
@@ -34,7 +36,7 @@
         }
       },
       "additionalProperties": false,
-      "required": ["quality"]
+      "required": ["quality", "subsampling"]
     }
   },
   "required": ["name", "configuration"],
