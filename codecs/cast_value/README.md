@@ -149,7 +149,7 @@ https://en.wikipedia.org/wiki/IEEE_754
 
 ## Change log
 
-No changes yet.
+- Fixed the NumPy compatibility example to encode positive infinity as `"Infinity"` instead of `"+Infinity"`, matching the Zarr V3 fill value encoding.
 
 ## Current maintainers
 
