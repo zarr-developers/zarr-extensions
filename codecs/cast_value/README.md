@@ -131,7 +131,7 @@ When casting a floating-point scalar to an integer, NumPy coerces unrepresentabl
                 "scalar_map": {
                     "encode": [
                         ["NaN", 0], 
-                        ["+Infinity", 0], 
+                        ["Infinity", 0], 
                         ["-Infinity", 0]
                     ]
                 }
