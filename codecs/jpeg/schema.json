@@ -14,7 +14,7 @@
           "maximum": 100
         },
         "encoded_color_space": {
-          "enum": ["ycbcr", "rgb"]
+          "enum": ["grayscale", "ycbcr", "rgb"]
         },
         "decoded_color_space": {
           "enum": ["rgb", "ycbcr", "grayscale"]
@@ -36,7 +36,7 @@
         }
       },
       "additionalProperties": false,
-      "required": ["quality", "subsampling"]
+      "required": ["quality", "encoded_color_space", "subsampling"]
     }
   },
   "required": ["name", "configuration"],

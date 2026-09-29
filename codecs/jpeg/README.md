@@ -13,21 +13,22 @@ The value of the `name` member in the codec object MUST be `jpeg`.
 
 ## Configuration parameters
 
-- `quality` (integer, required): the JPEG encoding quality, in the range `0`–`100`. Higher values preserve more detail at the cost of a larger encoded size. Decoding does not depend on it.
+- `quality` (integer, required): the JPEG encoding quality, in the range `0`–`100`. Higher values preserve more detail at the cost of a larger encoded size. Decoding does not depend on it. The parameter has no default when parsing a configuration. Implementations that offer a default for convenience when *building* a configuration SHOULD use `95`, so that configurations created with different implementations agree.
 
-- `encoded_color_space` (string, required): the color space of the samples as stored in the JPEG stream, for 3-component data. One of:
+- `encoded_color_space` (string, required): the color space of the samples as stored in the JPEG stream. It also fixes the component count, so a configuration can be fully validated without looking at the chunk data. One of:
+  - `grayscale`: 1-component data, stored as-is.
   - `ycbcr`: the RGB input is converted to YCbCr before encoding (the JFIF-standard color space, and a prerequisite for chroma subsampling). Suitable for natural color images.
   - `rgb`: the three components are stored as-is, with no color-space conversion. Suitable for independent scientific channels (fluorescence, multispectral, …) whose channels are not real colors. The encoder MUST write an APP14 Adobe marker indicating an "unknown" transform, so that decoders do not apply an inverse YCbCr transform.
 
-  This parameter is REQUIRED for 3-component data and has **no default**: the two color spaces are meant for different kinds of data, and silently applying YCbCr would destroy fidelity for data whose channels are not colors. 
+  This parameter is REQUIRED and has **no default**: for 3-component data, `ycbcr` and `rgb` are meant for different kinds of data, and silently applying YCbCr would destroy fidelity for data whose channels are not colors. 
 
   For maximum interoperability, note that encoders and decoders are only guaranteed to support grayscale (1-component) data and `ycbcr`; `rgb` (storing color components without conversion) is not supported by all implementations and SHOULD be used only when portability is not a concern. This parameter is defined as an open-ended color space, rather than a simple on/off transform, so that additional color spaces (e.g. XYB, CMYK) can be added later as a backwards-compatible extension.
 
-- `decoded_color_space` (string, optional): the color space of the chunk data, i.e. the input to encoding and the output of decoding. One of `rgb` or `ycbcr` for 3-component data, and `grayscale` for 1-component data. Defaults to `rgb` for 3-component data and `grayscale` for 1-component data. Together with `encoded_color_space` it determines the color conversion applied during encoding, and its inverse during decoding. The JPEG stream does not record this value, so decoders need it to return the original color space:
+- `decoded_color_space` (string, optional): the color space of the chunk data, i.e. the input to encoding and the output of decoding. One of `grayscale`, `rgb` or `ycbcr`. Defaults to `grayscale` if `encoded_color_space` is `grayscale`, and to `rgb` otherwise, so the default depends only on the configuration, not on the chunk data. Together with `encoded_color_space` it determines the color conversion applied during encoding, and its inverse during decoding. The JPEG stream does not record this value, so decoders need it to return the original color space:
 
   | `decoded_color_space` | `encoded_color_space` | Conversion |
   |---|---|---|
-  | `grayscale` | — | none |
+  | `grayscale` | `grayscale` | none |
   | `rgb` | `ycbcr` | RGB → YCbCr |
   | `rgb` | `rgb` | none |
   | `ycbcr` | `ycbcr` | none (data is already YCbCr) |
@@ -36,7 +37,7 @@ The value of the `name` member in the codec object MUST be `jpeg`.
 
 - `subsampling` (array, required): the subsampling applied to the components of the encoded color space, expressed declaratively as the per-component JPEG sampling factors. It is an array with **one entry per component**, and each entry is a two-element array `[horizontal, vertical]` giving that component's horizontal and vertical sampling factor as integers in the range `1`–`4`. The factors are **relative**: a component is subsampled by the ratio of its factors to the largest factor across all components, so a component with factor `[1, 1]` is stored at half the resolution (in each direction) of a component with factor `[2, 2]`. All-equal factors (e.g. `[[1, 1], [1, 1], [1, 1]]`) therefore mean no subsampling. For `ycbcr`, this is how the chroma components (Cb, Cr) are subsampled relative to luma (Y). The second and third components MUST have factor `[1, 1]`, and the first component's factor MUST be greater than or equal to it in each direction.
 
-For 3-component data, `subsampling` is only meaningful together with `encoded_color_space: ycbcr`; the common `4:2:0` scheme is `[[2, 2], [1, 1], [1, 1]]`. With `encoded_color_space: rgb` it MUST be `[[1, 1], [1, 1], [1, 1]]` (no subsampling), since those components are independent and MUST NOT be subsampled. For grayscale (1-component) data, `subsampling` MUST be `[[1, 1]]`; since there is only one component there is nothing to subsample relative to, so it has no effect.
+For 3-component data, `subsampling` is only meaningful together with `encoded_color_space: ycbcr`; the common `4:2:0` scheme is `[[2, 2], [1, 1], [1, 1]]`. With `encoded_color_space: rgb` it MUST be `[[1, 1], [1, 1], [1, 1]]` (no subsampling), since those components are independent and MUST NOT be subsampled. With `encoded_color_space: grayscale` (1-component data), `subsampling` MUST be `[[1, 1]]`; since there is only one component there is nothing to subsample relative to, so it has no effect.
 
 The common human-readable `J:a:b` chroma-subsampling notation maps to `subsampling` as follows. Implementations MUST support at least these schemes:
 
@@ -47,7 +48,7 @@ The common human-readable `J:a:b` chroma-subsampling notation maps to `subsampli
   | `4:4:0` | `[[1, 2], [1, 1], [1, 1]]` | half vertically |
   | `4:2:0` | `[[2, 2], [1, 1], [1, 1]]` | half horizontally and vertically |
 
-An implementation MUST reject a configuration whose parameters are invalid for the chunk's channel count (for example, 3-component data without `encoded_color_space`, a `subsampling` array whose length does not match the component count, or a `subsampling` other than `[[1, 1], [1, 1], [1, 1]]` together with `encoded_color_space: rgb`) rather than silently ignoring them.
+Because `encoded_color_space` fixes the component count (1 for `grayscale`, 3 otherwise), an implementation MUST reject an invalid configuration when parsing it, rather than silently ignoring the problem. Examples are a combination of color spaces not listed in the table above, a `subsampling` array whose length does not match the component count, or a `subsampling` other than `[[1, 1], [1, 1], [1, 1]]` together with `encoded_color_space: rgb`. When encoding, it MUST additionally reject a chunk whose component count (see below) does not match the configuration.
 
 ## Supported data types
 
@@ -76,7 +77,7 @@ The chunk is flattened in **C order** (last axis varies fastest), so the channel
 
 The spatial axes give the JPEG image `height` (`H`) and `width` (`W`). Each MUST NOT exceed `65535`, since the JPEG format stores each dimension as a 16-bit value. A decoder reshapes the decoded samples by the chunk shape.
 
-JPEG encodes samples in blocks — a *minimum coded unit* (MCU) of 8×8 samples, or up to 16×16 when subsampling is used. When `H` or `W` is not a multiple of the block size, the encoder pads the image up to the next block boundary and the decoder crops back to the stored dimensions, so the chunk shape still round-trips exactly; however, the padded samples share quantized blocks with the real edge samples and can introduce extra artifacts near the right and bottom edges. To avoid this, `H` and `W` SHOULD be multiples of `16` (which covers every subsampling mode; `8` suffices for `4:4:4`). Because Zarr pads boundary chunks to the full chunk shape, choosing a chunk shape whose spatial dimensions are multiples of `16` ensures every encoded image — including boundary chunks — is block-aligned.
+JPEG encodes samples in blocks called *minimum coded units* (MCUs). An MCU spans `8 × h_max` samples horizontally and `8 × v_max` samples vertically, where `h_max` and `v_max` are the largest horizontal and vertical sampling factors in `subsampling`. For example, `4:4:4` gives 8×8, `4:2:0` gives 16×16, and a factor of `4` gives 32. When `H` or `W` is not a multiple of the block size, the encoder pads the image up to the next block boundary and the decoder crops back to the stored dimensions, so the chunk shape still round-trips exactly; however, the padded samples share quantized blocks with the real edge samples and can introduce extra artifacts near the right and bottom edges. To avoid this, `W` SHOULD be a multiple of `8 × h_max` and `H` a multiple of `8 × v_max`. `16` covers all schemes listed above, and `32` covers every allowed sampling factor. Because Zarr pads boundary chunks to the full chunk shape, choosing such a chunk shape ensures every encoded image — including boundary chunks — is block-aligned.
 
 ## Examples
 
@@ -93,6 +94,25 @@ A 3-component chunk (shape `(H, W, 3)`) holding a natural color image. It is con
                 "quality": 90,
                 "encoded_color_space": "ycbcr",
                 "subsampling": [[2, 2], [1, 1], [1, 1]]
+            }
+        }
+    ]
+}
+```
+
+### Grayscale
+
+A 1-component chunk (shape `(H, W)` or `(H, W, 1)`).
+
+```json
+{
+    "codecs": [
+        {
+            "name": "jpeg",
+            "configuration": {
+                "quality": 90,
+                "encoded_color_space": "grayscale",
+                "subsampling": [[1, 1]]
             }
         }
     ]
@@ -183,7 +203,7 @@ The output is a standard JFIF/JPEG bitstream using baseline (Color Transform, Bl
 
 ### Encoding
 
-1. The component count (1 or 3) is determined from the chunk shape as described above; unsupported shapes are rejected.
+1. The component count (1 or 3) is determined from the chunk shape as described above. Unsupported shapes, and shapes whose component count does not match `encoded_color_space`, are rejected.
 2. The `uint8` chunk data is read in C order into a contiguous buffer; the spatial axes give the image `height` (`H`) and `width` (`W`).
 3. For 3-component data, the samples are converted from `decoded_color_space` to `encoded_color_space` as given in the table above, and the `subsampling` is applied. For `rgb`, the APP14 Adobe marker indicating an "unknown" transform is written.
 4. The samples are encoded as a baseline JPEG at the configured `quality`.
