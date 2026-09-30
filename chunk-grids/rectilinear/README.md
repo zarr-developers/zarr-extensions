@@ -144,7 +144,8 @@ Key differences between this specification and ZEP 0003:
 - This specification uses the field name `"chunk_shapes"` in the `configuration` field, while ZEP 0003 uses the field name `"chunk_shape"`.
 
 ## Change log
-No changes yet.
+
+- The array form of chunk edge lengths must be non-empty, including for an axis of length 0.
 
 ## Current maintainers
 - Davis Bennett (@d-v-b)
