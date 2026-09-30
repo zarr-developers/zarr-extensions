@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "numcodecs.adler32"
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "enum": ["start", "end"]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    { "const": "numcodecs.adler32" }
+  ]
+}

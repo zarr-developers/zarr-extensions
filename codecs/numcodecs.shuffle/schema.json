@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "numcodecs.shuffle"
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "elementsize": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    { "const": "numcodecs.shuffle" }
+  ]
+}
