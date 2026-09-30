@@ -78,9 +78,13 @@ The edge lengths of the chunks for an array axis with length `L` can be declared
   A single integer defines the step size of a regular 1-dimensional grid.
   
   To convert a single integer `m` into a sequence of explicit chunk edge lengths for an array axis 
-  with length `L`, repeat the integer `m` until it defines a sequence with a sum greater than or equal to `L`.
+  with length `L`, repeat `m` `ceil(L / m)` times, matching the grid shape of a
+  [regular chunk grid](https://zarr-specs.readthedocs.io/en/latest/v3/chunk-grids/regular-grid/index.html)
+  with chunk size `m`.
 
   For example, if `L` is 10, and `m` is 3, the explicit list of chunk lengths is `[3, 3, 3, 3]`.
+  If `L` is 0, the sequence is empty: the grid has zero chunks along that axis, and `m` still MUST be
+  at least 1.
 
 - as a non-empty array that can contain two types of elements:
     - an integer that explicitly denotes an edge length.
@@ -146,6 +150,7 @@ Key differences between this specification and ZEP 0003:
 ## Change log
 
 - The array form of chunk edge lengths must be non-empty, including for an axis of length 0.
+- An integer chunk edge length on an axis of length 0 declares zero chunks along that axis.
 
 ## Current maintainers
 - Davis Bennett (@d-v-b)
