@@ -82,13 +82,13 @@ The edge lengths of the chunks for an array axis with length `L` can be declared
 
   For example, if `L` is 10, and `m` is 3, the explicit list of chunk lengths is `[3, 3, 3, 3]`.
 
-- as an array that can contain two types of elements:
+- as a non-empty array that can contain two types of elements:
     - an integer that explicitly denotes an edge length.
     - an array that denotes a [run-length encoded](#run-length-encoding) sequence of integers, 
     each of which denotes an edge length.
 
 The sum of the edge lengths MUST equal or exceed `L`. Overflowing `L` by multiple chunks is 
-permitted.
+permitted. For an axis of length 0, the array form still requires at least one edge length.
 
 #### Run-length encoding
 

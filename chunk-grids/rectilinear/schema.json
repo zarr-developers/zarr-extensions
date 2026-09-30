@@ -21,6 +21,7 @@
         },
         {
           "type": "array",
+          "minitems": 1,
           "items": {
             "$ref": "#/$defs/InnerChunkEdgeLength"
           }
