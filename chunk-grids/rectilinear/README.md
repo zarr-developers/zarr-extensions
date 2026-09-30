@@ -149,8 +149,8 @@ Key differences between this specification and ZEP 0003:
 
 ## Change log
 
-- The array form of chunk edge lengths must be non-empty, including for an axis of length 0.
-- An integer chunk edge length on an axis of length 0 declares zero chunks along that axis.
+- Clarified that the array form of chunk edge lengths must be non-empty, including for an axis of length 0.
+- Clarified that an integer chunk edge length on an axis of length 0 declares zero chunks along that axis.
 
 ## Current maintainers
 - Davis Bennett (@d-v-b)
