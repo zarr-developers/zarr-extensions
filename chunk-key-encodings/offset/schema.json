@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/zarr-developers/zarr-extensions/refs/heads/main/chunk-key-encodings/offset/schema.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "offset"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "separator": {
+          "type": "string",
+          "enum": ["/", "."]
+        }
+      },
+      "required": ["offset"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
