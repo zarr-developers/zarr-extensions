@@ -135,8 +135,6 @@ the alternative its reviewers named. This is that extension, kept to the one fie
   - [`bench/`](https://github.com/rhoadesScholar/zarr-chunk-offset/tree/main/bench) measures the
     growth against the ways available without the encoding (renaming or copying every chunk)
 - zarr-python core: `OffsetChunkKeyEncoding` and `Array.prepend`,
-  <https://github.com/rhoadesScholar/zarr-python/tree/offset-chunk-key-encoding>
-- tensorstore (zarr3 driver, read and write):
-  <https://github.com/rhoadesScholar/tensorstore/tree/zarr3-offset-chunk-key-encoding>
-- neuroglancer (read):
-  <https://github.com/rhoadesScholar/neuroglancer/tree/zarr-offset-chunk-key-encoding>
+  <https://github.com/zarr-developers/zarr-python/pull/4516>
+- tensorstore (zarr3 driver, read and write): <https://github.com/google/tensorstore/pull/296>
+- neuroglancer (read): <https://github.com/google/neuroglancer/pull/1133>
