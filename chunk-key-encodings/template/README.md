@@ -146,7 +146,9 @@ It also brings the possibility of accessing legacy arrays stored as stacks of im
 
 ## Implementations
 
-- rust: <https://github.com/clbarnes/generic_cke>
+- rust: [template_cke](https://crates.io/crates/template_cke)
   - appropriate for standalone usage
   - optional (default) feature for usage with [zarrs](https://crates.io/crates/zarrs)
-  - python bindings for use with [zarr-python](https://pypi.org/project/zarr/)
+
+- python: [zarr-python-template](https://github.com/clbarnes/zarr-python-template)
+  - entry point for usage with [zarr-python](https://pypi.org/project/zarr/)
