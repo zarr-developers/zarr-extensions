@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RegularBoundedChunkGridMetadata",
+  "type": "object",
+  "properties": {
+    "name": { "const": "regular_bounded" },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "chunk_shape": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "origin": { "type": "array", "items": { "type": "integer" } },
+        "lower_bound": { "type": "array", "items": { "type": "integer" } }
+      },
+      "required": ["chunk_shape", "origin", "lower_bound"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
