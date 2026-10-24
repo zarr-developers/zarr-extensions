@@ -78,17 +78,21 @@ The edge lengths of the chunks for an array axis with length `L` can be declared
   A single integer defines the step size of a regular 1-dimensional grid.
   
   To convert a single integer `m` into a sequence of explicit chunk edge lengths for an array axis 
-  with length `L`, repeat the integer `m` until it defines a sequence with a sum greater than or equal to `L`.
+  with length `L`, repeat `m` `ceil(L / m)` times, matching the grid shape of a
+  [regular chunk grid](https://zarr-specs.readthedocs.io/en/latest/v3/chunk-grids/regular-grid/index.html)
+  with chunk size `m`.
 
   For example, if `L` is 10, and `m` is 3, the explicit list of chunk lengths is `[3, 3, 3, 3]`.
+  If `L` is 0, the sequence is empty: the grid has zero chunks along that axis, and `m` still MUST be
+  at least 1.
 
-- as an array that can contain two types of elements:
+- as a non-empty array that can contain two types of elements:
     - an integer that explicitly denotes an edge length.
     - an array that denotes a [run-length encoded](#run-length-encoding) sequence of integers, 
     each of which denotes an edge length.
 
 The sum of the edge lengths MUST equal or exceed `L`. Overflowing `L` by multiple chunks is 
-permitted.
+permitted. For an axis of length 0, the array form still requires at least one edge length.
 
 #### Run-length encoding
 
@@ -144,7 +148,9 @@ Key differences between this specification and ZEP 0003:
 - This specification uses the field name `"chunk_shapes"` in the `configuration` field, while ZEP 0003 uses the field name `"chunk_shape"`.
 
 ## Change log
-No changes yet.
+
+- Clarified that the array form of chunk edge lengths must be non-empty, including for an axis of length 0.
+- Clarified that an integer chunk edge length on an axis of length 0 declares zero chunks along that axis.
 
 ## Current maintainers
 - Davis Bennett (@d-v-b)
