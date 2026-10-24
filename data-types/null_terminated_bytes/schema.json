@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "null_terminated_bytes"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "length_bytes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": ["length_bytes"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
