@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pad Codec",
+  "description": "A codec that adds or removes padding.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "pad"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "description": "The location of the padding.",
+          "type": "string",
+          "enum": ["start", "end"]
+        },
+        "nbytes": {
+          "description": "The number of bytes of padding.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "padding": {
+          "description": "An optional base64-encoded string of the literal bytes to use for padding. The length of the decoded bytes must equal 'nbytes'. If not provided, padding will be zeros.",
+          "type": "string",
+          "contentEncoding": "base64"
+        }
+      },
+      "required": ["location", "nbytes"]
+    }
+  },
+  "required": ["name", "configuration"]
+}
