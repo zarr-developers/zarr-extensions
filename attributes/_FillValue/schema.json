@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+      {
+          "$comment": "Encoding for bool core types",
+          "type": "object",
+          "properties": {
+              "_FillValue": {
+                  "type": "boolean"
+              }
+          }
+      },
+      {
+          "$comment": "Encoding for integer core types",
+          "type": "object",
+          "properties": {
+              "_FillValue": {
+                  "type": "integer"
+              }
+          }
+      },
+      {
+          "$comment": "Encoding for float core types, 'string' and 'bytes' extension type. For float core types and 'bytes', it MUST be a base64 encoded string",
+          "type": "object",
+          "properties": {
+              "_FillValue": {
+                  "type": "string"
+              }
+          }
+      }
+  ]
+}
