@@ -86,15 +86,15 @@ codec configured with a compression level of 1 and with the checksum stored:
         }
       },
       {
+        "name": "bytes"
+        "configuration": {"endian": "little"}
+      },
+      {
         "name": "zstd",
         "configuration": {
             "level": 1,
             "checksum": true
         }
-      },
-      {
-        "name": "bytes"
-        "configuration": {"endian": "little"}
       }
     ]
 }
