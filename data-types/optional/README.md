@@ -74,7 +74,11 @@ The examples below demonstrate valid `data_type` and `fill_value` combinations w
 
 ### Python
 
-An `optional` data type with no nesting could be represented using a masked array, such as a NumPy [`numpy.ma.MaskedArray`](https://numpy.org/doc/stable/reference/maskedarray.generic.html).
+In Python, the representation of `null` values in an `optional` data type may depend on the use of other libraries:
+* `None` may be used when using only the Python standard library.
+* [`pandas.NA`](https://pandas.pydata.org/docs/reference/api/pandas.NA.html) may be used in conjunction with pandas.
+* [Polars](https://docs.pola.rs/user-guide/expressions/missing-data/) and [PyArrow](https://arrow.apache.org/docs/python/data.html#none-values-and-nan-handling) natively represent null values with a validity bitmap, which maps directly to the `optional` mask.
+* An `optional` data type with no nesting could be represented using a masked array, such as a NumPy [`numpy.ma.MaskedArray`](https://numpy.org/doc/stable/reference/maskedarray.generic.html).
 
 A `numpy` array using the `StringDType` with an `na_object` that is not `None` could use the `optional` data type with a `string` underlying data type.
 However, the `na_object` itself would not be stored in the Zarr metadata of the `optional` data type.
