@@ -93,19 +93,22 @@ The encoded format consists of:
 3. N bytes: encoded mask - the result of applying the mask codec chain to the boolean mask.
 4. M bytes: encoded data - the result of applying the data codec chain to the one-dimensional array of only valid elements.
 
+If the mask contains no valid (`true`) elements, the data codec chain is not applied and the encoded data MUST be empty (M = 0).
+Decoders MUST NOT apply the data codec chain when the decoded mask contains no valid elements.
+
 ### Algorithm
 
 **Encoding:**
 1. Create a boolean mask array indicating which elements are present (not null).
 2. Extract only the valid (non-null) elements in lexicographical order into a one-dimensional data array.
 3. Apply the mask codec chain to the mask.
-4. Apply the data codec chain to the one-dimensional data array.
+4. Apply the data codec chain to the one-dimensional data array, or produce empty encoded data if there are no valid elements.
 5. Write the lengths and encoded data in the specified format.
 
 **Decoding:**
 1. Read the mask length and data length from the first 16 bytes.
 2. Read and decode the mask using the mask codec chain.
-3. Read and decode the one-dimensional data array using the data codec chain.
+3. Read and decode the one-dimensional data array using the data codec chain, skipping this step if the mask contains no valid elements.
 4. Reconstruct the masked array into a suitable in-memory format, with null values where the mask is false.
 
 ### Compatible Implementations
