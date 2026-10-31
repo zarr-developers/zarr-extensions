@@ -96,6 +96,10 @@ In R, `NA` may be used to represent `null` values in an optional data type.
 
 This data type is primarily designed for the [`optional`](../../codecs/optional/README.md) codec, which separately encodes a validity mask and the non-null data.
 
+### Other Array-to-Bytes Codecs
+
+Array-to-bytes codecs other than `optional` (e.g. `bytes`) do not support the `optional` data type unless they explicitly define an encoding for it.
+
 ### Other Array-to-Array Codecs
 
 While array-to-array codecs MAY support the `optional` data type, users are RECOMMENDED to use the `optional` codec as the sole top-level codec.
