@@ -117,6 +117,11 @@ Decoders MUST NOT apply the data codec chain when the decoded mask contains no v
 3. Read and decode the one-dimensional data array using the data codec chain, skipping this step if the mask contains no valid elements.
 4. Reconstruct the masked array into a suitable in-memory format, with null values where the mask is false.
 
+### Sharding
+
+To shard optional data, it is RECOMMENDED to place the `optional` codec within the [`sharding_indexed`](https://zarr-specs.readthedocs.io/en/latest/v3/codecs/sharding-indexed/) codec, rather than `sharding_indexed` within `data_codecs`.
+Within `data_codecs`, the data array shape (`[N]`) varies by chunk and generally will not be evenly divisible by the inner chunk shape (see [zarr-specs#370](https://github.com/zarr-developers/zarr-specs/pull/370)), and `sharding_indexed` is not permitted if the fill value is `null`.
+
 ### Compatible Implementations
 
 * zarrs (Rust implementation)
