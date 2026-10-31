@@ -63,7 +63,7 @@ For example, the array metadata below specifies the optional codec with `packbit
 }
 ```
 
-Example `optional` data and be found in the [examples](./examples/) subdirectory.
+Example `optional` data can be found in the [examples](./examples/) subdirectory.
 
 ## Format and algorithm
 
