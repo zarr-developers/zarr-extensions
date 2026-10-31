@@ -80,7 +80,7 @@ The `na_object` could be set via a runtime option, or alternatively be encoded s
 
 ### Julia
 
-The Julia `missing` or `nothing` values could be used to represent null values in an `optional` data type represented as `Union{T,missing}` or `Union{T,nothing}` where `T` is the underlying data type.
+The Julia `missing` or `nothing` values could be used to represent null values in an `optional` data type represented as `Union{T,Missing}` or `Union{T,Nothing}` where `T` is the underlying data type.
 
 The `null` value type could be set via a runtime option, or alternatively be encoded separately as an attribute, for example.
 
