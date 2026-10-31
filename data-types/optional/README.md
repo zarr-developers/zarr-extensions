@@ -2,7 +2,7 @@
 
 Defines a data type for optional (nullable) values that can contain either a value of a specified underlying data type or be missing/undefined/null.
 
-The `optional` data type does not define how null values should be _interpreted_ and represented in-memory.
+The `optional` data type does not define how null values should be _interpreted_, used semantically, or represented in-memory.
 This is an implementation detail and MUST not impact encoding/decoding.
 If an implementation requires a specific in-memory representation for null values (e.g. `missing` or `nothing` in Julia), they are encouraged to do this through a registered attribute.
 See the [In-memory representation](#in-memory-representations) section for examples of how null values could be represented in different programming languages.
