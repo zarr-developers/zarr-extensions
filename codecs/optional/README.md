@@ -14,6 +14,11 @@ The value of the `name` member in the codec object MUST be `optional`.
 An array of codec configurations that will be applied to encode the mask (boolean array indicating which elements are present).
 The mask codecs are applied in sequence as a codec chain.
 
+The mask codec chain operates on an array with:
+- the `bool` data type, where `true` indicates a present element and `false` indicates a missing element,
+- a shape equal to the chunk shape, and
+- a fill value of `false`.
+
 ### `data_codecs`
 An array of codec configurations that will be applied to encode the data (a one-dimensional array of only the valid/present elements).
 The data codecs are applied in sequence as a codec chain.
