@@ -76,8 +76,14 @@ The mask and data are encoded through independent codec chains specified by `mas
 This allows for efficient storage when many elements are missing, and enables independent compression strategies for mask and data.
 
 The data codec chain operates on a one-dimensional array with:
-- a data type equal to the underlying data type of the `optional` data type, and
-- a shape of `[N]`, where `N` is the number of valid (non-null) elements in the chunk.
+- a data type equal to the underlying data type of the `optional` data type,
+- a shape of `[N]`, where `N` is the number of valid (non-null) elements in the chunk, and
+- a fill value determined from the fill value of the `optional` data type:
+  - if it is a single element array, the fill value is that element (e.g. `[42]` -> `42`, `[[42]]` -> `[42]`, `[null]` -> `null`),
+  - if it is `null`, the fill value is `null` if the underlying data type is an `optional` data type, and is otherwise undefined.
+
+The fill value is significant to codecs whose encoded representation depends on it (e.g. `sharding_indexed`).
+If the fill value of the `optional` data type is `null`, `data_codecs` (including any nested codecs) MUST NOT contain codecs whose encoded representation depends on the fill value.
 
 The elements of the data array are the valid elements of the chunk in lexicographical order (C order).
 If the underlying data type is itself an `optional` data type, the data codec chain must support it (e.g. by containing a nested `optional` codec).
