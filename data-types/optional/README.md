@@ -34,41 +34,43 @@ The recommended in-memory representations in this section are not normative.
 ### Rust
 
 The Rust [`Option<T>`](https://doc.rust-lang.org/std/option/) type is a natural fit for representing optional values, where `Option<T>` can be `None` (representing null) or `Some(T)` (representing a value of type `T`).
-The table below demonstrates valid `data_type` and `fill_value` combinations with an `optional` and nested `optional` data type, along with their equivalent Rust `Option` values.
+The examples below demonstrate valid `data_type` and `fill_value` combinations with an `optional` and nested `optional` data type, along with their equivalent Rust `Option` values.
 
-<table>
-<thead>
-<tr>
-<th><code>"data_type"</code></th>
-<th><code>"fill_value"</code></th>
-<th>Rust value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td rowspan="2"><code>{<br>&nbsp;&nbsp;"name": "optional",<br>&nbsp;&nbsp;"configuration": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"name": "uint8",<br>&nbsp;&nbsp;}<br>}</code></td>
-<td><code>null</code></td>
-<td><code>None</code></td>
-</tr>
-<tr>
-<td><code>[42]</code></td>
-<td><code>Some(42)</code></td>
-</tr>
-<tr>
-<td rowspan="3"><code>{<br>&nbsp;&nbsp;"name": "optional",<br>&nbsp;&nbsp;"configuration": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"name": "optional",<br>&nbsp;&nbsp;&nbsp;&nbsp;"configuration": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name": "uint8"<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;}<br>}</code></td>
-<td><code>null</code></td>
-<td><code>None</code></td>
-</tr>
-<tr>
-<td><code>[null]</code></td>
-<td><code>Some(None)</code></td>
-</tr>
-<tr>
-<td><code>[[42]]</code></td>
-<td><code>Some(Some(42))</code></td>
-</tr>
-</tbody>
-</table>
+#### Optional `uint8`
+
+```json
+{
+  "name": "optional",
+  "configuration": {
+    "name": "uint8"
+  }
+}
+```
+
+| `fill_value` | Rust value |
+| ------------ | ---------- |
+| `null`       | `None`     |
+| `[42]`       | `Some(42)` |
+
+#### Nested optional `uint8`
+
+```json
+{
+  "name": "optional",
+  "configuration": {
+    "name": "optional",
+    "configuration": {
+      "name": "uint8"
+    }
+  }
+}
+```
+
+| `fill_value` | Rust value       |
+| ------------ | ---------------- |
+| `null`       | `None`           |
+| `[null]`     | `Some(None)`     |
+| `[[42]]`     | `Some(Some(42))` |
 
 ### Python
 
