@@ -10,7 +10,7 @@
       "properties": {
         "quality": {
           "type": "integer",
-          "minimum": 0,
+          "minimum": 1,
           "maximum": 100
         },
         "encoded_color_space": {

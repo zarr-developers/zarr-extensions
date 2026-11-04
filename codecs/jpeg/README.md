@@ -13,7 +13,7 @@ The value of the `name` member in the codec object MUST be `jpeg`.
 
 ## Configuration parameters
 
-- `quality` (integer, required): the JPEG encoding quality, in the range `0`–`100`. Higher values preserve more detail at the cost of a larger encoded size. Decoding does not depend on it. The parameter has no default when parsing a configuration. Implementations that offer a default for convenience when *building* a configuration SHOULD use `95`, so that configurations created with different implementations agree.
+- `quality` (integer, required): the JPEG encoding quality, in the range `1`–`100`. Higher values preserve more detail at the cost of a larger encoded size. It is an encoder setting: this specification does not prescribe how it maps to quantization tables, so its exact effect depends on the encoder, and different encoders MAY produce different output for the same value. Decoding does not depend on it, since the quantization tables are stored in the JPEG stream. The range deliberately deviates from the `0`–`100` quality scale of the IJG libjpeg library [IJG-libjpeg] (which treats `0` as `1`), because not all implementations accept `0` (e.g. the TurboJPEG API of libjpeg-turbo requires `1`–`100`). The parameter has no default when parsing a configuration. Implementations that offer a default for convenience when *building* a configuration SHOULD use `95`, so that configurations created with different implementations agree.
 
 - `encoded_color_space` (string, required): the color space of the samples as stored in the JPEG stream. It also fixes the component count, so a configuration can be fully validated without looking at the chunk data. One of:
   - `grayscale`: 1-component data, stored as-is.
@@ -226,6 +226,8 @@ The output is a standard JFIF/JPEG bitstream using baseline (Color Transform, Bl
 [ITU-T81] ITU-T Recommendation T.81 | ISO/IEC 10918-1. Information technology – Digital compression and coding of continuous-tone still images – Requirements and guidelines. September 1992. URL: https://www.w3.org/Graphics/JPEG/itu-t81.pdf
 
 [ITU-T871] ITU-T Recommendation T.871 | ISO/IEC 10918-5. Information technology – Digital compression and coding of continuous-tone still images: JPEG File Interchange Format (JFIF). May 2011. URL:    https://www.itu.int/rec/T-REC-T.871
+
+[IJG-libjpeg] Independent JPEG Group. Using the IJG JPEG library (libjpeg.txt). URL: http://apodeline.free.fr/DOC/libjpeg/libjpeg-3.html
 
 ## Current maintainers
 
