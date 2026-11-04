@@ -31,21 +31,39 @@
             "minItems": 2,
             "maxItems": 2
           },
-          "minItems": 3,
+          "minItems": 1,
           "maxItems": 3
         }
       },
       "additionalProperties": false,
       "required": ["quality", "encoded_color_space"],
-      "if": {
-        "properties": { "encoded_color_space": { "const": "ycbcr" } }
-      },
-      "then": {
-        "required": ["subsampling"]
-      },
-      "else": {
-        "not": { "required": ["subsampling"] }
-      }
+      "allOf": [
+        {
+          "if": {
+            "properties": { "encoded_color_space": { "const": "ycbcr" } }
+          },
+          "then": {
+            "required": ["subsampling"],
+            "properties": { "subsampling": { "minItems": 3 } }
+          }
+        },
+        {
+          "if": {
+            "properties": { "encoded_color_space": { "const": "rgb" } }
+          },
+          "then": {
+            "properties": { "subsampling": { "const": [[1, 1], [1, 1], [1, 1]] } }
+          }
+        },
+        {
+          "if": {
+            "properties": { "encoded_color_space": { "const": "grayscale" } }
+          },
+          "then": {
+            "properties": { "subsampling": { "const": [[1, 1]] } }
+          }
+        }
+      ]
     }
   },
   "required": ["name", "configuration"],
