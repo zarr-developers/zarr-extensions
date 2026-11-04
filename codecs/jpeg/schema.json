@@ -31,12 +31,21 @@
             "minItems": 2,
             "maxItems": 2
           },
-          "minItems": 1,
+          "minItems": 3,
           "maxItems": 3
         }
       },
       "additionalProperties": false,
-      "required": ["quality", "encoded_color_space", "subsampling"]
+      "required": ["quality", "encoded_color_space"],
+      "if": {
+        "properties": { "encoded_color_space": { "const": "ycbcr" } }
+      },
+      "then": {
+        "required": ["subsampling"]
+      },
+      "else": {
+        "not": { "required": ["subsampling"] }
+      }
     }
   },
   "required": ["name", "configuration"],
