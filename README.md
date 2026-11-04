@@ -1,6 +1,8 @@
 # Zarr Extensions Registry
 
-This repository is the normative source of registered names for the Zarr v3 specification. This includes Zarr extensions as well as a catalog of registered attributes for [Zarr version 3](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html).
+This repository contains the specifications for Zarr extensions for [Zarr version 3](https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html).
+
+It is the normative source for registering names of Zarr v3 extensions.
 
 ## Registering an extension
 
@@ -37,37 +39,6 @@ Extension maintainers are responsible for their extensions.
 Updates to the extensions will also be reviewed by the ZFWG.
 The ZFWG reserves the right to reassign extensions to other maintainers in case of prolonged inactivity or other reasons at its own discretion.
 
-## Registering an attribute
-
-Strictly speaking, registered attributes are not extensions, because the `attributes` dictionary in Zarr arrays and groups may be populated with arbitrary metadata.
-Therefore, implementations do not have strict guarantees about the contents of the `attributes` dictionary and are not required to fail if the `attributes` dictionary contains unknown keys.
-
-However, there are a number of attribute keys that are commonly used within the Zarr community as conventions for common or domain-specific metadata.
-Therefore, this repository provides a catalog of registered attributes for coordination and discovery purposes.
-
-The process for registering an attribute is similar to registering an extension.
-Open a new PR with a new directory under the `attributes` directory, with the top-level key of the registered attribute.
-
- * [Attributes](./attributes/README.md)
-
-Registered attributes MUST have a `README.md` file that briefly describes the attribute.
-It is RECOMMENDED that the `README.md` links to external specification documents with the following contents:
-
-- detailed description of the attribute key(s) and structure
-- JSON schema for validation
-- examples of usage
-- example data
-- notes on interoperability and compatibility
-- description of any inheritance or precedence rules
-
-Linking to external specification documents ensures flexibility and avoids potential conflicts. 
-For straightforward and non-controversial cases, detailed specifications and schemas may still be included in this repository.
-
-The PR will be reviewed by the [ZFWG](https://github.com/orgs/zarr-developers/teams/format-wg) using the same review process as for extensions.
-Please note that all registered attributes documents will be licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
-Only open a PR if you are willing to license your registered attribute under this license.
-
-
 ## Document conventions
 
 These conventions are used for all extension specification documents in this repository.
@@ -91,4 +62,4 @@ introduced with the words "for example".
 
 ## License
 
-All extensions and registered attributes are licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
+All extensions are licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
