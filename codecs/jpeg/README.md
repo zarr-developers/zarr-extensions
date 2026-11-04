@@ -22,7 +22,7 @@ The value of the `name` member in the codec object MUST be `jpeg`.
 
   This parameter is REQUIRED and has **no default**: for 3-component data, `ycbcr` and `rgb` are meant for different kinds of data, and silently applying YCbCr would destroy fidelity for data whose channels are not colors. 
 
-  For maximum interoperability, note that encoders and decoders are only guaranteed to support grayscale (1-component) data and `ycbcr`; `rgb` (storing color components without conversion) is not supported by all implementations and SHOULD be used only when portability is not a concern. This parameter is defined as an open-ended color space, rather than a simple on/off transform, so that additional color spaces (e.g. XYB, CMYK) can be added later as a backwards-compatible extension.
+  For maximum interoperability, note that encoders and decoders are only guaranteed to support grayscale (1-component) data and `ycbcr`; `rgb` (storing color components without conversion) is not supported by all implementations and SHOULD be used only when portability is not a concern. Some decoders ignore the APP14 Adobe marker and always apply the inverse YCbCr transform to 3-component data (e.g. the jpgjs decoder used by Neuroglancer), which would silently produce wrong values for `rgb` data. An implementation that cannot decode `rgb` MUST therefore reject a configuration with `encoded_color_space: rgb` when parsing it, and a decoder that cannot honor the color transform stored in a JPEG stream MUST reject that chunk rather than return incorrectly converted data. This parameter is defined as an open-ended color space, rather than a simple on/off transform, so that additional color spaces (e.g. XYB, CMYK) can be added later as a backwards-compatible extension.
 
 - `decoded_color_space` (string, optional): the color space of the chunk data, i.e. the input to encoding and the output of decoding. One of `grayscale`, `rgb` or `ycbcr`. Defaults to `grayscale` if `encoded_color_space` is `grayscale`, and to `rgb` otherwise, so the default depends only on the configuration, not on the chunk data. Together with `encoded_color_space` it determines the color conversion applied during encoding, and its inverse during decoding. The JPEG stream does not record this value, so decoders need it to return the original color space:
 
@@ -215,7 +215,7 @@ The output is a standard JFIF/JPEG bitstream using baseline (Color Transform, Bl
 
 ## Interoperability notes
 
-- This codec matches neuroglancer `precomputed`'s `jpeg` encoding for 1- and 3-channel `uint8` data, with no data reordering. 
+- This codec matches neuroglancer `precomputed`'s `jpeg` encoding for 1- and 3-channel `uint8` data with `encoded_color_space: grayscale` or `ycbcr`, with no data reordering. Neuroglancer does not support `rgb`. 
   
 - This works because Zarr's C-order over `[z, y, x, channel]` (reshaped to `(z·y, x, channel)` with the [`reshape`](../reshape/) codec) visits samples in the same order (channel, then x, then y, then z) as neuroglancer's Fortran-order over `[x, y, z]`.
 
