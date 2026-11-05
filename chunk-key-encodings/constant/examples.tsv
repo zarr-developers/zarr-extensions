@@ -1,0 +1,18 @@
+key	shape	chunk_shape	chunk_coordinate	encoded	note
+data.h5	1024,2048	1024,2048	0,0	data.h5	single chunk stored as a foreign file
+scan.czi	10,20,30	10,20,30	0,0,0	scan.czi	three dimensions
+sub/dir/shard.zarr.zip	8	8	0	sub/dir/shard.zarr.zip	key may contain "/" in the middle
+{0}/{*}	4,4	4,4	0,0	{0}/{*}	braces are literal, there is no interpolation
+data.h5			()	data.h5	zero-dimensional array has exactly one chunk, the empty coordinate
+data.h5	0	8	-	-	array with zero chunks has nothing to address (valid)
+data.h5	1024,2048	1024,2048	1,0	error	only the origin chunk can be addressed
+data.h5	4,4	2,2	0,0	error	array has 4 chunks, the metadata is invalid
+data.h5	5	5	0	data.h5	shape equal to chunk shape is one chunk
+data.h5	6	5	0	error	ceil(6/5) = 2 chunks, the metadata is invalid
+	4	4	0	error	empty key is invalid
+/data.h5	4	4	0	error	key must not begin with "/"
+data/	4	4	0	error	key must not end with "/"
+a//b	4	4	0	error	key must not contain "//"
+../data.h5	4	4	0	error	key must not contain ".."
+a\b	4	4	0	error	key must not contain "\"
+zarr.json	4	4	0	error	key must not contain "zarr.json"

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/zarr-developers/zarr-extensions/refs/heads/main/chunk-key-encodings/constant/schema.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "constant"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(\\.\\.|\\\\|//|zarr\\.json|\\u0000|/$)).+$"
+        }
+      },
+      "required": ["key"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
