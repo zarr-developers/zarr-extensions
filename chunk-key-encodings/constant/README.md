@@ -117,4 +117,4 @@ instead of silently overwriting or mixing up data.
 
 ## Implementations
 
-- Julia: [Zarr.jl](https://github.com/JuliaIO/Zarr.jl) `ConstantChunkKeyEncoding` (pending pull request)
+- Julia: [Zarr.jl](https://github.com/JuliaIO/Zarr.jl) `ConstantChunkKeyEncoding` ([JuliaIO/Zarr.jl#368](https://github.com/JuliaIO/Zarr.jl/pull/368))
