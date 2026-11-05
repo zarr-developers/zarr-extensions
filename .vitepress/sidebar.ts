@@ -21,7 +21,7 @@ const subdirsWithReadme = (dir: string) =>
 
 export function registrySidebar(): DefaultTheme.SidebarItem[] {
   return [
-    { text: 'Extensions', link: '/' },
+    { text: 'Overview', link: '/' },
     ...subdirsWithReadme(root).map((point) => {
       const items = subdirsWithReadme(path.join(root, point)).map((name) => ({
         text: name,
