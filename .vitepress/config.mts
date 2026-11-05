@@ -9,9 +9,9 @@ const base = process.env.VITEPRESS_BASE ? `${process.env.VITEPRESS_BASE.replace(
 
 const description = 'The registry of Zarr v3 extensions: codecs, data types, chunk grids, chunk key encodings and storage transformers.'
 
-// Head, nav, social links and footer are duplicated from zarr.dev
+// Head, social links and footer are duplicated from zarr.dev
 // (zarr-developers/zarr-developers.github.io, .vitepress/config.mts) until
-// they are extracted into a shared theme package. Links to zarr.dev are absolute.
+// they are extracted into a shared theme package.
 export default defineConfig({
   base,
   title: 'Zarr Extensions',
@@ -50,30 +50,12 @@ gtag('config', 'G-BCRR9QE7Z0');`],
   themeConfig: {
     logo: 'https://zarr.dev/android-chrome-192x192.png',
     search: { provider: 'local' },
+    // A stub until zarr.dev's full nav lives in the shared theme package, so
+    // there is nothing here to keep in sync. zarr.dev opens in the same tab
+    // without the external-link icon, like a link within one site.
     nav: [
-      { text: 'Implementations', link: 'https://zarr.dev/implementations' },
-      { text: 'Datasets', link: 'https://zarr.dev/datasets' },
-      { text: 'Adopters', link: 'https://zarr.dev/adopters' },
-      {
-        text: 'Community',
-        items: [
-          { text: 'Overview', link: 'https://zarr.dev/community' },
-          { text: 'Affiliated Projects', link: 'https://zarr.dev/affiliated-projects' },
-          { text: 'Office Hours', link: 'https://zarr.dev/office-hours' },
-          { text: 'ZEPs', link: 'https://zarr.dev/zeps/' },
-          { text: 'Slides', link: 'https://zarr.dev/slides' },
-        ],
-      },
-      {
-        text: 'Resources',
-        items: [
-          { text: 'Specification', link: 'https://zarr-specs.readthedocs.io/' },
-          { text: 'Documentation', link: 'https://zarr.readthedocs.io/en/stable/' },
-          { text: 'Extensions', link: '/' },
-          { text: 'Conventions', link: 'https://zarr.dev/conventions' },
-          { text: 'Blog', link: 'https://zarr.dev/blog/' },
-        ],
-      },
+      { text: 'zarr.dev', link: 'https://zarr.dev/', target: '_self', noIcon: true },
+      { text: 'Specification', link: 'https://zarr-specs.readthedocs.io/' },
     ],
     sidebar: registrySidebar(),
     socialLinks: [
