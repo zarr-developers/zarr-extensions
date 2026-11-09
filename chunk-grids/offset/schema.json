@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OffsetChunkGridMetadata",
+  "type": "object",
+  "properties": {
+    "name": { "const": "offset" },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "integer" }
+        },
+        "base_chunk_grid": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "not": { "const": "offset" } },
+            "configuration": { "type": "object" }
+          },
+          "required": ["name"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["offset", "base_chunk_grid"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
