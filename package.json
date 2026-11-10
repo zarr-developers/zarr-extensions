@@ -8,6 +8,7 @@
     "docs:preview": "vitepress preview"
   },
   "devDependencies": {
+    "@zarr-developers/vitepress-theme": "github:zarr-developers/vitepress-theme#v0.1.0",
     "vitepress": "1.6.4"
   },
   "overrides": {
