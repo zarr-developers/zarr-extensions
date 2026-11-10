@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Concatenate Parts Storage Transformer",
+    "description": "Configuration parameters for a concat-parts storage transformer",
+    "type": "object",
+    "properties": {
+        "name": {
+            "const": "concat-parts"
+        },
+        "configuration": {
+            "type": "object",
+            "properties": {
+                "parts": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "key_suffix": {
+                                "type": "string"
+                            },
+                            "size": {
+                                "type": "integer",
+                                "minimum": 0
+                            }
+                        },
+                        "required": ["key_suffix"]
+                    }
+                }
+            },
+            "required": ["parts"]
+        }
+    },
+    "required": ["name", "configuration"]
+}
