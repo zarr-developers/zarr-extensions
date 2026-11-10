@@ -24,4 +24,6 @@ npm run docs:preview  # preview the production build
 
 `.github/workflows/website.yml` builds the site on every pull request and deploys it to GitHub Pages on every push to `main`.
 
-The head tags, social links, footer and brand colors are duplicated from [zarr.dev](https://github.com/zarr-developers/zarr-developers.github.io) for now and are meant to move into a shared theme package. The top nav is a stub (zarr.dev and Specification) until zarr.dev's full nav can come from that package.
+## Look and navigation
+
+The top nav, head tags, social links and brand colors come from [@zarr-developers/vitepress-theme](https://github.com/zarr-developers/vitepress-theme), which zarr.dev uses too. Change them there, not here. This site pins a release tag of the package in `package.json`.
