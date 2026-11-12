@@ -81,8 +81,17 @@ See [examples.tsv](./examples.tsv) for a set of examples / test cases.
 
 ## Notes (non-normative)
 
-- A [regular](../regular/README.md) chunk grid whose `chunk_shape` is equal to or greater than the array shape
-  also yields a single chunk, but the chunk shape must be kept in sync with the array shape by hand,
-  and a reader cannot tell from the grid alone that the array is meant to be a single chunk.
-  The `single` grid states that intent explicitly.
+- The purpose of this grid is to make the intent clear.
+  A one-chunk array can already be described with a [regular](../regular/README.md) chunk grid
+  whose `chunk_shape` is equal to or greater than the array shape, but then:
+  - the single-chunk property is implicit.
+    A reader has to compute `ceil(shape[i] / chunk_shape[i])` over every dimension to learn that the array is one chunk,
+    and cannot tell whether that was intended or accidental.
+  - the `chunk_shape` has to be kept in sync with the array shape by hand, for example after a resize.
+  - a writer that grows the array can silently turn it into a multi-chunk array.
+    A chunk key encoding that can only address one chunk, such as [constant](../../chunk-key-encodings/constant/README.md),
+    would then reject the array only at that point.
+
+  The `single` grid states the intent directly in the array metadata.
+  There is no configuration to get wrong, and the chunk shape always follows the array shape.
 - Readers that do not implement this extension cannot determine the chunk layout and will fail to open the array.
