@@ -59,9 +59,15 @@ this encoding can only address an array with at most one chunk:
   Encoding any other chunk coordinate MUST result in an error.
 - Resizing an array so that it would contain more than one chunk MUST result in an error.
 
+Arrays that use this encoding SHOULD use the [single](../../chunk-grids/single/README.md) chunk grid,
+which makes the single-chunk restriction explicit in the array metadata
+instead of leaving it to be derived from the shape and the chunk shape.
+Other chunk grids that result in at most one chunk, such as a `regular` grid
+whose `chunk_shape` is equal to or greater than the array shape, remain valid.
+
 Implementations SHOULD report a violation of the first restriction when the array metadata is read
 rather than when the first chunk is accessed.
-An array with zero chunks (for example, one of shape `[0]`) has no chunk to address and is valid.
+An array with zero chunks (for example, one of shape `[0]` with a `regular` chunk grid) has no chunk to address and is valid.
 
 ## Examples
 
@@ -74,8 +80,7 @@ A two-dimensional array that consists of a single chunk stored as the file `data
     "shape": [1024, 2048],
     "data_type": "int16",
     "chunk_grid": {
-        "name": "regular",
-        "configuration": { "chunk_shape": [1024, 2048] }
+        "name": "single"
     },
     "chunk_key_encoding": {
         "name": "constant",
@@ -85,6 +90,9 @@ A two-dimensional array that consists of a single chunk stored as the file `data
     "codecs": [ /* ... */ ]
 }
 ```
+
+The same array with a `regular` chunk grid, which is valid but not recommended:
+`"chunk_grid": { "name": "regular", "configuration": { "chunk_shape": [1024, 2048] } }`.
 
 See [examples.tsv](./examples.tsv) for a set of examples / test cases.
 
