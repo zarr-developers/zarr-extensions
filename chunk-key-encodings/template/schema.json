@@ -10,7 +10,7 @@
     "configuration": {
       "type": "object",
       "properties": {
-        "format": {
+        "template": {
           "type": "string",
           "pattern": "\\{((\\*|-?\\d+)(:0(\\d+))?)\\}"
         },
@@ -19,7 +19,7 @@
         }
       },
       "required": [
-        "format"
+        "template"
       ],
       "additionalProperties": false
     }
