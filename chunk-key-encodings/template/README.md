@@ -29,7 +29,7 @@ Optionally, this MAY be followed by a colon, then a 0, then the minimum width of
 Outside of braces, the template string:
 
 - MUST NOT begin with `/`, but MAY contain it elsewhere
-- MUST NOT contain the substrings `..`, `\`, `\0`, or `//`
+- MUST NOT contain the substrings `..`, `\`, or `//`, or the NUL character (U+0000)
 - MUST NOT contain the substring `zarr.json`
 
 The template string MUST contain at least one braced template expression.
@@ -42,7 +42,7 @@ but implementations SHOULD implement full unicode support.
 
 Note that the grammar describes the syntactic structure only;
 the additional lexical constraints listed above
-(e.g. MUST NOT begin with `/`, MUST NOT contain `..`, `\`, `\0`, `//`, or `zarr.json`)
+(e.g. MUST NOT begin with `/`, MUST NOT contain `..`, `\`, `//`, NUL, or `zarr.json`)
 and the validation rules below still apply.
 
 ```bnf
