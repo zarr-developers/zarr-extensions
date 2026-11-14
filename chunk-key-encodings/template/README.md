@@ -23,6 +23,7 @@ Optionally, this MAY be followed by a colon, then a 0, then the minimum width of
   - If `{*}` is present, the configuration object MUST include the `separator` field
   - No more than one `*` term may be present
   - Values of the chunk coordinate not included explicitly by another expression are included in left-to-right order, separated by the value of the `separator` field
+  - The `separator` field MUST NOT contain the substrings `..`, `\`, `//`, or `zarr.json`, or the NUL character (U+0000), since it is written into the chunk key
 - `{1:05}` denotes the second value of the chunk coordinate, in decimal format, left-padded with zeros until it is 5 digits long
   - If the coordinate value's decimal representation is already 5 or more digits long, ignore the padding term
 
