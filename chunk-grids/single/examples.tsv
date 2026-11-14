@@ -1,0 +1,8 @@
+shape	chunk_coordinate	chunk_shape	note
+1024,2048	0,0	1024,2048	chunk covers the whole array
+10,20,30	0,0,0	10,20,30	three dimensions
+8	0	8	one dimension
+	()	()	zero-dimensional array has exactly one chunk, the empty coordinate
+0	0	0	zero-length dimension: the single chunk contains no elements
+1024,2048	1,0	error	only the origin chunk is in the grid
+1024,2048	0	error	chunk coordinate has the wrong number of dimensions

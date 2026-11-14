@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/zarr-developers/zarr-extensions/refs/heads/main/chunk-grids/single/schema.json",
+  "title": "SingleChunkGridMetadata",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "single"
+    },
+    "configuration": {
+      "type": "object",
+      "maxProperties": 0
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}
