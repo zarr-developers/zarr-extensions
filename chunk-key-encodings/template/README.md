@@ -13,7 +13,7 @@ The expression consists of one of
 - a negative integer representing an index from the end of the chunk coordinate,
   where `-1` is the last value;
   i.e. `positive_index = len(chunk_coordinate) + negative_index`
-- an asterisk `*` representing a all values of the chunk coordinate not represented elsewhere
+- an asterisk `*` representing all values of the chunk coordinate not represented elsewhere
 
 Optionally, this MAY be followed by a colon, then a 0, then the minimum width of the resulting inserted string, to be left-padded by zeros.
 
@@ -23,13 +23,14 @@ Optionally, this MAY be followed by a colon, then a 0, then the minimum width of
   - If `{*}` is present, the configuration object MUST include the `separator` field
   - No more than one `*` term may be present
   - Values of the chunk coordinate not included explicitly by another expression are included in left-to-right order, separated by the value of the `separator` field
+  - The `separator` field MUST NOT contain the substrings `..`, `\`, `//`, or `zarr.json`, or the NUL character (U+0000), since it is written into the chunk key
 - `{1:05}` denotes the second value of the chunk coordinate, in decimal format, left-padded with zeros until it is 5 digits long
   - If the coordinate value's decimal representation is already 5 or more digits long, ignore the padding term
 
 Outside of braces, the template string:
 
 - MUST NOT begin with `/`, but MAY contain it elsewhere
-- MUST NOT contain the substrings `..`, `\`, `\0`, or `//`
+- MUST NOT contain the substrings `..`, `\`, or `//`, or the NUL character (U+0000)
 - MUST NOT contain the substring `zarr.json`
 
 The template string MUST contain at least one braced template expression.
@@ -37,12 +38,12 @@ The template string MUST contain at least one braced template expression.
 ### Grammar
 
 The template string syntax can be described by the following BNF grammar.
-For brevity, only the [characters recommended by the Zarr specification](https://zarr-specs.readthedocs.io/en/v3.1.0/v3/core/index.html#node-names) are considered for literals,
+For brevity, only the [characters recommended by the Zarr specification](https://zarr-specs.readthedocs.io/en/v3.1.0/v3/core/index.html#node-names), and `/`, are considered for literals,
 but implementations SHOULD implement full unicode support.
 
 Note that the grammar describes the syntactic structure only;
 the additional lexical constraints listed above
-(e.g. MUST NOT begin with `/`, MUST NOT contain `..`, `\`, `\0`, `//`, or `zarr.json`)
+(e.g. MUST NOT begin with `/`, MUST NOT contain `..`, `\`, `//`, NUL, or `zarr.json`)
 and the validation rules below still apply.
 
 ```bnf
@@ -50,14 +51,14 @@ and the validation rules below still apply.
 <element>       ::= <expression> | <escaped-brace> | <literal-char>
 
 <expression>    ::= "{" <index> "}" | "{" <index> ":" <padding> "}"
-<padding>       ::= "0" <positive>
+<padding>       ::= "0" <digits>
 
 <index>         ::= "*" | <integer>
-<integer>       ::= "0" | <positive> | "-" <positive>
-<positive>      ::= <nonzero> | <nonzero> <positive>
+<integer>       ::= <digits> | "-" <digits>
+<digits>        ::= <digit> | <digit> <digits>
 
 <escaped-brace> ::= "{{" | "}}"
-<literal-char>  ::= <letter> | <digit> | "-" | "_" | "."
+<literal-char>  ::= <letter> | <digit> | "-" | "_" | "." | "/"
 <letter>        ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
                   | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t"
                   | "u" | "v" | "w" | "x" | "y" | "z"
@@ -65,8 +66,7 @@ and the validation rules below still apply.
                   | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
                   | "U" | "V" | "W" | "X" | "Y" | "Z"
 
-<digit>         ::= "0" | <nonzero>
-<nonzero>       ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<digit>         ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 ```
 
 ### Regular expression
@@ -93,7 +93,7 @@ Note that this regular expression does not support escaped braces.
 | field | requirement level | type | description |
 | - | - | - | - |
 | name | MUST | literal string `"template"` | |
-| configuration | MUST | [Configuration](object-generic-chunk-key-encoding-configuration) | |
+| configuration | MUST | [Configuration](#object-template-chunk-key-encoding-configuration) | |
 
 ### Object: Template Chunk Key Encoding Configuration
 
@@ -120,7 +120,7 @@ Examples include
 {
     "name": "template",
     "configuration": {
-        "format": "images/{-1}/{*:04}.jpeg",
+        "template": "images/{-1}/{*:04}.jpeg",
         "separator": "_"
     }
 }
@@ -130,7 +130,7 @@ Examples include
 {
     "name": "template",
     "configuration": {
-        "format": "{2}-{0}_{1}"
+        "template": "{2}-{0}_{1}"
     }
 }
 ```
