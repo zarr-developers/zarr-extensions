@@ -14,7 +14,7 @@ This codec defines an ordered set of conditions that define how a scalar from th
 
 1. An input scalar is explicitly mapped to an output scalar. This transformation is defined by the `scalar_map` field in the codec configuration. The scalar map MUST be evaluated before any other representability checks.
 
-2. An input scalar represents a value exactly representable in the output data type. A scalar is exactly representable in a target data type if it is an element of the set of numerical values representable by that data type and can be encoded without rounding or range transformation. E.g., `0` in `uint16` maps to `0` in `uint8`. No parametrization of this transformation is required. Exact representability for floating-point types refers to numerical value only, not bit-level encoding. Payload preservation is not required.
+2. An input scalar represents a value exactly representable in the output data type. A scalar is exactly representable in a target data type if it is an element of the set of numerical values representable by that data type and can be encoded without rounding or range transformation. E.g., `0` in `uint16` maps to `0` in `uint8`. No parametrization of this transformation is required. Exact representability refers to the value a scalar represents, not its encoding. Which scalars represent the same value is defined by the data type. For example, in IEEE 754 floating-point types every NaN represents the same value regardless of its sign or payload, while positive and negative zero are distinct values.
 
 3. An input scalar can be transformed to a value that is representable in the output data type using a combination of rounding and a rule for mapping out-of-range scalars into the output data type.
 
@@ -22,9 +22,11 @@ Codec implementations MUST evaluate these conditions in order. If none of these 
 
 ### Special values
 
-If both input and output data types support IEEE 754 semantics, NaN values MUST be propagated unless overridden by `scalar_map`. Signed zero MUST be preserved.
+If both input and output data types support IEEE 754 semantics, NaN values MUST be propagated unless overridden by `scalar_map`. If the output data type has a negative zero, the sign of a zero MUST be preserved.
 
 If the output data type does not support NaN or transfinite values and the input scalar has NaN or transfinite semantics, the transformation MUST error unless explicitly overridden by scalar_map.
+
+This codec preserves values, not encodings. Information that an application stores in a scalar's encoding but not in its value, such as a NaN payload marking a missing observation (e.g. R's `NA`), is not guaranteed to survive a cast. Applications that need such information to survive SHOULD store it outside the array's values (for example in a separate mask array), or use a sentinel value that is mapped explicitly with `scalar_map`.
 
 ## Codec metadata
 
@@ -108,7 +110,9 @@ If present, both `encode` and `decode` are JSON arrays of length-2 arrays `[[<in
 
 For `encode`, the input data type is the array data type before casting and the output data type is the target `data_type`. For `decode`, the input data type is the target `data_type` and the output data type is the array data type before casting.
 
-Readers MUST interpret each array as a mapping with unique keys (the first element in each sub-array). If the same input scalar is repeated, readers MUST use the first occurrence. Writers SHOULD NOT repeat the same input scalar.
+A scalar matches a key if both represent the same value of the input data type, as defined by that data type (see [Procedure](#procedure), step 2). For example, in IEEE 754 floating-point types a NaN key matches every NaN, and positive and negative zero are distinct keys.
+
+Readers MUST interpret each array as a mapping with unique keys (the first element in each sub-array). If two keys represent the same value, readers MUST use the first occurrence. Writers SHOULD NOT include two keys that represent the same value.
 
 When encoding, if a value matches a key in `scalar_map.encode`, the corresponding mapped value is used instead of the normal casting rules defined by `rounding` and `out_of_range`. Similarly, when decoding, if a value matches a key in `scalar_map.decode`, the corresponding mapped value is used instead of the normal casting rules.
 
@@ -149,6 +153,7 @@ https://en.wikipedia.org/wiki/IEEE_754
 
 ## Change log
 
+- Clarified that scalars are compared by the value they represent, as defined by their data type, not by their encoding. This defines when a scalar matches a `scalar_map` key: in IEEE 754 floating-point types, every NaN is the same value and positive and negative zero are distinct. Signed zero is now preserved only when the output data type has a negative zero.
 - Fixed the NumPy compatibility example to encode positive infinity as `"Infinity"` instead of `"+Infinity"`, matching the Zarr V3 fill value encoding.
 
 ## Current maintainers
