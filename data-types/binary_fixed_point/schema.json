@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "binary_fixed_point"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "base_data_type": {
+          "enum": [
+            "uint8",
+            "uint16",
+            "uint32",
+            "uint64",
+            "int8",
+            "int16",
+            "int32",
+            "int64"
+          ]
+        },
+        "fractional_bits": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "integer_bits": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "base_data_type"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "fractional_bits"
+          ]
+        },
+        {
+          "required": [
+            "integer_bits"
+          ]
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "name",
+    "configuration"
+  ],
+  "additionalProperties": false
+}
