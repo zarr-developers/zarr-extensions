@@ -90,11 +90,12 @@ The following snippet of array metadata demonstrates the metadata for the `scale
 
 ### Uint16 range reduction
 
-In this example, a `uint16` array with values in the range `[1000, 1255]` is shifted down by `1000` so that values fall in the range `[0, 255]`, then cast to `uint8` via the `cast_value` codec.
+In this example, a `uint16` array with values in the range `[1000, 1255]` is shifted down by `1000` so that values fall in the range `[0, 255]`, then cast to `uint8` via the `cast_value` codec.  Note that with these codecs,`fill_value` is constrained to the range `[1000, 1255]`.
 
 ```json
 {
     "data_type": "uint16",
+    "fill_value": 1000,
     "codecs": [
         {
             "name": "scale_offset",
@@ -112,6 +113,41 @@ In this example, a `uint16` array with values in the range `[1000, 1255]` is shi
     ]
 }
 ```
+
+Using a `cast_value` codec with a `scalar_map` makes it possible for any `fill_value` to be used by mapping it into the valid range without changing the data type. Here, first mapping the `fill_value` `0 → 1000` has equivalent behavior to the example above.
+
+```json
+{
+    "data_type": "uint16",
+    "fill_value": 0,
+    "codecs": [
+        {
+            "name": "cast_value",
+            "configuration": {
+                "data_type": "uint16"
+                "scalar_map": {
+                    "encode": [[0, 1000]],
+                    "decode": [[1000, 0]]
+                }
+            }
+        },
+        {
+            "name": "scale_offset",
+            "configuration": {
+                "offset": 1000
+            }
+        },
+        {
+            "name": "cast_value",
+            "configuration": {
+                "data_type": "uint8"
+            }
+        },
+        "bytes"
+    ]
+}
+```
+
 
 ### Float64 to uint8 with NaN preservation
 
