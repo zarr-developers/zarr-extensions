@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "missing",
+  "oneOf": [
+    {
+      "const": "missing"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "const": "missing"
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    }
+  ]
+}
