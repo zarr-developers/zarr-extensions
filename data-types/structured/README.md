@@ -1,3 +1,8 @@
+---
+status: superseded
+superseded_by: [struct]
+---
+
 # Structured data type (legacy alias)
 
 The `"structured"` data type name is a legacy alias for

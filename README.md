@@ -60,6 +60,38 @@ introduced with the words "for example".
 
 [RFC2119]: https://tools.ietf.org/html/rfc2119
 
+## Extension status
+
+An extension's `README.md` MAY begin with a YAML front matter block that records
+the extension's status:
+
+```yaml
+---
+status: superseded
+superseded_by: [bytes]
+---
+```
+
+| field | type | notes |
+| - | - | - |
+| `status` | `"active"` or `"superseded"` | `"active"` if the front matter or the field is absent. |
+| `superseded_by` | list of strings | Required when `status` is `"superseded"`, and not allowed otherwise. Each string is the name of a registered extension at the same extension point. |
+
+- `active`: the extension may be used for new data.
+- `superseded`: new data should use the extensions listed in `superseded_by`
+  instead (in that order, when there are several, for example a sequence of
+  codecs). Implementations should continue to read data that uses the
+  superseded extension. The extension's document may state stronger
+  requirements, for example that writers must not use it.
+
+A superseded extension's document SHOULD explain how its data relates to the
+extensions that supersede it, for example whether metadata can be rewritten
+without re-encoding any data.
+
+The registry website shows the status on each extension's page and in the
+sidebar, and its build fails if a status is invalid or names an extension that
+is not registered.
+
 ## License
 
 All extensions are licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
