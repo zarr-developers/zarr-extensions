@@ -5,7 +5,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import type { DefaultTheme } from 'vitepress'
-import { isRegistryEntry, root } from './plugins/registry'
+import { declaredStatus, isRegistryEntry, root } from './plugins/registry'
 
 function title(readme: string, fallback: string): string {
   const m = readFileSync(readme, 'utf8').match(/^#\s+(.+)$/m)
@@ -23,10 +23,13 @@ export function registrySidebar(): DefaultTheme.SidebarItem[] {
   return [
     { text: 'Overview', link: '/' },
     ...subdirsWithReadme(root).map((point) => {
-      const items = subdirsWithReadme(path.join(root, point)).map((name) => ({
-        text: name,
-        link: `/${point}/${name}/`,
-      }))
+      const items = subdirsWithReadme(path.join(root, point)).map((name) => {
+        const superseded = declaredStatus(path.join(root, point, name, 'README.md')) === 'superseded'
+        return {
+          text: superseded ? `${name} (superseded)` : name,
+          link: `/${point}/${name}/`,
+        }
+      })
       return {
         text: title(path.join(root, point, 'README.md'), point),
         link: `/${point}/`,
