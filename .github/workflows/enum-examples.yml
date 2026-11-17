@@ -1,0 +1,32 @@
+name: Enum examples
+
+# Runs the interoperability examples from data-types/enum/README.md against
+# real Arrow, Polars and DuckDB.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - data-types/enum/**
+      - .github/workflows/enum-examples.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - data-types/enum/**
+      - .github/workflows/enum-examples.yml
+
+permissions:
+  contents: read
+
+jobs:
+  interop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install numpy pyarrow polars duckdb pytest
+      - run: pytest -v data-types/enum/examples/test_interop.py

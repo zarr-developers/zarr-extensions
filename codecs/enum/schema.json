@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "codec_chain": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "configuration": {
+            "type": "object"
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "enum"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "tag_codecs": {
+          "$ref": "#/$defs/codec_chain"
+        },
+        "variant_codecs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/codec_chain"
+          }
+        }
+      },
+      "required": ["tag_codecs", "variant_codecs"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}
