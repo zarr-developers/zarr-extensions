@@ -59,7 +59,7 @@ def test_kleene_logic():
     expect_and = [False, None]
     expect_or = [True, None]
 
-    a = pa.array([None, None])
+    a = pa.array([None, None], type=pa.bool_())
     assert pc.and_kleene(a, pa.array([False, True])).to_pylist() == expect_and
     assert pc.or_kleene(a, pa.array([True, False])).to_pylist() == expect_or
 
@@ -70,7 +70,7 @@ def test_kleene_logic():
     row = duckdb.sql(
         "SELECT NULL AND FALSE, NULL AND TRUE, NULL OR TRUE, NULL OR FALSE, "
         "NOT NULL::BOOLEAN, NULL = NULL"
-    ).fetchone()
+    ).fetchall()[0]
     assert row == (False, None, True, None, None, None)
 
 
@@ -84,7 +84,7 @@ def test_sql_nullable_column():
         (False,),
         (True,),
     ]
-    assert con.sql("SELECT COUNT(x), SUM(x), AVG(x) FROM t").fetchone() == (
+    assert con.sql("SELECT COUNT(x), SUM(x), AVG(x) FROM t").fetchall()[0] == (
         2,
         4.5,
         2.25,

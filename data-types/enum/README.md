@@ -123,7 +123,7 @@ with `"fill_value": {"variant": "missing"}`.
 ## Usage and interoperability examples
 
 These examples are non-normative.
-The Arrow, Polars and DuckDB (SQL) snippets are checked in CI by [`examples/test_interop.py`](./examples/test_interop.py).
+The Arrow, Polars and DuckDB (SQL) snippets are checked in CI by `examples/test_interop.py`.
 The data used throughout is a chunk of four `float64` values with the second and fourth absent: `[1.5, <absent>, 3.0, <absent>]`.
 It is stored as tags `[1, 0, 1, 0]` and, for the one payload variant, the payloads `[1.5, 3.0]`.
 
