@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "const": "geozl"
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "recipe": {
+          "type": "string",
+          "minLength": 1
+        },
+        "error": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^(LINEAR|LOG|SQRT):MAX_ERROR=|^(LINEAR|LOG|SQRT):.*,MAX_ERROR="
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nodata": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "enum": ["NaN", "Infinity", "-Infinity"]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["recipe"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "configuration"],
+  "additionalProperties": false
+}

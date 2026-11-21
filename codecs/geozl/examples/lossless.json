@@ -1,0 +1,6 @@
+{
+  "name": "geozl",
+  "configuration": {
+    "recipe": "planar>zigzag>transpose>entropy"
+  }
+}

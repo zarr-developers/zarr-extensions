@@ -1,0 +1,7 @@
+{
+  "name": "geozl",
+  "configuration": {
+    "recipe": "planar>zigzag>pfor",
+    "error": "SQRT:MAX_ERROR=1N,A=4,B=0.5"
+  }
+}

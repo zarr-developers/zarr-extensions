@@ -1,0 +1,8 @@
+{
+  "name": "geozl",
+  "configuration": {
+    "recipe": "planar>zigzag>transpose>entropy",
+    "error": "LINEAR:MAX_ERROR=2",
+    "nodata": -9999
+  }
+}
